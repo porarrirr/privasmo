@@ -7,7 +7,8 @@ import kotlin.math.sqrt
 
 const val MANUAL_INPUT_SENSOR_VALUE = "_MANUAL_INPUT_"
 const val INCH_TO_MM = 25.4
-const val SENSOR_DIAG_FACTOR = 2.0 / 3.0
+// Optical format approximation: 0.63 ≈ 16 mm per optical inch
+const val SENSOR_DIAG_FACTOR = 16.0 / INCH_TO_MM
 const val FF_DIAGONAL_MM = 43.2666
 const val MAX_DEVICES = 5
 const val MAX_LENSES_PER_DEVICE = 4
