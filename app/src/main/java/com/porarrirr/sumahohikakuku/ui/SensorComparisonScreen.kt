@@ -1,10 +1,15 @@
 package com.porarrirr.sumahohikakuku.ui
 
 import android.graphics.Color as AndroidColor
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.view.MotionEvent
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,16 +28,25 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior  
 import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Icon
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,6 +59,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -53,40 +69,59 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
+import com.porarrirr.sumahohikakuku.GraphSettingsActivity
+import com.porarrirr.sumahohikakuku.data.GraphSettings
+import com.porarrirr.sumahohikakuku.data.GraphSettingsRepository
+import kotlinx.coroutines.flow.distinctUntilChanged
 import com.porarrirr.sumahohikakuku.model.ComparisonResults
 import com.porarrirr.sumahohikakuku.model.FocalLengthMetrics
 import com.porarrirr.sumahohikakuku.model.MAX_DEVICES
@@ -97,6 +132,7 @@ import com.porarrirr.sumahohikakuku.model.isValidManualSensorDescriptor
 import com.porarrirr.sumahohikakuku.viewmodel.DeviceInputState
 import com.porarrirr.sumahohikakuku.viewmodel.LensInputState
 import com.porarrirr.sumahohikakuku.viewmodel.PresetListItem
+import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonEvent
 import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonUiState
 import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonViewModel
 import kotlin.math.max
@@ -105,8 +141,12 @@ import kotlin.math.roundToInt
 import java.util.Locale
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 private const val SENSOR_VIZ_SCALE = 6f
+private const val FOCAL_EPSILON = 0.01
 
 private val DEVICE_COLOR_PALETTE = listOf(
     "#2563EB",
@@ -136,20 +176,141 @@ private val DEVICE_COLOR_PALETTE = listOf(
     "#FB7185"
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+    var menuExpanded by remember { mutableStateOf(false) }
+    var isExporting by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val graphSettingsRepository = remember(context) {
+        GraphSettingsRepository(context.applicationContext)
+    }
+    val graphSettings by graphSettingsRepository.settingsFlow.collectAsStateWithLifecycle(
+        initialValue = GraphSettings()
+    )
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    LaunchedEffect(viewModel) {
+        viewModel.events.collectLatest { event ->
+            when (event) {
+                is SensorComparisonEvent.ShowMessage -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
+    fun exportResultsImage(share: Boolean) {
+        val results = uiState.comparisonResults ?: return
+        val selectedFocalLength = uiState.selectedFocalLength
+        val settingsSnapshot = graphSettings
+        menuExpanded = false
+        isExporting = true
+        coroutineScope.launch {
+            try {
+                val activity = context.findComponentActivity() ?: error("Activity not found")
+                val exportedAt = System.currentTimeMillis()
+                val widthPx = context.resources.displayMetrics.widthPixels
+                val bitmap = renderComposableToBitmap(activity, widthPx) {
+                    ExportComparisonImageContent(
+                        results = results,
+                        graphSettings = settingsSnapshot,
+                        selectedFocalLength = selectedFocalLength,
+                        exportedAtEpochMillis = exportedAt
+                    )
+                }
+                val fileName = "sumahohikakuku_" +
+                    SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date(exportedAt)) +
+                    ".png"
+                val uri = try {
+                    saveBitmapToPictures(context, bitmap, fileName)
+                } finally {
+                    bitmap.recycle()
+                }
+
+                if (share) {
+                    shareImage(context, uri)
+                } else {
+                    android.widget.Toast
+                        .makeText(context, "画像を保存しました", android.widget.Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (error: Throwable) {
+                val prefix = if (share) "共有用画像の生成に失敗しました" else "画像の保存に失敗しました"
+                android.widget.Toast
+                    .makeText(context, "$prefix: ${error.localizedMessage}", android.widget.Toast.LENGTH_LONG)
+                    .show()
+            } finally {
+                isExporting = false
+            }
+        }
+    }
+
+    androidx.compose.material3.Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            androidx.compose.material3.TopAppBar(
+                title = { Text("センサー比較") },
+                actions = {
+                    TextButton(
+                        onClick = viewModel::openPresetSave,
+                        enabled = uiState.devices.isNotEmpty() && !uiState.isPresetProcessing
+                    ) {
+                        Icon(imageVector = Icons.Filled.Save, contentDescription = null)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("保存")
+                    }
+                    TextButton(onClick = { menuExpanded = true }) {
+                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("呼び出し")
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("プリセット呼び出し") },
+                            onClick = {
+                                menuExpanded = false
+                                viewModel.openPresetLibrary()
+                            },
+                            enabled = !uiState.isPresetProcessing
+                        )
+
+                        DropdownMenuItem(
+                            text = { Text("設定") },
+                            onClick = {
+                                menuExpanded = false
+                                val intent = android.content.Intent(context, GraphSettingsActivity::class.java)
+                                if (context !is android.app.Activity) {
+                                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(scrollState)
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+        if (isExporting) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
         Text(
-            text = "高度なスマートフォンセンサー比較ツール (総光量対応)",
+            text = "高度なスマートフォンセンサー比較ツール (総光量対応)",  
             style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
@@ -161,21 +322,57 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
             color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        PresetSummaryCard(
-            uiState = uiState,
-            onOpenManager = viewModel::openPresetManager
-        )
-
-        OutlinedButton(
-            onClick = viewModel::addDevice,
-            enabled = uiState.canAddDevice,
-            modifier = Modifier.fillMaxWidth()
+        OutlinedCard(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.outlinedCardColors(
+                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
+            )
         ) {
-            Text("デバイス追加 (最大${MAX_DEVICES}台)")
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "デバイス",
+                        style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "${uiState.devices.size} / $MAX_DEVICES",
+                        style = androidx.compose.material3.MaterialTheme.typography.labelMedium,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Text(
+                    text = "比較対象に追加したいスマホを登録します。",
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Button(
+                    onClick = viewModel::addDevice,
+                    enabled = uiState.canAddDevice,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                ) {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("デバイスを追加")
+                }
+            }
         }
 
         DeviceConfigSection(
             uiState = uiState,
+            focusDeviceId = uiState.deviceFocusRequestId,
+            onConsumeFocusRequest = viewModel::consumeDeviceFocusRequest,
             onRemoveDevice = viewModel::removeDevice,
             onUpdateDeviceName = viewModel::updateDeviceName,
             onUpdateDeviceColor = viewModel::updateDeviceColor,
@@ -199,29 +396,47 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
             ResultsSection(
                 uiState = uiState,
                 results = results,
-                onFocalLengthChanged = viewModel::updateFocalLength
+                graphSettings = graphSettings,
+                isExporting = isExporting,
+                onFocalLengthChanged = viewModel::updateFocalLength,
+                onExportResultsImage = ::exportResultsImage
             )
         }
     }
+    }
 
-    if (uiState.isPresetManagerVisible) {
-        PresetManagerSheet(
-            uiState = uiState,
-            onClose = viewModel::closePresetManager,
-            onPresetNameChange = viewModel::updatePresetNameInput,
-            onSelectTargetDevice = viewModel::updatePresetTargetDevice,
-            onSavePreset = viewModel::savePreset,
-            onLoadPreset = viewModel::loadPreset,
-            onDeletePreset = viewModel::deletePreset,
-            onRenamePreset = viewModel::renamePreset
-        )
+    when (uiState.presetSheet) {
+        com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.SAVE -> {
+            PresetSaveSheet(
+                uiState = uiState,
+                onClose = viewModel::closePresetSheet,
+                onPresetNameChange = viewModel::updatePresetNameInput,
+                onSelectTargetDevice = viewModel::updatePresetTargetDevice,
+                onSavePreset = viewModel::savePreset
+            )
+        }
+        com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.LIBRARY -> {    
+            PresetLibrarySheet(
+                uiState = uiState,
+                onClose = viewModel::closePresetSheet,
+                onLoadPreset = viewModel::loadPreset,
+                onOverwriteTargetDeviceFromPreset = viewModel::overwriteTargetDeviceFromPreset,
+                onDeletePreset = viewModel::deletePreset,
+                onRenamePreset = viewModel::renamePreset,
+                onSelectTargetDevice = viewModel::updatePresetTargetDevice
+            )
+        }
+        com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.NONE -> Unit
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PresetSummaryCard(
     uiState: SensorComparisonUiState,
-    onOpenManager: () -> Unit
+    onSelectTargetDevice: (Long?) -> Unit,
+    onOpenSave: () -> Unit,
+    onOpenLibrary: () -> Unit
 ) {
     val targetDevice = uiState.presetTargetDevice
     val activePresetId = targetDevice?.let { device -> uiState.activePresetAssignments[device.id] }
@@ -239,18 +454,55 @@ private fun PresetSummaryCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         text = "プリセット",
                         style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "対象デバイス: $deviceLabel",
-                        style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
+                        text = "対象デバイス1台分の構成を保存 / 呼び出しできます。",
+                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    var deviceMenuExpanded by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(
+                        expanded = deviceMenuExpanded,
+                        onExpandedChange = { deviceMenuExpanded = it },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            value = deviceLabel,
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("対象デバイス") },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .bringIntoViewOnFocus(),
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = deviceMenuExpanded)
+                            },
+                            enabled = uiState.devices.isNotEmpty() && !uiState.isPresetProcessing
+                        )
+                        DropdownMenu(
+                            expanded = deviceMenuExpanded,
+                            onDismissRequest = { deviceMenuExpanded = false }
+                        ) {
+                            uiState.devices.forEach { device ->
+                                DropdownMenuItem(
+                                    text = { Text(device.name.ifBlank { "デバイス" }) },
+                                    onClick = {
+                                        onSelectTargetDevice(device.id)
+                                        deviceMenuExpanded = false
+                                    },
+                                    enabled = !uiState.isPresetProcessing
+                                )
+                            }
+                        }
+                    }
                     Text(
-                        text = "割り当てプリセット: ${activePresetName ?: "未選択"}",
+                        text = "このデバイスの元プリセット: ${activePresetName ?: "なし"}",
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
                     )
                     Text(
@@ -259,8 +511,19 @@ private fun PresetSummaryCard(
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                OutlinedButton(onClick = onOpenManager) {
-                    Text("プリセット管理")
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = onOpenSave,
+                        enabled = uiState.devices.isNotEmpty() && !uiState.isPresetProcessing
+                    ) {
+                        Text("保存")
+                    }
+                    OutlinedButton(onClick = onOpenLibrary, enabled = !uiState.isPresetProcessing) {
+                        Text("一覧")
+                    }
                 }
             }
             if (uiState.isPresetProcessing) {
@@ -272,18 +535,14 @@ private fun PresetSummaryCard(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PresetManagerSheet(
+private fun PresetSaveSheet(
     uiState: SensorComparisonUiState,
     onClose: () -> Unit,
     onPresetNameChange: (String) -> Unit,
     onSelectTargetDevice: (Long?) -> Unit,
-    onSavePreset: () -> Unit,
-    onLoadPreset: (String) -> Unit,
-    onDeletePreset: (String) -> Unit,
-    onRenamePreset: (String, String) -> Unit
+    onSavePreset: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val dateFormat = remember { SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN) }
 
     ModalBottomSheet(
         onDismissRequest = onClose,
@@ -292,6 +551,7 @@ private fun PresetManagerSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .imePadding()
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -301,7 +561,7 @@ private fun PresetManagerSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "プリセット管理",
+                    text = "プリセット保存",
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -315,7 +575,7 @@ private fun PresetManagerSheet(
             }
 
             Text(
-                text = "保存・読み込み対象のデバイス",
+                text = "保存対象のデバイス",
                 style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold
             )
@@ -338,10 +598,11 @@ private fun PresetManagerSheet(
                         value = targetLabel,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("保存/読み込み対象デバイス") },
+                        label = { Text("保存対象デバイス") },
                         modifier = Modifier
                             .menuAnchor()
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .bringIntoViewOnFocus(),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = deviceMenuExpanded) },
                         enabled = !uiState.isPresetProcessing
                     )
@@ -362,7 +623,7 @@ private fun PresetManagerSheet(
                     }
                 }
                 Text(
-                    text = "選択したデバイスに対して操作します。",
+                    text = "選択したデバイスの構成を保存します。",
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -372,7 +633,7 @@ private fun PresetManagerSheet(
                 value = uiState.presetNameInput,
                 onValueChange = onPresetNameChange,
                 label = { Text("新しいプリセット名") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                 singleLine = true,
                 enabled = !uiState.isPresetProcessing
             )
@@ -382,7 +643,130 @@ private fun PresetManagerSheet(
                 enabled = uiState.isPresetSaveEnabled && !uiState.isPresetProcessing,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("選択中のデバイスをプリセット保存")
+                Text("プリセットとして保存")
+            }
+
+            uiState.presetErrorMessage?.let { errorMessage ->
+                Text(
+                    text = errorMessage,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
+                )
+            }
+
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PresetLibrarySheet(
+    uiState: SensorComparisonUiState,
+    onClose: () -> Unit,
+    onLoadPreset: (String) -> Unit,
+    onOverwriteTargetDeviceFromPreset: (String) -> Unit,
+    onDeletePreset: (String) -> Unit,
+    onRenamePreset: (String, String) -> Unit,
+    onSelectTargetDevice: (Long?) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val dateFormat = remember { SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN) }
+    val targetLabel = uiState.presetTargetDevice?.name?.ifBlank { "デバイス" } ?: "未選択"
+    val canAppendDevice = uiState.devices.size < MAX_DEVICES
+
+    ModalBottomSheet(
+        onDismissRequest = onClose,
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "プリセット一覧",
+                    style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextButton(onClick = onClose) {
+                    Text("閉じる")
+                }
+            }
+
+            if (uiState.isPresetProcessing) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+
+            Text(
+                text = "上書き先デバイス",
+                style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            if (uiState.devices.isEmpty()) {
+                Text(
+                    text = "上書きできるデバイスがありません。先にデバイスを追加してください。",
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                var deviceMenuExpanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(
+                    expanded = deviceMenuExpanded,
+                    onExpandedChange = { deviceMenuExpanded = it }
+                ) {
+                    OutlinedTextField(
+                        value = targetLabel,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("上書き先デバイス") },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .bringIntoViewOnFocus(),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = deviceMenuExpanded)
+                        },
+                        enabled = !uiState.isPresetProcessing
+                    )
+                    DropdownMenu(
+                        expanded = deviceMenuExpanded,
+                        onDismissRequest = { deviceMenuExpanded = false }
+                    ) {
+                        uiState.devices.forEach { device ->
+                            DropdownMenuItem(
+                                text = { Text(device.name.ifBlank { "デバイス" }) },
+                                onClick = {
+                                    onSelectTargetDevice(device.id)
+                                    deviceMenuExpanded = false
+                                },
+                                enabled = !uiState.isPresetProcessing
+                            )
+                        }
+                    }
+                }
+            }
+
+            Text(
+                text = "「追加」は比較対象に新しいデバイスとして追加します。\n" +
+                    "「上書き」は上書き先デバイスの設定を置き換えます。",
+                style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            if (!canAppendDevice) {
+                Text(
+                    text = "端末数が上限です (最大${MAX_DEVICES}台)。削除してから読み込んでください。",
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.error
+                )
             }
 
             uiState.presetErrorMessage?.let { errorMessage ->
@@ -417,14 +801,16 @@ private fun PresetManagerSheet(
                     items(uiState.presetListItems, key = { it.id }) { item ->
                         val targetId = uiState.presetTargetDeviceId
                         val activeId = targetId?.let { uiState.activePresetAssignments[it] }
-                        val canAppendDevice = uiState.devices.size < MAX_DEVICES
                         PresetEntryCard(
                             item = item,
                             isActive = activeId == item.id,
                             isProcessing = uiState.isPresetProcessing,
                             canAppendDevice = canAppendDevice,
+                            canOverwriteTargetDevice = uiState.devices.isNotEmpty(),
+                            overwriteTargetLabel = targetLabel,
                             dateFormat = dateFormat,
                             onLoad = onLoadPreset,
+                            onOverwriteTargetDeviceFromPreset = onOverwriteTargetDeviceFromPreset,
                             onDelete = onDeletePreset,
                             onRename = onRenamePreset
                         )
@@ -441,8 +827,11 @@ private fun PresetEntryCard(
     isActive: Boolean,
     isProcessing: Boolean,
     canAppendDevice: Boolean,
+    canOverwriteTargetDevice: Boolean,
+    overwriteTargetLabel: String,
     dateFormat: SimpleDateFormat,
     onLoad: (String) -> Unit,
+    onOverwriteTargetDeviceFromPreset: (String) -> Unit,
     onDelete: (String) -> Unit,
     onRename: (String, String) -> Unit
 ) {
@@ -465,6 +854,8 @@ private fun PresetEntryCard(
             .getOrElse { fallbackColor }
     }
     val deviceNameLabel = item.deviceName.ifBlank { "無題のデバイス" }
+    var showOverwriteDialog by remember(item.id) { mutableStateOf(false) }
+    val canOverwrite = canOverwriteTargetDevice && !isProcessing
 
     Card(
         colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant)
@@ -477,7 +868,7 @@ private fun PresetEntryCard(
                 value = renameValue,
                 onValueChange = { renameValue = it.take(40) },
                 label = { Text("プリセット名") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                 singleLine = true,
                 enabled = !isProcessing
             )
@@ -519,7 +910,7 @@ private fun PresetEntryCard(
                 )
                 if (isActive) {
                     Text(
-                        text = "選択中",
+                        text = "対象の元",
                         color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -535,8 +926,44 @@ private fun PresetEntryCard(
                     enabled = !isProcessing && canAppendDevice,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("読み込む")
+                    Text("デバイスとして追加")
                 }
+                OutlinedButton(
+                    onClick = { showOverwriteDialog = true },
+                    enabled = canOverwrite,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("上書き")
+                }
+            }
+
+            if (showOverwriteDialog) {
+                AlertDialog(
+                    onDismissRequest = { showOverwriteDialog = false },
+                    title = { Text("上書きしますか？") },
+                    text = {
+                        Text(
+                            text = "上書き先: $overwriteTargetLabel\n" +
+                                "端末名・色・レンズ設定が置き換わります。"
+                        )
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                showOverwriteDialog = false
+                                onOverwriteTargetDeviceFromPreset(item.id)
+                            },
+                            enabled = canOverwrite
+                        ) {
+                            Text("上書きする")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showOverwriteDialog = false }) {
+                            Text("キャンセル")
+                        }
+                    }
+                )
             }
 
             Row(
@@ -569,6 +996,8 @@ private fun PresetEntryCard(
 @Composable
 private fun DeviceConfigSection(
     uiState: SensorComparisonUiState,
+    focusDeviceId: Long?,
+    onConsumeFocusRequest: () -> Unit,
     onRemoveDevice: (Long) -> Unit,
     onUpdateDeviceName: (Long, String) -> Unit,
     onUpdateDeviceColor: (Long, String) -> Unit,
@@ -586,6 +1015,24 @@ private fun DeviceConfigSection(
                 (configuration.screenWidthDp.dp - 32.dp).coerceAtLeast(320.dp)
             }
             val listState = rememberLazyListState()
+            val focusManager = LocalFocusManager.current
+            LaunchedEffect(focusDeviceId) {
+                val id = focusDeviceId ?: return@LaunchedEffect
+                val index = uiState.devices.indexOfFirst { it.id == id }
+                if (index >= 0) {
+                    listState.animateScrollToItem(index)
+                }
+                onConsumeFocusRequest()
+            }
+            LaunchedEffect(listState) {
+                snapshotFlow { listState.isScrollInProgress }
+                    .distinctUntilChanged()
+                    .collect { isScrolling ->
+                        if (isScrolling) {
+                            focusManager.clearFocus()
+                        }
+                    }
+            }
             val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
             val nestedScrollConnection = remember(listState.canScrollBackward, listState.canScrollForward, uiState.devices.size) {
                 object : NestedScrollConnection {
@@ -777,7 +1224,7 @@ private fun DeviceCard(
                 value = device.name,
                 onValueChange = { onUpdateDeviceName(device.id, it) },
                 label = { Text("名前") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus()
             )
 
             ColorSelector(
@@ -840,25 +1287,32 @@ private fun LensCard(
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = lens.nativeFocalLength,
-                    onValueChange = { onUpdateLensFocalLength(deviceId, lens.id, it) },
+                    onValueChange = {
+                        onUpdateLensFocalLength(deviceId, lens.id, sanitizeDecimalInput(it))
+                    },
                     label = { Text("焦点距離 (35mm換算)") },
-                    modifier = Modifier.weight(1f),
-                    singleLine = true
+                    modifier = Modifier.weight(1f).bringIntoViewOnFocus(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
                 OutlinedTextField(
                     value = lens.fNumber,
-                    onValueChange = { onUpdateLensFNumber(deviceId, lens.id, it) },
+                    onValueChange = {
+                        onUpdateLensFNumber(deviceId, lens.id, sanitizeDecimalInput(it))
+                    },
                     label = { Text("F値") },
-                    modifier = Modifier.weight(1f),
-                    singleLine = true
+                    modifier = Modifier.weight(1f).bringIntoViewOnFocus(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
             }
 
-            var expanded by remember { mutableStateOf(false) }
             val selectedSensor = availableSensors.firstOrNull { it.value == lens.selectedSensorValue }
+            var isSensorPickerOpen by remember { mutableStateOf(false) }
             ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
+                expanded = isSensorPickerOpen,
+                onExpandedChange = { isSensorPickerOpen = true },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
                     value = selectedSensor?.name ?: "手動入力",
@@ -867,25 +1321,24 @@ private fun LensCard(
                     label = { Text("センサー") },
                     modifier = Modifier
                         .menuAnchor()
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .bringIntoViewOnFocus(),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isSensorPickerOpen)
                     }
                 )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    availableSensors.forEach { sensor ->
-                        DropdownMenuItem(
-                            text = { Text(sensor.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                            onClick = {
-                                onUpdateLensSensorSelection(deviceId, lens.id, sensor.value)
-                                expanded = false
-                            }
-                        )
-                    }
-                }
+            }
+
+            if (isSensorPickerOpen) {
+                SensorPickerSheet(
+                    availableSensors = availableSensors,
+                    selectedSensorValue = lens.selectedSensorValue,
+                    onSelectSensor = { value ->
+                        onUpdateLensSensorSelection(deviceId, lens.id, value)
+                        isSensorPickerOpen = false
+                    },
+                    onClose = { isSensorPickerOpen = false }
+                )
             }
 
             if (lens.selectedSensorValue == MANUAL_INPUT_SENSOR_VALUE) {
@@ -894,7 +1347,7 @@ private fun LensCard(
                     value = lens.manualSensorDescriptor,
                     onValueChange = { onUpdateLensManualDescriptor(deviceId, lens.id, it) },
                     label = { Text("手動入力 (例: 1/1.28)") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                     singleLine = true,
                     isError = !manualValid,
                     supportingText = {
@@ -903,6 +1356,156 @@ private fun LensCard(
                         }
                     }
                 )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SensorPickerSheet(
+    availableSensors: List<com.porarrirr.sumahohikakuku.model.SensorSpec>,
+    selectedSensorValue: String,
+    onSelectSensor: (String) -> Unit,
+    onClose: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var query by remember { mutableStateOf("") }
+    var manufacturerFilter by remember { mutableStateOf<String?>(null) }
+
+    val manufacturerOptions = remember(availableSensors) {
+        val seen = linkedSetOf<String>()
+        availableSensors.forEach { sensor ->
+            if (!sensor.isManual && sensor.manufacturer.isNotBlank()) {
+                seen.add(sensor.manufacturer)
+            }
+        }
+        seen.toList()
+    }
+
+    val filteredSensors = remember(availableSensors, query, manufacturerFilter) {
+        val tokens = query.trim()
+            .replace('　', ' ')
+            .lowercase(Locale.US)
+            .split(Regex("\\s+"))
+            .filter { it.isNotBlank() }
+
+        availableSensors.filter { sensor ->
+            if (sensor.isManual) return@filter true
+            if (manufacturerFilter != null && sensor.manufacturer != manufacturerFilter) {
+                return@filter false
+            }
+            if (tokens.isEmpty()) return@filter true
+            val haystack = "${sensor.name} ${sensor.manufacturer}".lowercase(Locale.US)
+            tokens.all { token -> haystack.contains(token) }
+        }
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onClose,
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "センサー選択",
+                    style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextButton(onClick = onClose) {
+                    Text("閉じる")
+                }
+            }
+
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                label = { Text("検索") },
+                placeholder = { Text("IMX989 / Samsung など") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
+                trailingIcon = {
+                    if (query.isNotBlank()) {
+                        TextButton(onClick = { query = "" }) {
+                            Text("クリア")
+                        }
+                    }
+                }
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 4.dp)
+            ) {
+                item {
+                    FilterChip(
+                        selected = manufacturerFilter == null,
+                        onClick = { manufacturerFilter = null },
+                        label = { Text("すべて") }
+                    )
+                }
+                items(manufacturerOptions, key = { it }) { manufacturer ->
+                    FilterChip(
+                        selected = manufacturerFilter == manufacturer,
+                        onClick = {
+                            manufacturerFilter =
+                                if (manufacturerFilter == manufacturer) null else manufacturer
+                        },
+                        label = { Text(manufacturer) }
+                    )
+                }
+            }
+
+            HorizontalDivider()
+
+            if (filteredSensors.isEmpty()) {
+                Text(
+                    text = "該当するセンサーがありません",
+                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.75f)
+                ) {
+                    items(filteredSensors, key = { it.value }) { sensor ->
+                        val isSelected = sensor.value == selectedSensorValue
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = sensor.name,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            onClick = {
+                                onSelectSensor(sensor.value)
+                                onClose()
+                            },
+                            trailingIcon = {
+                                if (isSelected) {
+                                    Text(
+                                        text = "選択中",
+                                        fontSize = 12.sp,
+                                        color = androidx.compose.material3.MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -958,6 +1561,7 @@ private fun ColorSelector(
                 parseHexColor(normalized)?.let(onSelectColor)
             },
             label = { Text("カスタム色 (#RRGGBB)") },
+            modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
             isError = !isValidHex,
             supportingText = {
                 if (!isValidHex) {
@@ -1043,7 +1647,10 @@ private fun ColorPaletteDialog(
 private fun ResultsSection(
     uiState: SensorComparisonUiState,
     results: ComparisonResults,
-    onFocalLengthChanged: (Int) -> Unit
+    graphSettings: GraphSettings,
+    isExporting: Boolean,
+    onFocalLengthChanged: (Double) -> Unit,
+    onExportResultsImage: (Boolean) -> Unit
 ) {
     val focalLengths = results.focalLengths
     if (focalLengths.isEmpty()) return
@@ -1051,12 +1658,32 @@ private fun ResultsSection(
     val sliderSteps = (focalLengths.size - 2).coerceAtLeast(0)
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(text = "2. 比較グラフ", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
-        ChartsSection(results = results)
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { onExportResultsImage(false) },
+                enabled = !isExporting,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("結果を画像で保存")
+            }
+            OutlinedButton(
+                onClick = { onExportResultsImage(true) },
+                enabled = !isExporting,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("結果を共有")
+            }
+        }
+
+        ChartsSection(results = results, graphSettings = graphSettings)
 
         Text(text = "3. インタラクティブ操作", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
         Card {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(text = "焦点距離 (35mm換算): ${uiState.selectedFocalLength}mm", fontWeight = FontWeight.Medium)
+                Text(
+                    text = "焦点距離 (35mm換算): ${formatFocalLength(uiState.selectedFocalLength)}mm",
+                    fontWeight = FontWeight.Medium
+                )
                 Slider(
                     value = selectedIndex.toFloat(),
                     onValueChange = {
@@ -1089,18 +1716,156 @@ private fun ResultsSection(
 }
 
 @Composable
-private fun ChartsSection(results: ComparisonResults) {
+private fun ChartsSection(
+    results: ComparisonResults,
+    graphSettings: GraphSettings
+) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         ChartCard(
             title = "有効センサー面積の比較",
             results = results,
+            graphSettings = graphSettings,
+            yLabel = "有効センサー面積",
+            yUnit = "mm²",
+            yDecimals = 2,
             dataExtractor = { metric -> metric.effectiveAreaSqMm.toFloat() }
         )
         ChartCard(
             title = "集光力 (有効面積 / F値²) の比較",
             results = results,
+            graphSettings = graphSettings,
+            yLabel = "集光力",
+            yDecimals = 3,
             dataExtractor = { metric -> metric.totalLightIntake.toFloat() }
         )
+    }
+}
+
+@Composable
+private fun ExportComparisonImageContent(
+    results: ComparisonResults,
+    graphSettings: GraphSettings,
+    selectedFocalLength: Double,
+    exportedAtEpochMillis: Long
+) {
+    val exportedAtLabel = remember(exportedAtEpochMillis) {
+        SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN).format(Date(exportedAtEpochMillis))
+    }
+
+    Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "スマートフォンセンサー比較",
+                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "作成: $exportedAtLabel",
+                style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = "比較グラフ",
+                style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            ChartsSection(results = results, graphSettings = graphSettings)
+
+            Text(
+                text = "スペック表 (${formatFocalLength(selectedFocalLength)}mm)",
+                style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            ExportSpecTable(results = results, focalLength = selectedFocalLength)
+        }
+    }
+}
+
+@Composable
+private fun ExportSpecTable(
+    results: ComparisonResults,
+    focalLength: Double
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        results.devices.forEach { device ->
+            val metrics = device.metricsAt(focalLength) ?: return@forEach
+            val fallbackColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+            val deviceColor = remember(device.colorHex, fallbackColor) {
+                runCatching { Color(AndroidColor.parseColor(device.colorHex)) }
+                    .getOrElse { fallbackColor }
+            }
+
+            val sensorMetrics = metrics.baseLens.sensorMetrics
+            val binning = sensorMetrics.binningType
+            val nativePixelPitch = sensorMetrics.nativePixelSizeUm.takeIf { it > 0 }
+                ?.let { "${it.format(2)} µm" }
+            val binnedPixelPitch = computeBinnedPixelSize(sensorMetrics.nativePixelSizeUm, binning)
+                ?.let { "${it.format(2)} µm" }
+            val pixelPitchLabel = if (binnedPixelPitch != null) "画素ピッチ (ビニング後)" else "画素ピッチ"
+            val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: "N/A"
+
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(18.dp)
+                                .clip(CircleShape)
+                                .background(deviceColor)
+                                .border(
+                                    1.dp,
+                                    androidx.compose.material3.MaterialTheme.colorScheme.outline,
+                                    CircleShape
+                                )
+                        )
+                        Text(
+                            text = device.name,
+                            style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = deviceColor,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    OutlinedCard(
+                        colors = CardDefaults.outlinedCardColors(
+                            containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background
+                        )
+                    ) {
+                        DeviceMetricsKeyValueTable(
+                            items = listOf(
+                                "有効面積" to "${metrics.effectiveAreaSqMm.format(2)} mm²",
+                                pixelPitchLabel to pixelPitchValue,
+                                "集光力" to metrics.totalLightIntake.format(3),
+                                "実焦点距離" to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
+                                "F値" to "F${metrics.baseLens.fNumber.format(2)}",
+                                "使用センサー" to sensorMetrics.sensorName
+                            ),
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1108,8 +1873,19 @@ private fun ChartsSection(results: ComparisonResults) {
 private fun ChartCard(
     title: String,
     results: ComparisonResults,
+    graphSettings: GraphSettings,
+    yLabel: String,
+    yUnit: String? = null,
+    yDecimals: Int = 2,
     dataExtractor: (FocalLengthMetrics) -> Float
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val axisTextColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
+    val gridColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(
+        alpha = if (isDarkTheme) 0.2f else 0.08f
+    ).toArgb()
+    val chartSurfaceColor = androidx.compose.material3.MaterialTheme.colorScheme.surface.toArgb()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -1124,12 +1900,60 @@ private fun ChartCard(
                     LineChart(context).apply {
                         description.isEnabled = false
                         axisRight.isEnabled = false
+                        setDrawGridBackground(false)
+                        setDrawBorders(false)
                         setTouchEnabled(true)
                         setPinchZoom(true)
+                        setHighlightPerTapEnabled(true)
+                        setHighlightPerDragEnabled(true)
+                        setOnChartGestureListener(object : OnChartGestureListener {
+                            override fun onChartLongPressed(me: MotionEvent?) {
+                                me ?: return
+                                getHighlightByTouchPoint(me.x, me.y)?.let { highlight ->
+                                    highlightValue(highlight, true)
+                                }
+                            }
+
+                            override fun onChartGestureStart(
+                                me: MotionEvent?,
+                                lastPerformedGesture: ChartTouchListener.ChartGesture?
+                            ) = Unit
+
+                            override fun onChartGestureEnd(
+                                me: MotionEvent?,
+                                lastPerformedGesture: ChartTouchListener.ChartGesture?
+                            ) = Unit
+
+                            override fun onChartDoubleTapped(me: MotionEvent?) = Unit
+
+                            override fun onChartSingleTapped(me: MotionEvent?) = Unit
+
+                            override fun onChartFling(
+                                me1: MotionEvent?,
+                                me2: MotionEvent?,
+                                velocityX: Float,
+                                velocityY: Float
+                            ) = Unit
+
+                            override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) = Unit
+
+                            override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) = Unit
+                        })
+                        marker = ChartMarkerView(context, yLabel = yLabel, yUnit = yUnit, yDecimals = yDecimals).also {
+                            it.chartView = this
+                        }
                         xAxis.position = XAxis.XAxisPosition.BOTTOM
                         xAxis.granularity = 1f
                         xAxis.setDrawGridLines(false)
+                        xAxis.setDrawAxisLine(false)
+                        xAxis.valueFormatter = object : ValueFormatter() {
+                            override fun getFormattedValue(value: Float): String {
+                                return formatFocalLength(value.toDouble())
+                            }
+                        }
                         axisLeft.setDrawGridLines(true)
+                        axisLeft.setLabelCount(4, false)
+                        axisLeft.setDrawAxisLine(false)
                         axisLeft.axisMinimum = 0f
                         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
                         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
@@ -1138,22 +1962,91 @@ private fun ChartCard(
                     }
                 },
                 update = { chart ->
-                    val dataSets = results.devices.map { device ->
+                    chart.xAxis.textColor = axisTextColor
+                    chart.xAxis.textSize = 12f
+                    chart.axisLeft.textColor = axisTextColor
+                    chart.axisLeft.textSize = 12f
+                    chart.axisLeft.gridColor = gridColor
+                    chart.legend.textColor = axisTextColor
+                    chart.legend.textSize = 12f
+                    chart.legend.form = Legend.LegendForm.CIRCLE
+                    chart.legend.formSize = 10f
+
+                    val axisLabelDecimals = yDecimals.coerceAtMost(2)
+                    chart.axisLeft.valueFormatter = object : ValueFormatter() {
+                        override fun getFormattedValue(value: Float): String {
+                            val formatted = String.format(Locale.US, "%.${axisLabelDecimals}f", value)
+                            val unitSuffix = yUnit?.takeIf { it.isNotBlank() }?.let { " $it" }.orEmpty()
+                            return "$formatted$unitSuffix"
+                        }
+                    }
+
+                    val fillTopAlpha = when (results.devices.size) {
+                        1 -> 80
+                        2 -> 64
+                        else -> 52
+                    }
+                    val glowAlpha = if (isDarkTheme) 64 else 40
+
+                    val dataSets = mutableListOf<ILineDataSet>()
+                    val legendEntries = mutableListOf<LegendEntry>()
+                    results.devices.forEach { device ->
+                        val parsedColor = runCatching { AndroidColor.parseColor(device.colorHex) }
+                            .getOrDefault(AndroidColor.DKGRAY)
+                        val nativeFocals = device.lenses
+                            .map { lens -> lens.nativeFocalLength35mm }
+                            .distinct()
+
+                        val markerDrawable = createLensMarkerDrawable(
+                            context = chart.context,
+                            accentColor = parsedColor,
+                            surfaceColor = chartSurfaceColor
+                        )
+
                         val entries = results.focalLengths.mapNotNull { focal ->
                             val metrics = device.metricsAt(focal) ?: return@mapNotNull null
-                            Entry(focal.toFloat(), dataExtractor(metrics))
+                            Entry(focal.toFloat(), dataExtractor(metrics)).apply {
+                                data = metrics
+                                if (isApproximatelyIn(focal, nativeFocals)) {
+                                    icon = markerDrawable
+                                }
+                            }
                         }
-                        LineDataSet(entries, device.name).apply {
-                            val parsedColor = AndroidColor.parseColor(device.colorHex)
+
+                        dataSets += LineDataSet(entries, "").apply {
+                            color = withAlpha(parsedColor, glowAlpha)
+                            setDrawValues(false)
+                            setDrawCircles(false)
+                            setDrawFilled(false)
+                            setDrawIcons(false)
+                            lineWidth = graphSettings.glowLineWidth
+                            mode = LineDataSet.Mode.LINEAR
+                            isHighlightEnabled = false
+                        }
+
+                        dataSets += LineDataSet(entries, device.name).apply {
                             color = parsedColor
                             highLightColor = parsedColor
                             setDrawValues(false)
-                            lineWidth = 2f
                             setDrawCircles(false)
                             setDrawFilled(true)
-                            fillColor = AndroidColor.argb(48, AndroidColor.red(parsedColor), AndroidColor.green(parsedColor), AndroidColor.blue(parsedColor))
+                            setDrawIcons(true)
+                            lineWidth = graphSettings.lineWidth
+                            mode = LineDataSet.Mode.LINEAR
+                            fillDrawable = createLineFillDrawable(
+                                lineColor = parsedColor,
+                                topAlpha = fillTopAlpha
+                            )
+                        }
+
+                        legendEntries += LegendEntry().apply {
+                            label = device.name
+                            formColor = parsedColor
+                            form = Legend.LegendForm.CIRCLE
                         }
                     }
+
+                    chart.legend.setCustom(legendEntries)
                     chart.data = LineData(dataSets)
                     chart.axisLeft.setDrawLabels(true)
                     chart.axisLeft.axisMinimum = 0f
@@ -1164,14 +2057,68 @@ private fun ChartCard(
     }
 }
 
+private fun createLineFillDrawable(lineColor: Int, topAlpha: Int): GradientDrawable {
+    return GradientDrawable(
+        GradientDrawable.Orientation.TOP_BOTTOM,
+        intArrayOf(withAlpha(lineColor, topAlpha), withAlpha(lineColor, 0))
+    )
+}
+
+private fun createLensMarkerDrawable(
+    context: android.content.Context,
+    accentColor: Int,
+    surfaceColor: Int
+): LayerDrawable {
+    val density = context.resources.displayMetrics.density
+    val sizePx = (density * 16f).roundToInt().coerceAtLeast(1)
+    val strokePx = (density * 2f).roundToInt().coerceAtLeast(1)
+    val insetPx = (density * 4f).roundToInt().coerceAtLeast(1)
+
+    val background = GradientDrawable().apply {
+        shape = GradientDrawable.OVAL
+        setColor(surfaceColor)
+        setStroke(strokePx, accentColor)
+    }
+
+    val lens = AppCompatResources.getDrawable(
+        context,
+        com.porarrirr.sumahohikakuku.R.drawable.ic_lens_marker
+    )?.mutate()?.also { DrawableCompat.setTint(it, accentColor) }
+
+    return LayerDrawable(arrayOf(background, lens ?: background)).apply {
+        setLayerInset(1, insetPx, insetPx, insetPx, insetPx)
+        setBounds(0, 0, sizePx, sizePx)
+    }
+}
+
+private fun withAlpha(color: Int, alpha: Int): Int {
+    return AndroidColor.argb(
+        alpha.coerceIn(0, 255),
+        AndroidColor.red(color),
+        AndroidColor.green(color),
+        AndroidColor.blue(color)
+    )
+}
+
 @Composable
 private fun DeviceMetricsCard(
     device: ProcessedDevice,
-    focalLength: Int,
+    focalLength: Double,
     modifier: Modifier = Modifier
 ) {
     val metrics = device.metricsAt(focalLength) ?: return
-    val color = Color(AndroidColor.parseColor(device.colorHex))
+    val fallbackColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+    val color = remember(device.colorHex, fallbackColor) {
+        runCatching { Color(AndroidColor.parseColor(device.colorHex)) }.getOrElse { fallbackColor }
+    }
+    var isDetailsExpanded by remember(device.name, device.colorHex) { mutableStateOf(false) }
+
+    val sensorMetrics = metrics.baseLens.sensorMetrics
+    val binning = sensorMetrics.binningType
+    val nativePixelPitch = sensorMetrics.nativePixelSizeUm.takeIf { it > 0 }?.let { "${it.format(2)} µm" }
+    val binnedPixelPitch = computeBinnedPixelSize(sensorMetrics.nativePixelSizeUm, binning)?.let { "${it.format(2)} µm" }
+    val pixelPitchLabel = if (binnedPixelPitch != null) "画素ピッチ (ビニング後)" else "画素ピッチ"
+    val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: "N/A"
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant)
@@ -1179,29 +2126,159 @@ private fun DeviceMetricsCard(
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(text = device.name, color = color, style = androidx.compose.material3.MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             SensorVisualization(metrics = metrics, borderColor = color)
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "有効面積: ${metrics.effectiveAreaSqMm.format(2)} mm²")
-                Text(text = "有効寸法: ${metrics.effectiveWidthMm.format(2)} x ${metrics.effectiveHeightMm.format(2)} mm")
-                Text(text = "使用レンズ: ${metrics.baseLens.nativeFocalLength35mm.format(1)}mm (35mm換算) / F${metrics.baseLens.fNumber.format(2)}")
-                Text(text = "使用センサー: ${metrics.baseLens.sensorMetrics.sensorName}")
-                metrics.baseLens.sensorMetrics.nativePixelSizeUm.takeIf { it > 0 }?.let {
-                    Text(text = "ネイティブピクセル: ${it.format(2)} µm")
-                }
-                val binning = metrics.baseLens.sensorMetrics.binningType
-                Text(text = "ビニング特性: $binning")
-                computeBinnedPixelSize(metrics.baseLens.sensorMetrics.nativePixelSizeUm, binning)?.let {
-                    Text(text = "実効ビニングピクセル: ${it.format(2)} µm")
-                }
-                Text(text = "デジタルズーム: ${metrics.zoomRatio.format(2)}x")
+
+            DeviceMetricsHighlightGrid(
+                items = listOf(
+                    "有効面積" to "${metrics.effectiveAreaSqMm.format(2)} mm²",
+                    pixelPitchLabel to pixelPitchValue,
+                    "集光力" to metrics.totalLightIntake.format(3)
+                )
+            )
+
+            OutlinedCard(
+                colors = CardDefaults.outlinedCardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background)
+            ) {
+                DeviceMetricsKeyValueTable(
+                    items = listOf(
+                        "有効寸法" to "${metrics.effectiveWidthMm.format(2)} × ${metrics.effectiveHeightMm.format(2)} mm",
+                        "実焦点距離" to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
+                        "F値" to "F${metrics.baseLens.fNumber.format(2)}",
+                        "有効口径" to "${metrics.apertureDiameterMm.format(2)} mm",
+                        "デジタルズーム" to "${metrics.zoomRatio.format(2)}x",
+                        "使用センサー" to sensorMetrics.sensorName,
+                        "使用レンズ" to "${metrics.baseLens.nativeFocalLength35mm.format(1)}mm (35mm換算)"
+                    ),
+                    modifier = Modifier.padding(12.dp)
+                )
             }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "レンズ特性", fontWeight = FontWeight.SemiBold)
-                Text(text = "実焦点距離: ${metrics.baseLens.actualFocalLengthMm.format(2)} mm")
-                Text(text = "F値: ${metrics.baseLens.fNumber.format(2)}")
-                Text(text = "有効口径: ${metrics.apertureDiameterMm.format(2)} mm")
-                Text(text = "開口面積: ${metrics.apertureAreaSqMm.format(2)} mm²")
-                Text(text = "集光力: ${metrics.totalLightIntake.format(3)}")
-                Text(text = "有効センサー面積: ${metrics.effectiveAreaSqMm.format(2)} mm²")
+
+            val detailItems = buildList {
+                add("ビニング特性" to binning)
+                nativePixelPitch?.let { add("ネイティブ画素ピッチ" to it) }
+                binnedPixelPitch?.let { add("実効画素ピッチ" to it) }
+                add("開口面積" to "${metrics.apertureAreaSqMm.format(2)} mm²")
+            }
+
+            TextButton(
+                onClick = { isDetailsExpanded = !isDetailsExpanded },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(if (isDetailsExpanded) "詳細を隠す ▲" else "詳細を表示 ▼")
+            }
+
+            if (isDetailsExpanded) {
+                OutlinedCard(
+                    colors = CardDefaults.outlinedCardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background)
+                ) {
+                    DeviceMetricsKeyValueTable(
+                        items = detailItems,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeviceMetricsHighlightGrid(
+    items: List<Pair<String, String>>,
+    modifier: Modifier = Modifier
+) {
+    val safeItems = items.filter { it.first.isNotBlank() && it.second.isNotBlank() }
+    if (safeItems.isEmpty()) return
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        val rows = safeItems.chunked(2)
+        rows.forEach { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                row.forEach { (label, value) ->
+                    MetricHighlightTile(
+                        label = label,
+                        value = value,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                if (row.size == 1) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MetricHighlightTile(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        color = androidx.compose.material3.MaterialTheme.colorScheme.surface
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = label,
+                style = androidx.compose.material3.MaterialTheme.typography.labelMedium,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = value,
+                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun DeviceMetricsKeyValueTable(
+    items: List<Pair<String, String>>,
+    modifier: Modifier = Modifier
+) {
+    val safeItems = items.filter { it.first.isNotBlank() && it.second.isNotBlank() }
+    Column(modifier = modifier) {
+        safeItems.forEachIndexed { index, (label, value) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = label,
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(0.45f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = value,
+                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(0.55f),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (index != safeItems.lastIndex) {
+                HorizontalDivider(
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                )
             }
         }
     }
@@ -1233,6 +2310,23 @@ private fun sanitizeHexInput(raw: String): String {
     return if (cleaned.isEmpty()) "#" else "#${cleaned}"
 }
 
+private fun sanitizeDecimalInput(raw: String): String {
+    if (raw.isEmpty()) return ""
+    val normalized = buildString(raw.length) {
+        for (char in raw) {
+            val ascii = when (char) {
+                in '０'..'９' -> (char.code - '０'.code + '0'.code).toChar()
+                '．', '。', '，', ',' -> '.'
+                else -> char
+            }
+            if (ascii.isDigit() || ascii == '.') append(ascii)
+        }
+    }
+    val firstDot = normalized.indexOf('.')
+    if (firstDot == -1) return normalized
+    return normalized.substring(0, firstDot + 1) + normalized.substring(firstDot + 1).filter { it != '.' }
+}
+
 private fun parseHexColor(input: String): String? {
     val cleaned = input.uppercase(Locale.US).removePrefix("#")
     return if (cleaned.length == 6 && cleaned.all(::isHexDigit)) "#${cleaned}" else null
@@ -1244,7 +2338,7 @@ private fun isHexDigit(char: Char): Boolean {
 
 private fun computeBinnedPixelSize(nativePixelSize: Double, binningType: String): Double? {
     if (nativePixelSize <= 0.0) return null
-    val lower = binningType.lowercase()
+    val lower = binningType.lowercase(Locale.US)
     val factor = when {
         "quad" in lower || "2x2" in lower -> 2.0
         "nona" in lower || "3x3" in lower -> 3.0
@@ -1256,6 +2350,34 @@ private fun computeBinnedPixelSize(nativePixelSize: Double, binningType: String)
 
 private fun Double.format(decimals: Int): String {
     return String.format(Locale.US, "%.${decimals}f", this)
+}
+
+private fun formatFocalLength(value: Double): String {
+    val rounded = value.roundToInt().toDouble()
+    return if (kotlin.math.abs(value - rounded) < FOCAL_EPSILON) {
+        rounded.toInt().toString()
+    } else {
+        String.format(Locale.US, "%.1f", value)
+    }
+}
+
+private fun isApproximatelyIn(value: Double, candidates: List<Double>): Boolean {
+    return candidates.any { candidate -> kotlin.math.abs(candidate - value) < FOCAL_EPSILON }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun Modifier.bringIntoViewOnFocus(): Modifier = composed {
+    val requester = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
+    bringIntoViewRequester(requester)
+        .onFocusEvent { focusState ->
+            if (focusState.isFocused) {
+                scope.launch {
+                    delay(150)
+                    requester.bringIntoView()
+                }
+            }
+        }
 }
 
 @Composable

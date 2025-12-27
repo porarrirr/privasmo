@@ -4,10 +4,12 @@ import kotlin.math.PI
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
+import java.util.Locale
 
 const val MANUAL_INPUT_SENSOR_VALUE = "_MANUAL_INPUT_"
 const val INCH_TO_MM = 25.4
-const val SENSOR_DIAG_FACTOR = 2.0 / 3.0
+// Optical format approximation: 0.63 ≈ 16 mm per nominal inch.
+const val SENSOR_DIAG_FACTOR = 16.0 / INCH_TO_MM
 const val FF_DIAGONAL_MM = 43.2666
 const val MAX_DEVICES = 5
 const val MAX_LENSES_PER_DEVICE = 4
@@ -65,7 +67,7 @@ data class LensProcessed(
 )
 
 data class FocalLengthMetrics(
-    val focalLength35mm: Int,
+    val focalLength35mm: Double,
     val effectiveWidthMm: Double,
     val effectiveHeightMm: Double,
     val effectiveAreaSqMm: Double,
@@ -82,13 +84,14 @@ data class ProcessedDevice(
     val lenses: List<LensProcessed>,
     val metricsByFocalLength: List<FocalLengthMetrics>
 ) {
-    private val metricsLookup: Map<Int, FocalLengthMetrics> = metricsByFocalLength.associateBy { it.focalLength35mm }
+    private val metricsLookup: Map<Double, FocalLengthMetrics> =
+        metricsByFocalLength.associateBy { it.focalLength35mm }
 
-    fun metricsAt(focalLength: Int): FocalLengthMetrics? = metricsLookup[focalLength]
+    fun metricsAt(focalLength: Double): FocalLengthMetrics? = metricsLookup[focalLength]
 }
 
 data class ComparisonResults(
-    val focalLengths: List<Int>,
+    val focalLengths: List<Double>,
     val devices: List<ProcessedDevice>
 )
 
@@ -179,7 +182,7 @@ fun computeProcessedDevice(
     name: String,
     colorHex: String,
     rawLenses: List<Pair<Double, Pair<Double, SensorMetrics>>>,
-    focalLengths: List<Int>
+    focalLengths: List<Double>
 ): ProcessedDevice? {
     if (rawLenses.isEmpty()) return null
     val lenses = rawLenses.map { (focalLength35, pair) ->
@@ -209,16 +212,19 @@ fun computeProcessedDevice(
     )
 }
 
-fun calculateEffectiveMetrics(focalLength35mm: Int, lenses: List<LensProcessed>): FocalLengthMetrics? {
+fun calculateEffectiveMetrics(focalLength35mm: Double, lenses: List<LensProcessed>): FocalLengthMetrics? {
     require(lenses.isNotEmpty())
     val minNativeFocal = lenses.first().nativeFocalLength35mm
-    if (focalLength35mm.toDouble() < minNativeFocal) {
+    if (focalLength35mm < minNativeFocal) {
         return null
     }
     var baseLens = lenses.first()
     for (candidate in lenses) {
         if (focalLength35mm >= candidate.nativeFocalLength35mm) {
             baseLens = candidate
+            if (focalLength35mm == candidate.nativeFocalLength35mm) {
+                break
+            }
         } else {
             break
         }
@@ -250,9 +256,20 @@ fun isValidManualSensorDescriptor(descriptor: String): Boolean {
     return manualDescriptorToDiagonalInches(descriptor.trim()) != null
 }
 
-private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {
-    if (!descriptor.contains('/')) return null
-    val normalized = descriptor.replace(',', '.').replace('，', '.')
+private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {     
+    if (descriptor.isBlank()) return null
+    val normalized = buildString(descriptor.length) {
+        descriptor.forEach { char ->
+            val ascii = when (char) {
+                in '０'..'９' -> (char.code - '０'.code + '0'.code).toChar()
+                '／' -> '/'
+                '．', '。', '，', ',' -> '.'
+                else -> char
+            }
+            append(ascii)
+        }
+    }
+    if (!normalized.contains('/')) return null
     val parts = normalized.split('/').map { it.trim() }
     val numerator = parts.getOrNull(0)
         ?.replace(nonNumericRegex, "")
@@ -318,20 +335,20 @@ private fun getNumericPartForSort(name: String): Int {
     return Regex("\\d+").find(name)?.value?.toIntOrNull() ?: 0
 }
 
-private fun normalizeBinning(raw: String): String {
-    val binningRaw = raw.trim().lowercase()
+internal fun normalizeBinning(raw: String): String {
+    val binningRaw = raw.trim().lowercase(Locale.US)
     return when {
         binningRaw == "yes" -> "Quad Bayer (2x2)"
         "nona" in binningRaw -> "Nona (3x3)"
-        "16-cell" in binningRaw || "16-in-1" in binningRaw -> "16-cell (4x4)"
+        "16-cell" in binningRaw || "16-in-1" in binningRaw -> "16-cell (4x4)"   
         binningRaw == "no" -> "None"
         binningRaw == "unknown" -> "Unknown"
         else -> raw.trim()
     }
 }
 
-private fun detectManufacturer(name: String): String {
-    val lower = name.lowercase()
+internal fun detectManufacturer(name: String): String {
+    val lower = name.lowercase(Locale.US)
     return when {
         "sony" in lower || name.contains("ソニー") -> "Sony"
         "omnivision" in lower -> "OmniVision"
