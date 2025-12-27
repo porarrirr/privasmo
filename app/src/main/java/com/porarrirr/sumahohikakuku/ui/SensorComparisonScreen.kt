@@ -44,9 +44,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -968,7 +971,8 @@ private fun PresetEntryCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedButton(
                     onClick = { onRename(item.id, trimmedRename) },
@@ -977,15 +981,15 @@ private fun PresetEntryCard(
                 ) {
                     Text("名前変更")
                 }
-                TextButton(
+                FilledTonalIconButton(
                     onClick = { onDelete(item.id) },
                     enabled = !isProcessing,
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error
-                    ),
-                    modifier = Modifier.weight(1f)
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(
+                        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
+                        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
+                    )
                 ) {
-                    Text("削除")
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "プリセットを削除")
                 }
             }
         }
@@ -1215,8 +1219,14 @@ private fun DeviceCard(
                     style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
-                TextButton(onClick = { onRemoveDevice(device.id) }) {
-                    Text("削除")
+                FilledTonalIconButton(
+                    onClick = { onRemoveDevice(device.id) },
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(
+                        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
+                        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
+                    )
+                ) {
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "デバイスを削除")
                 }
             }
 
@@ -1279,8 +1289,15 @@ private fun LensCard(
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "レンズ", style = androidx.compose.material3.MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                TextButton(onClick = { onRemoveLens(deviceId, lens.id) }, enabled = canRemove) {
-                    Text("削除")
+                FilledTonalIconButton(
+                    onClick = { onRemoveLens(deviceId, lens.id) },
+                    enabled = canRemove,
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(
+                        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
+                        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
+                    )
+                ) {
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "レンズを削除")
                 }
             }
 
