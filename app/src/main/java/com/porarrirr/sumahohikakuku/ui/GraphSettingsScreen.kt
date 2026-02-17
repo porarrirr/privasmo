@@ -26,6 +26,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -41,14 +43,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.porarrirr.sumahohikakuku.R
 import com.porarrirr.sumahohikakuku.data.CustomSensorRepository
+import com.porarrirr.sumahohikakuku.data.CustomSensorRepositoryError
 import com.porarrirr.sumahohikakuku.data.GraphSettings
 import com.porarrirr.sumahohikakuku.data.GraphSettingsRepository
+import com.porarrirr.sumahohikakuku.domain.input.sanitizeDecimalInput
 import com.porarrirr.sumahohikakuku.model.CustomSensorEntry
 import com.porarrirr.sumahohikakuku.model.SensorSpec
 import com.porarrirr.sumahohikakuku.model.normalizeBinning
@@ -56,6 +61,7 @@ import com.porarrirr.sumahohikakuku.model.parseSensorCsv
 import java.util.Locale
 import java.util.UUID
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -70,6 +76,7 @@ fun GraphSettingsScreen(
     val settings by repository.settingsFlow.collectAsStateWithLifecycle(initialValue = GraphSettings())
     val customSensors by sensorRepository.sensorsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var lineWidth by remember { mutableFloatStateOf(settings.lineWidth) }
     LaunchedEffect(settings.lineWidth) {
@@ -88,6 +95,16 @@ fun GraphSettingsScreen(
         }
     }
 
+    LaunchedEffect(sensorRepository) {
+        sensorRepository.errors.collectLatest { error ->
+            val messageRes = when (error) {
+                is CustomSensorRepositoryError.WriteFailed -> R.string.error_failed_to_save_custom_sensors
+                else -> R.string.error_failed_to_load_custom_sensors
+            }
+            snackbarHostState.showSnackbar(context.getString(messageRes))
+        }
+    }
+
     var isEditorOpen by remember { mutableStateOf(false) }
     var editorTarget by remember { mutableStateOf<CustomSensorEntry?>(null) }
     var deleteTarget by remember { mutableStateOf<CustomSensorEntry?>(null) }
@@ -103,14 +120,15 @@ fun GraphSettingsScreen(
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("設定") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "戻る"
+                            contentDescription = stringResource(R.string.action_back)
                         )
                     }
                 }
@@ -129,7 +147,7 @@ fun GraphSettingsScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(text = "グラフ線の太さ", fontWeight = FontWeight.SemiBold)
+                    Text(text = stringResource(R.string.label_chart_line_width), fontWeight = FontWeight.SemiBold)
                     Text(text = String.format(Locale.US, "%.1f", lineWidth))
                     Slider(
                         value = lineWidth,
@@ -150,8 +168,8 @@ fun GraphSettingsScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(text = "センサー一覧（カスタム）", fontWeight = FontWeight.SemiBold)
-                    Text(text = "MP・ピクセルサイズを入力し、ビニングを選択して追加できます。")
+                    Text(text = stringResource(R.string.label_custom_sensor_list), fontWeight = FontWeight.SemiBold)
+                    Text(text = stringResource(R.string.helper_custom_sensor_editor))
 
                     OutlinedButton(
                         onClick = {
@@ -161,11 +179,11 @@ fun GraphSettingsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(imageVector = Icons.Filled.Add, contentDescription = null)
-                        Text("追加")
+                        Text(stringResource(R.string.action_add))
                     }
 
                     if (customSensors.isEmpty()) {
-                        Text(text = "まだ登録されていません。")
+                        Text(text = stringResource(R.string.text_no_custom_sensors))
                     } else {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             customSensors
@@ -201,7 +219,7 @@ fun GraphSettingsScreen(
                                                         imageVector = Icons.Filled.Edit,
                                                         contentDescription = null
                                                     )
-                                                    Text("編集")
+                                                    Text(stringResource(R.string.action_edit))
                                                 }
                                                 OutlinedButton(
                                                     onClick = { deleteTarget = entry },
@@ -211,7 +229,7 @@ fun GraphSettingsScreen(
                                                         imageVector = Icons.Filled.Delete,
                                                         contentDescription = null
                                                     )
-                                                    Text("削除")
+                                                    Text(stringResource(R.string.action_delete))
                                                 }
                                             }
                                         }
@@ -230,7 +248,7 @@ fun GraphSettingsScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("デフォルトに戻す")
+                Text(stringResource(R.string.action_reset_default))
             }
         }
     }
@@ -253,8 +271,15 @@ fun GraphSettingsScreen(
     if (pendingDelete != null) {
         AlertDialog(
             onDismissRequest = { deleteTarget = null },
-            title = { Text("センサーを削除") },
-            text = { Text("「${pendingDelete.name}」を削除しますか？") },
+            title = { Text(stringResource(R.string.dialog_delete_sensor_title)) },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.dialog_delete_sensor_message,
+                        pendingDelete.name
+                    )
+                )
+            },
             confirmButton = {
                 Button(
                     onClick = {
@@ -264,12 +289,12 @@ fun GraphSettingsScreen(
                         deleteTarget = null
                     }
                 ) {
-                    Text("削除")
+                    Text(stringResource(R.string.action_delete))
                 }
             },
             dismissButton = {
                 OutlinedButton(onClick = { deleteTarget = null }) {
-                    Text("キャンセル")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         )
@@ -323,23 +348,34 @@ private fun CustomSensorEditorDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "センサー追加" else "センサー編集") },
+        title = {
+            Text(
+                if (initial == null) {
+                    stringResource(R.string.title_add_sensor)
+                } else {
+                    stringResource(R.string.title_edit_sensor)
+                }
+            )
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("センサー名") },
+                    label = { Text(stringResource(R.string.label_sensor_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = isDuplicate
                 )
                 if (isDuplicate) {
-                    Text(text = "同名のセンサーが既に存在します。", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+                    Text(
+                        text = stringResource(R.string.error_duplicate_sensor_name),
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.error
+                    )
                 }
                 OutlinedTextField(
                     value = megapixelsInput,
                     onValueChange = { megapixelsInput = sanitizeDecimalInput(it) },
-                    label = { Text("画素数 (MP)") },
+                    label = { Text(stringResource(R.string.label_megapixels)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -347,7 +383,7 @@ private fun CustomSensorEditorDialog(
                 OutlinedTextField(
                     value = pixelSizeInput,
                     onValueChange = { pixelSizeInput = sanitizeDecimalInput(it) },
-                    label = { Text("ピクセルサイズ (µm)") },
+                    label = { Text(stringResource(R.string.label_pixel_size_um)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -361,7 +397,7 @@ private fun CustomSensorEditorDialog(
                         value = binningSelection,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("ビニング") },
+                        label = { Text(stringResource(R.string.label_binning)) },
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth(),
@@ -401,29 +437,13 @@ private fun CustomSensorEditorDialog(
                 },
                 enabled = isValid
             ) {
-                Text("保存")
+                Text(stringResource(R.string.action_save))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
-                Text("キャンセル")
+                Text(stringResource(R.string.action_cancel))
             }
         }
     )
-}
-
-private fun sanitizeDecimalInput(input: String): String {
-    val normalized = buildString {
-        input.trim().forEach { char ->
-            val ascii = when (char) {
-                in '０'..'９' -> (char.code - '０'.code + '0'.code).toChar()
-                '．', '。', '，', ',' -> '.'
-                else -> char
-            }
-            if (ascii.isDigit() || ascii == '.') append(ascii)
-        }
-    }
-    val firstDot = normalized.indexOf('.')
-    if (firstDot == -1) return normalized
-    return normalized.substring(0, firstDot + 1) + normalized.substring(firstDot + 1).filter { it != '.' }
 }

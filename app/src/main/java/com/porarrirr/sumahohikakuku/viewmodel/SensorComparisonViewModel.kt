@@ -1,13 +1,16 @@
 package com.porarrirr.sumahohikakuku.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.porarrirr.sumahohikakuku.R
 import com.porarrirr.sumahohikakuku.data.CustomSensorRepository
+import com.porarrirr.sumahohikakuku.data.DeviceInputRepository
 import com.porarrirr.sumahohikakuku.data.PresetRepository
+import com.porarrirr.sumahohikakuku.data.SavedDeviceInput
+import com.porarrirr.sumahohikakuku.data.SavedLensInput
+import com.porarrirr.sumahohikakuku.data.SensorDatabaseRepository
 import com.porarrirr.sumahohikakuku.model.ComparisonResults
 import com.porarrirr.sumahohikakuku.model.CustomSensorEntry
 import com.porarrirr.sumahohikakuku.model.DEFAULT_DEVICE_COLORS
@@ -18,18 +21,13 @@ import com.porarrirr.sumahohikakuku.model.PresetDeviceSnapshot
 import com.porarrirr.sumahohikakuku.model.PresetLensSnapshot
 import com.porarrirr.sumahohikakuku.model.PresetSnapshot
 import com.porarrirr.sumahohikakuku.model.SensorSpec
-import com.porarrirr.sumahohikakuku.model.calculateNativeSensorMetrics
-import com.porarrirr.sumahohikakuku.model.computeProcessedDevice
 import com.porarrirr.sumahohikakuku.model.isValidManualSensorDescriptor
-import com.porarrirr.sumahohikakuku.model.parseSensorCsv
 import com.porarrirr.sumahohikakuku.model.toSensorSpec
+import com.porarrirr.sumahohikakuku.ui.common.UiText
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
-import org.json.JSONArray
-import org.json.JSONObject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -41,19 +39,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.math.abs
+
 
 private const val DEFAULT_MANUAL_SENSOR_VALUE = "1/1.33"
 private const val TAG = "SensorComparisonViewModel"
-private const val PREFS_NAME = "sensor_comparison_prefs"
-private const val KEY_SAVED_DEVICES = "saved_devices"
 
 private val DEFAULT_FOCAL_LENGTHS = (14..260).map { it.toDouble() }
 private val HEX_REGEX = Regex("^#[0-9A-F]{6}$")
 
 sealed interface SensorComparisonEvent {
-    data class ShowMessage(val message: String) : SensorComparisonEvent
+    data class ShowMessage(val message: UiText) : SensorComparisonEvent
 }
 
 data class LensInputState(
@@ -101,7 +96,7 @@ data class SensorComparisonUiState(
     val presetTargetDeviceId: Long? = null,
     val activePresetAssignments: Map<Long, String> = emptyMap(),
     val isPresetProcessing: Boolean = false,
-    val presetErrorMessage: String? = null,
+    val presetErrorMessage: UiText? = null,
     val deviceFocusRequestId: Long? = null
 ) {
     val canAddDevice: Boolean get() = devices.size < MAX_DEVICES
@@ -140,7 +135,14 @@ internal data class ResolvedSensorSelection(
     val manualDescriptor: String?
 )
 
-class SensorComparisonViewModel(application: Application) : AndroidViewModel(application) {
+class SensorComparisonViewModel @JvmOverloads constructor(
+    application: Application,
+    private val presetRepository: PresetRepository = PresetRepository(application),
+    private val customSensorRepository: CustomSensorRepository = CustomSensorRepository(application),
+    private val deviceInputRepository: DeviceInputRepository = DeviceInputRepository(application),
+    private val sensorDatabaseRepository: SensorDatabaseRepository = SensorDatabaseRepository(application),
+    private val generateComparisonUseCase: GenerateComparisonUseCase = GenerateComparisonUseCase()
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(SensorComparisonUiState())
     val uiState: StateFlow<SensorComparisonUiState> = _uiState.asStateFlow()
@@ -148,23 +150,33 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
     private val _events = MutableSharedFlow<SensorComparisonEvent>(extraBufferCapacity = 8)
     val events: SharedFlow<SensorComparisonEvent> = _events.asSharedFlow()
 
-    private val presetRepository = PresetRepository(application)
-    private val customSensorRepository = CustomSensorRepository(application)
-    private val sharedPreferences = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
     private var nextDeviceId = 1L
     private var nextLensId = 1L
     private var hasRestoredState = false
+    private var hasShownDeviceSaveError = false
+    private var hasShownCustomSensorLoadError = false
+    private var hasShownPresetLoadError = false
 
     init {
         viewModelScope.launch {
-            val baseSensors = loadBaseSensors()
+            val baseSensors = sensorDatabaseRepository.loadSensors()
+                .getOrElse { error ->
+                    Log.e(TAG, "Failed to load sensor database", error)
+                    postMessage(UiText.StringResource(R.string.error_failed_to_load_sensor_database))
+                    emptyList()
+                }
             customSensorRepository.sensorsFlow
                 .map { custom -> mergeSensors(baseSensors, custom) }
                 .distinctUntilChanged()
                 .collectLatest { sensors ->
                     if (!hasRestoredState) {
-                        val restoredDevices = loadPersistedDevices(sensors)
+                        val restoredDevices = deviceInputRepository.load()
+                            .onFailure { error ->
+                                Log.w(TAG, "Failed to restore devices", error)
+                                postMessage(UiText.StringResource(R.string.error_failed_to_restore_device_inputs))
+                            }
+                            .getOrNull()
+                            ?.let { saved -> buildDevicesFromSaved(saved, sensors) }
                         val devices = restoredDevices ?: createDefaultDevices(sensors)
                         _uiState.update { current ->
                             current.copy(
@@ -204,6 +216,22 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
                     if (!hasRestoredState) return@collectLatest
                     persistDevices(devices)
                 }
+        }
+
+        viewModelScope.launch {
+            customSensorRepository.errors.collectLatest {
+                if (hasShownCustomSensorLoadError) return@collectLatest
+                hasShownCustomSensorLoadError = true
+                postMessage(UiText.StringResource(R.string.error_failed_to_load_custom_sensors))
+            }
+        }
+
+        viewModelScope.launch {
+            presetRepository.errors.collectLatest {
+                if (hasShownPresetLoadError) return@collectLatest
+                hasShownPresetLoadError = true
+                postMessage(UiText.StringResource(R.string.error_failed_to_load_presets))
+            }
         }
     }
 
@@ -363,17 +391,17 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
         val state = _uiState.value
         val trimmedName = state.presetNameInput.trim()
         if (trimmedName.isEmpty()) {
-            _uiState.update { it.copy(presetErrorMessage = "プリセット名を入力してください") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_preset_name_required)) }
             return
         }
         val targetDevice = state.presetTargetDevice
         if (targetDevice == null) {
-            _uiState.update { it.copy(presetErrorMessage = "保存対象のデバイスを選択してください") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_preset_target_required)) }
             return
         }
         val deviceSnapshot = targetDevice.toSnapshot()
         if (deviceSnapshot.lenses.isEmpty()) {
-            _uiState.update { it.copy(presetErrorMessage = "保存するレンズ設定がありません") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_preset_no_lenses)) }
             return
         }
         val now = System.currentTimeMillis()
@@ -401,7 +429,12 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
                             activePresetAssignments = assignments
                         )
                     }
-                    postMessage("プリセットを保存しました: ${snapshot.name}")
+                    postMessage(
+                        UiText.StringResource(
+                            R.string.message_preset_saved,
+                            listOf(snapshot.name)
+                        )
+                    )
                 }
                 .onFailure { error ->
                     failPresetOperation(error)
@@ -413,7 +446,14 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
         val state = _uiState.value
         val snapshot = state.presets.firstOrNull { it.id == presetId } ?: return
         if (state.devices.size >= MAX_DEVICES) {
-            _uiState.update { it.copy(presetErrorMessage = "これ以上端末を追加できません (最大${MAX_DEVICES}台)") }
+            _uiState.update {
+                it.copy(
+                    presetErrorMessage = UiText.StringResource(
+                        R.string.error_max_devices_reached,
+                        listOf(MAX_DEVICES)
+                    )
+                )
+            }
             return
         }
         val newDeviceId = nextDeviceId++
@@ -433,20 +473,20 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
                 activePresetAssignments = assignments
             )
         }
-        postMessage("デバイスを追加しました: ${newDevice.name}")
+        postMessage(UiText.StringResource(R.string.message_device_added, listOf(newDevice.name)))
     }
 
     fun overwriteTargetDeviceFromPreset(presetId: String) {
         val state = _uiState.value
         val targetDeviceId = state.presetTargetDeviceId
         if (targetDeviceId == null) {
-            _uiState.update { it.copy(presetErrorMessage = "上書きするデバイスを選択してください") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_overwrite_target_required)) }
             return
         }
         val snapshot = state.presets.firstOrNull { it.id == presetId } ?: return
         val targetDevice = state.devices.firstOrNull { it.id == targetDeviceId }
         if (targetDevice == null) {
-            _uiState.update { it.copy(presetErrorMessage = "上書きするデバイスが見つかりません") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_overwrite_target_not_found)) }
             return
         }
 
@@ -470,7 +510,7 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
                 activePresetAssignments = current.activePresetAssignments + (targetDeviceId to presetId)
             )
         }
-        postMessage("デバイスを上書きしました: ${overwritten.name}")
+        postMessage(UiText.StringResource(R.string.message_device_overwritten, listOf(overwritten.name)))
     }
 
     fun deletePreset(presetId: String) {
@@ -482,7 +522,7 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
                         val assignments = current.activePresetAssignments.filterValues { it != presetId }
                         current.copy(activePresetAssignments = assignments)
                     }
-                    postMessage("プリセットを削除しました")
+                    postMessage(UiText.StringResource(R.string.message_preset_deleted))
                 }
                 .onFailure { error -> failPresetOperation(error) }
         }
@@ -491,7 +531,7 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
     fun renamePreset(presetId: String, newName: String) {
         val trimmedName = newName.trim()
         if (trimmedName.isEmpty()) {
-            _uiState.update { it.copy(presetErrorMessage = "新しいプリセット名を入力してください") }
+            _uiState.update { it.copy(presetErrorMessage = UiText.StringResource(R.string.error_new_preset_name_required)) }
             return
         }
         startPresetOperation()
@@ -499,7 +539,7 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
             runCatching { presetRepository.updatePresetName(presetId, trimmedName.take(40)) }
                 .onSuccess {
                     finishPresetOperation()
-                    postMessage("プリセット名を変更しました")
+                    postMessage(UiText.StringResource(R.string.message_preset_renamed))
                 }
                 .onFailure { error -> failPresetOperation(error) }
         }
@@ -540,53 +580,19 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
             _uiState.update { it.copy(comparisonResults = null) }
             return
         }
-        val sensorLookup = state.availableSensors.associateBy { it.value }
-        val nativeFocals = state.devices.flatMap { device ->
-            device.lenses.mapNotNull { lens ->
-                lens.nativeFocalLength.toDoubleOrNull()?.takeIf { it > 0.0 }
-            }
-        }
-        val focalGrid = (DEFAULT_FOCAL_LENGTHS + nativeFocals).distinct().sorted()
-        val processedDevices = state.devices.mapIndexedNotNull { index, device ->
-            val sanitizedName = device.name.ifBlank { "デバイス ${index + 1}" }
-            val rawLenses = device.lenses.mapNotNull { lens ->
-                val focal = lens.nativeFocalLength.toDoubleOrNull()
-                val fNumber = lens.fNumber.toDoubleOrNull()
-                if (focal == null || focal <= 0.0 || fNumber == null || fNumber <= 0.0) return@mapNotNull null
-                val sensorSpec = sensorLookup[lens.selectedSensorValue]
-                val manualDescriptor = if (lens.usesManualSensor) lens.manualSensorDescriptor else null
-                val metrics = calculateNativeSensorMetrics(sensorSpec, manualDescriptor)
-                if (metrics.areaSqMm <= 0.0 || metrics.diagonalMm <= 0.0) return@mapNotNull null
-                focal to (fNumber to metrics)
-            }
-            computeProcessedDevice(sanitizedName, device.colorHex, rawLenses, focalGrid)
-        }
 
-        if (processedDevices.isEmpty()) {
-            _uiState.update { it.copy(comparisonResults = null, focalLengths = DEFAULT_FOCAL_LENGTHS, selectedFocalLength = DEFAULT_FOCAL_LENGTHS.first()) }
-            return
-        }
-        val availableFocalLengths = processedDevices
-            .flatMap { device -> device.metricsByFocalLength.map { it.focalLength35mm } }
-            .distinct()
-            .sorted()
-
-        if (availableFocalLengths.isEmpty()) {
-            _uiState.update { it.copy(comparisonResults = null, focalLengths = DEFAULT_FOCAL_LENGTHS, selectedFocalLength = DEFAULT_FOCAL_LENGTHS.first()) }
-            return
-        }
-
-        val desiredFocal = state.selectedFocalLength
-        val nearestFocal = availableFocalLengths.minByOrNull { abs(it - desiredFocal) } ?: availableFocalLengths.first()
+        val output = generateComparisonUseCase.generate(
+            devices = state.devices,
+            availableSensors = state.availableSensors,
+            selectedFocalLength = state.selectedFocalLength,
+            defaultFocalLengths = DEFAULT_FOCAL_LENGTHS
+        )
 
         _uiState.update {
             it.copy(
-                comparisonResults = ComparisonResults(
-                    focalLengths = availableFocalLengths,
-                    devices = processedDevices
-                ),
-                selectedFocalLength = nearestFocal,
-                focalLengths = availableFocalLengths
+                comparisonResults = output.results,
+                selectedFocalLength = output.selectedFocalLength,
+                focalLengths = output.focalLengths
             )
         }
     }
@@ -619,11 +625,12 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
     }
 
     private fun failPresetOperation(error: Throwable?) {
-        val message = error?.localizedMessage?.takeIf { it.isNotBlank() } ?: "プリセット処理に失敗しました"
+        val message = error?.localizedMessage?.takeIf { it.isNotBlank() }?.let(UiText::Dynamic)
+            ?: UiText.StringResource(R.string.error_preset_operation_failed)
         _uiState.update { it.copy(isPresetProcessing = false, presetErrorMessage = message) }
     }
 
-    private fun postMessage(message: String) {
+    private fun postMessage(message: UiText) {
         _events.tryEmit(SensorComparisonEvent.ShowMessage(message))
     }
 
@@ -700,135 +707,75 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
     }
 
     private suspend fun persistDevices(devices: List<DeviceInputState>) {
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val serialized = JSONArray().apply {
-                    devices.forEach { device ->
-                        val lenses = JSONArray().apply {
-                            device.lenses.forEach { lens ->
-                                put(
-                                    JSONObject().apply {
-                                        put("id", lens.id)
-                                        put("nativeFocalLength", lens.nativeFocalLength)
-                                        put("selectedSensorValue", lens.selectedSensorValue)
-                                        val manualDescriptor = if (lens.selectedSensorValue == MANUAL_INPUT_SENSOR_VALUE) {
-                                            lens.manualSensorDescriptor.ifBlank { DEFAULT_MANUAL_SENSOR_VALUE }
-                                        } else {
-                                            lens.manualSensorDescriptor
-                                        }
-                                        put("manualSensorDescriptor", manualDescriptor)
-                                        put("fNumber", lens.fNumber)
-                                    }
-                                )
-                            }
-                        }
-                        put(
-                            JSONObject().apply {
-                                put("id", device.id)
-                                put("name", device.name)
-                                put("colorHex", sanitizeColorHex(device.colorHex))
-                                put("lenses", lenses)
-                            }
-                        )
+        val snapshot = devices.map { device ->
+            SavedDeviceInput(
+                name = device.name,
+                colorHex = sanitizeColorHex(device.colorHex),
+                lenses = device.lenses.map { lens ->
+                    val manualDescriptor = if (lens.selectedSensorValue == MANUAL_INPUT_SENSOR_VALUE) {
+                        lens.manualSensorDescriptor.ifBlank { DEFAULT_MANUAL_SENSOR_VALUE }
+                    } else {
+                        lens.manualSensorDescriptor
                     }
-                }
-                val editor = sharedPreferences.edit()
-                val committed = if (serialized.length() == 0) {
-                    editor.remove(KEY_SAVED_DEVICES).commit()
-                } else {
-                    editor.putString(KEY_SAVED_DEVICES, serialized.toString()).commit()
-                }
-                if (!committed) {
-                    Log.w(TAG, "Failed to persist devices")
-                }
-            }.onFailure { error ->
-                Log.e(TAG, "Error while persisting devices", error)
-            }
-        }
-    }
-
-    private suspend fun loadPersistedDevices(sensors: List<SensorSpec>): List<DeviceInputState>? {
-        val serialized = withContext(Dispatchers.IO) {
-            sharedPreferences.getString(KEY_SAVED_DEVICES, null)
-        } ?: return null
-        if (serialized.isBlank()) return null
-
-        return try {
-            val array = JSONArray(serialized)
-            val sensorLookup = sensors.associateBy { it.value }
-            if (array.length() == 0) {
-                nextDeviceId = 1L
-                nextLensId = 1L
-                emptyList()
-            } else {
-                val restored = mutableListOf<DeviceInputState>()
-                var highestDeviceId = 0L
-                var highestLensId = 0L
-                for (i in 0 until array.length()) {
-                    val deviceObj = array.optJSONObject(i) ?: continue
-                    val rawDeviceId = deviceObj.optLong("id", -1L)
-                    val deviceId = if (rawDeviceId > 0) rawDeviceId else highestDeviceId + 1
-                    highestDeviceId = maxOf(highestDeviceId, deviceId)
-
-                    val name = deviceObj.optString("name").ifBlank { "デバイス $deviceId" }
-                    val colorHex = sanitizeColorHex(deviceObj.optString("colorHex"))
-                    val lensArray = deviceObj.optJSONArray("lenses")
-                    val lenses = mutableListOf<LensInputState>()
-                    if (lensArray != null) {
-                        for (j in 0 until lensArray.length()) {
-                            val lensObj = lensArray.optJSONObject(j) ?: continue
-                            val rawLensId = lensObj.optLong("id", -1L)
-                            val lensId = if (rawLensId > 0) rawLensId else highestLensId + 1
-                            highestLensId = maxOf(highestLensId, lensId)
-
-                            val nativeFocal = lensObj.optString("nativeFocalLength").trim().ifBlank { "24" }
-                            val fNumber = lensObj.optString("fNumber").trim().ifBlank { "1.8" }
-
-                            val selection = resolveSensorSelection(
-                                rawValue = lensObj.optString("selectedSensorValue").takeIf { it.isNotBlank() } ?: MANUAL_INPUT_SENSOR_VALUE,
-                                manualDescriptor = lensObj.optString("manualSensorDescriptor"),
-                                sensorLookup = sensorLookup
-                            )
-
-                            lenses += LensInputState(
-                                id = lensId,
-                                nativeFocalLength = nativeFocal,
-                                selectedSensorValue = selection.value,
-                                manualSensorDescriptor = selection.manualDescriptor ?: "",
-                                fNumber = fNumber
-                            )
-                        }
-                    }
-                    if (lenses.isEmpty()) {
-                        val fallbackLensId = highestLensId + 1
-                        highestLensId = fallbackLensId
-                        lenses += LensInputState(
-                            id = fallbackLensId,
-                            nativeFocalLength = "24",
-                            selectedSensorValue = MANUAL_INPUT_SENSOR_VALUE,
-                            manualSensorDescriptor = DEFAULT_MANUAL_SENSOR_VALUE,
-                            fNumber = "1.8"
-                        )
-                    }
-                    restored += DeviceInputState(
-                        id = deviceId,
-                        name = name,
-                        colorHex = colorHex,
-                        lenses = lenses.take(MAX_LENSES_PER_DEVICE)
+                    SavedLensInput(
+                        nativeFocalLength = lens.nativeFocalLength,
+                        selectedSensorValue = lens.selectedSensorValue,
+                        manualSensorDescriptor = manualDescriptor,
+                        fNumber = lens.fNumber
                     )
                 }
-                if (restored.isEmpty()) {
-                    null
-                } else {
-                    nextDeviceId = highestDeviceId + 1
-                    nextLensId = highestLensId + 1
-                    restored.take(MAX_DEVICES)
+            )
+        }
+        deviceInputRepository.save(snapshot)
+            .onSuccess { hasShownDeviceSaveError = false }
+            .onFailure { error ->
+                Log.e(TAG, "Failed to persist devices", error)
+                if (!hasShownDeviceSaveError) {
+                    hasShownDeviceSaveError = true
+                    postMessage(
+                        UiText.StringResource(R.string.error_failed_to_save_device_inputs)
+                    )
                 }
             }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to restore devices from preferences", e)
-            null
-        }
+    }
+
+    private fun buildDevicesFromSaved(
+        saved: List<SavedDeviceInput>,
+        sensors: List<SensorSpec>
+    ): List<DeviceInputState> {
+        nextDeviceId = 1L
+        nextLensId = 1L
+        val sensorLookup = sensors.associateBy { it.value }
+
+        return saved
+            .take(MAX_DEVICES)
+            .mapIndexed { deviceIndex, device ->
+                val deviceId = nextDeviceId++
+                val fallbackColor = DEFAULT_DEVICE_COLORS[deviceIndex % DEFAULT_DEVICE_COLORS.size]
+                val lenses = device.lenses
+                    .take(MAX_LENSES_PER_DEVICE)
+                    .map { lens ->
+                        val selection = resolveSensorSelection(
+                            rawValue = lens.selectedSensorValue.takeIf { it.isNotBlank() }
+                                ?: MANUAL_INPUT_SENSOR_VALUE,
+                            manualDescriptor = lens.manualSensorDescriptor,
+                            sensorLookup = sensorLookup
+                        )
+                        LensInputState(
+                            id = nextLensId++,
+                            nativeFocalLength = lens.nativeFocalLength.trim().ifBlank { "24" },
+                            selectedSensorValue = selection.value,
+                            manualSensorDescriptor = selection.manualDescriptor ?: "",
+                            fNumber = lens.fNumber.trim().ifBlank { "1.8" }
+                        )
+                    }
+                DeviceInputState(
+                    id = deviceId,
+                    name = device.name.ifBlank { "デバイス ${deviceIndex + 1}" },
+                    colorHex = sanitizeColorHex(device.colorHex, fallbackColor),
+                    lenses = lenses.ifEmpty { listOf(newDefaultLens()) }
+                )
+            }
     }
 
     private fun newDefaultLens(): LensInputState {
@@ -839,14 +786,6 @@ class SensorComparisonViewModel(application: Application) : AndroidViewModel(app
             manualSensorDescriptor = DEFAULT_MANUAL_SENSOR_VALUE,
             fNumber = "1.8"
         )
-    }
-
-    private suspend fun loadBaseSensors(): List<SensorSpec> {
-        val resources = getApplication<Application>().resources
-        val rawText = withContext(Dispatchers.IO) {
-            resources.openRawResource(R.raw.sensor_database).bufferedReader().use { it.readText() }
-        }
-        return parseSensorCsv(rawText)
     }
 
     private fun mergeSensors(

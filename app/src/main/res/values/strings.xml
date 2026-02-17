@@ -1,3 +1,102 @@
 <resources>
     <string name="app_name">スマートフォンセンサー比較ツール</string>
+    <string name="error_failed_to_load_sensor_database">センサーデータベースの読み込みに失敗しました</string>
+    <string name="error_failed_to_restore_device_inputs">入力内容の復元に失敗しました</string>
+    <string name="error_failed_to_save_device_inputs">入力内容の保存に失敗しました</string>
+    <string name="error_failed_to_load_custom_sensors">カスタムセンサーの読み込みに失敗しました</string>
+    <string name="error_failed_to_save_custom_sensors">カスタムセンサーの保存に失敗しました</string>
+    <string name="error_failed_to_load_presets">プリセットの読み込みに失敗しました</string>
+    <string name="error_preset_name_required">プリセット名を入力してください</string>
+    <string name="error_preset_target_required">保存対象のデバイスを選択してください</string>
+    <string name="error_preset_no_lenses">保存するレンズ設定がありません</string>
+    <string name="error_max_devices_reached">これ以上端末を追加できません (最大%1$d台)</string>
+    <string name="error_overwrite_target_required">上書きするデバイスを選択してください</string>
+    <string name="error_overwrite_target_not_found">上書きするデバイスが見つかりません</string>
+    <string name="error_new_preset_name_required">新しいプリセット名を入力してください</string>
+    <string name="error_preset_operation_failed">プリセット処理に失敗しました</string>
+
+    <string name="sensor_comparison_title">センサー比較</string>
+    <string name="action_save">保存</string>
+    <string name="action_load">呼び出し</string>
+    <string name="action_list">一覧</string>
+    <string name="action_close">閉じる</string>
+    <string name="action_clear">クリア</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_rename">名前変更</string>
+    <string name="action_add_device">デバイスを追加</string>
+    <string name="action_add_device_as_device">デバイスとして追加</string>
+    <string name="action_overwrite">上書き</string>
+    <string name="action_open_color_palette">カラーパレットを開く</string>
+    <string name="action_save_results_image">結果を画像で保存</string>
+    <string name="action_share_results_image">結果を共有</string>
+    <string name="action_back">戻る</string>
+    <string name="action_add">追加</string>
+    <string name="action_edit">編集</string>
+    <string name="action_delete">削除</string>
+    <string name="action_reset_default">デフォルトに戻す</string>
+
+    <string name="menu_settings">設定</string>
+    <string name="settings_title">設定</string>
+
+    <string name="button_generate_graph">グラフ生成 / 更新</string>
+    <string name="button_add_lens_with_max">レンズ追加 (最大%d個)</string>
+    <string name="button_save_as_preset">プリセットとして保存</string>
+
+    <string name="label_name">名前</string>
+    <string name="label_sensor_name">センサー名</string>
+    <string name="label_target_device">対象デバイス</string>
+    <string name="label_preset_save_title">プリセット保存</string>
+    <string name="label_preset_save_target_device">保存対象のデバイス</string>
+    <string name="label_preset_save_target_device_field">保存対象デバイス</string>
+    <string name="label_preset_new_name">新しいプリセット名</string>
+    <string name="label_preset_overwrite_target_device">上書き先デバイス</string>
+    <string name="label_preset_name">プリセット名</string>
+    <string name="label_focal_length">焦点距離 (35mm換算)</string>
+    <string name="label_f_number">F値</string>
+    <string name="label_sensor">センサー</string>
+    <string name="label_megapixels">画素数 (MP)</string>
+    <string name="label_pixel_size_um">ピクセルサイズ (µm)</string>
+    <string name="label_binning">ビニング</string>
+    <string name="label_chart_line_width">グラフ線の太さ</string>
+    <string name="label_custom_sensor_list">センサー一覧（カスタム）</string>
+    <string name="label_manual_input_example">手動入力 (例: 1/1.28)</string>
+    <string name="helper_invalid_fraction_format">有効な分数形式で入力してください (例: 1/1.28)</string>
+    <string name="label_search">検索</string>
+    <string name="placeholder_search_sensor">IMX989 / Samsung など</string>
+    <string name="label_all">すべて</string>
+    <string name="label_custom_color">カスタム色 (#RRGGBB)</string>
+    <string name="helper_hex_six_digits">6桁の16進数で入力してください</string>
+    <string name="title_color_palette">カラーパレット</string>
+
+    <string name="dialog_title_overwrite">上書きしますか？</string>
+    <string name="dialog_confirm_overwrite">上書きする</string>
+    <string name="dialog_delete_sensor_title">センサーを削除</string>
+    <string name="dialog_delete_sensor_message">「%1$s」を削除しますか？</string>
+
+    <string name="toast_image_saved">画像を保存しました</string>
+    <string name="error_failed_to_save_image">画像の保存に失敗しました</string>
+    <string name="error_failed_to_create_share_image">共有用画像の生成に失敗しました</string>
+    <string name="message_preset_saved">プリセットを保存しました: %1$s</string>
+    <string name="message_device_added">デバイスを追加しました: %1$s</string>
+    <string name="message_device_overwritten">デバイスを上書きしました: %1$s</string>
+    <string name="message_preset_deleted">プリセットを削除しました</string>
+    <string name="message_preset_renamed">プリセット名を変更しました</string>
+    <string name="title_add_sensor">センサー追加</string>
+    <string name="title_edit_sensor">センサー編集</string>
+    <string name="error_duplicate_sensor_name">同名のセンサーが既に存在します。</string>
+    <string name="helper_custom_sensor_editor">MP・ピクセルサイズを入力し、ビニングを選択して追加できます。</string>
+    <string name="text_no_custom_sensors">まだ登録されていません。</string>
+
+    <string name="label_lens">レンズ</string>
+    <string name="label_color">色</string>
+    <string name="section_comparison_graph">2. 比較グラフ</string>
+    <string name="section_interactive">3. インタラクティブ操作</string>
+    <string name="section_sensor_details">4. 選択焦点距離でのセンサー詳細</string>
+    <string name="label_dimensions_width_height">幅: %1$.1f mm | 高さ: %2$.1f mm</string>
+    <string name="chart_marker_default_label">値</string>
+    <string name="chart_marker_focal_length_mm">焦点距離: %1$smm</string>
+    <string name="chart_marker_zoom_digital">デジタルズーム (クロップ): %1$sx (元: %2$smm)</string>
+    <string name="chart_marker_zoom_optical">光学 (ネイティブレンズ: %1$smm)</string>
+    <string name="chart_marker_value_format">%1$s: %2$s%3$s</string>
+    <string name="chart_marker_unit_prefix"> %1$s</string>
 </resources>

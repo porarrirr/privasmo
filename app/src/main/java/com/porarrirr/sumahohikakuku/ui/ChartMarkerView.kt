@@ -1,6 +1,7 @@
 package com.porarrirr.sumahohikakuku.ui
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
@@ -12,12 +13,29 @@ import com.porarrirr.sumahohikakuku.model.FocalLengthMetrics
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ChartMarkerView(
+@Suppress("UNUSED_PARAMETER")
+class ChartMarkerView @JvmOverloads constructor(
     context: Context,
-    private val yLabel: String,
-    private val yUnit: String?,
-    private val yDecimals: Int
+    _attrs: AttributeSet? = null,
+    _defStyleAttr: Int = 0,
+    private var yLabel: String = context.getString(R.string.chart_marker_default_label),
+    private var yUnit: String? = null,
+    private var yDecimals: Int = 2
 ) : MarkerView(context, R.layout.chart_marker_view) {
+
+    constructor(
+        context: Context,
+        yLabel: String,
+        yUnit: String?,
+        yDecimals: Int
+    ) : this(
+        context = context,
+        _attrs = null,
+        _defStyleAttr = 0,
+        yLabel = yLabel,
+        yUnit = yUnit,
+        yDecimals = yDecimals
+    )
 
     private val titleTextView: TextView = findViewById(R.id.marker_title)
     private val xValueTextView: TextView = findViewById(R.id.marker_x_value)
@@ -34,7 +52,7 @@ class ChartMarkerView(
         }
 
         val focalLabel = formatFocalLength(e.x.toDouble())
-        xValueTextView.text = "焦点距離: ${focalLabel}mm"
+        xValueTextView.text = context.getString(R.string.chart_marker_focal_length_mm, focalLabel)
 
         val metrics = e.data as? FocalLengthMetrics
         if (metrics == null) {
@@ -44,15 +62,17 @@ class ChartMarkerView(
             val baseNativeFocal = formatFocalLength(metrics.baseLens.nativeFocalLength35mm)
             zoomInfoTextView.text = if (metrics.zoomRatio > 1.0001) {
                 val zoomLabel = String.format(Locale.US, "%.2f", metrics.zoomRatio)
-                "デジタルズーム (クロップ): ${zoomLabel}x (元: ${baseNativeFocal}mm)"
+                context.getString(R.string.chart_marker_zoom_digital, zoomLabel, baseNativeFocal)
             } else {
-                "光学 (ネイティブレンズ: ${baseNativeFocal}mm)"
+                context.getString(R.string.chart_marker_zoom_optical, baseNativeFocal)
             }
         }
 
         val formattedY = String.format(Locale.US, "%.${yDecimals}f", e.y)
-        val unitSuffix = yUnit?.takeIf { it.isNotBlank() }?.let { " $it" }.orEmpty()
-        yValueTextView.text = "$yLabel: $formattedY$unitSuffix"
+        val unitSuffix = yUnit?.takeIf { it.isNotBlank() }
+            ?.let { context.getString(R.string.chart_marker_unit_prefix, it) }
+            .orEmpty()
+        yValueTextView.text = context.getString(R.string.chart_marker_value_format, yLabel, formattedY, unitSuffix)
 
         super.refreshContent(e, highlight)
     }

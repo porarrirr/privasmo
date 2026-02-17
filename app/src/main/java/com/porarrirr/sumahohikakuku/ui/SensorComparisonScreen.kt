@@ -45,8 +45,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -68,6 +68,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenu
@@ -101,6 +102,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -122,8 +124,12 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.porarrirr.sumahohikakuku.GraphSettingsActivity
+import com.porarrirr.sumahohikakuku.R
 import com.porarrirr.sumahohikakuku.data.GraphSettings
 import com.porarrirr.sumahohikakuku.data.GraphSettingsRepository
+import com.porarrirr.sumahohikakuku.domain.input.parseHexColor
+import com.porarrirr.sumahohikakuku.domain.input.sanitizeDecimalInput
+import com.porarrirr.sumahohikakuku.domain.input.sanitizeHexInput
 import kotlinx.coroutines.flow.distinctUntilChanged
 import com.porarrirr.sumahohikakuku.model.ComparisonResults
 import com.porarrirr.sumahohikakuku.model.FocalLengthMetrics
@@ -138,6 +144,7 @@ import com.porarrirr.sumahohikakuku.viewmodel.PresetListItem
 import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonEvent
 import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonUiState
 import com.porarrirr.sumahohikakuku.viewmodel.SensorComparisonViewModel
+import com.porarrirr.sumahohikakuku.ui.common.resolve
 import kotlin.math.max
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -184,7 +191,6 @@ private val DEVICE_COLOR_PALETTE = listOf(
 fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
-    var menuExpanded by remember { mutableStateOf(false) }
     var isExporting by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val graphSettingsRepository = remember(context) {
@@ -195,12 +201,39 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
     )
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val actions = remember(viewModel) {
+        SensorComparisonActions(
+            openPresetSave = viewModel::openPresetSave,
+            openPresetLibrary = viewModel::openPresetLibrary,
+            closePresetSheet = viewModel::closePresetSheet,
+            addDevice = viewModel::addDevice,
+            consumeDeviceFocusRequest = viewModel::consumeDeviceFocusRequest,
+            removeDevice = viewModel::removeDevice,
+            updateDeviceName = viewModel::updateDeviceName,
+            updateDeviceColor = viewModel::updateDeviceColor,
+            addLens = viewModel::addLens,
+            removeLens = viewModel::removeLens,
+            updateLensFocalLength = viewModel::updateLensFocalLength,
+            updateLensSensorSelection = viewModel::updateLensSensorSelection,
+            updateLensManualDescriptor = viewModel::updateLensManualDescriptor,
+            updateLensFNumber = viewModel::updateLensFNumber,
+            generateComparison = viewModel::generateComparison,
+            updateFocalLength = viewModel::updateFocalLength,
+            updatePresetNameInput = viewModel::updatePresetNameInput,
+            updatePresetTargetDevice = viewModel::updatePresetTargetDevice,
+            savePreset = viewModel::savePreset,
+            loadPreset = viewModel::loadPreset,
+            overwriteTargetDeviceFromPreset = viewModel::overwriteTargetDeviceFromPreset,
+            deletePreset = viewModel::deletePreset,
+            renamePreset = viewModel::renamePreset
+        )
+    }
 
     LaunchedEffect(viewModel) {
         viewModel.events.collectLatest { event ->
             when (event) {
                 is SensorComparisonEvent.ShowMessage -> {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(event.message.resolve(context))
                 }
             }
         }
@@ -210,7 +243,6 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
         val results = uiState.comparisonResults ?: return
         val selectedFocalLength = uiState.selectedFocalLength
         val settingsSnapshot = graphSettings
-        menuExpanded = false
         isExporting = true
         coroutineScope.launch {
             try {
@@ -238,11 +270,20 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                     shareImage(context, uri)
                 } else {
                     android.widget.Toast
-                        .makeText(context, "画像を保存しました", android.widget.Toast.LENGTH_SHORT)
+                        .makeText(
+                            context,
+                            context.getString(R.string.toast_image_saved),
+                            android.widget.Toast.LENGTH_SHORT
+                        )
                         .show()
                 }
             } catch (error: Throwable) {
-                val prefix = if (share) "共有用画像の生成に失敗しました" else "画像の保存に失敗しました"
+                val prefixRes = if (share) {
+                    R.string.error_failed_to_create_share_image
+                } else {
+                    R.string.error_failed_to_save_image
+                }
+                val prefix = context.getString(prefixRes)
                 android.widget.Toast
                     .makeText(context, "$prefix: ${error.localizedMessage}", android.widget.Toast.LENGTH_LONG)
                     .show()
@@ -256,44 +297,34 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             androidx.compose.material3.TopAppBar(
-                title = { Text("センサー比較") },
+                title = { Text(stringResource(R.string.sensor_comparison_title)) },
                 actions = {
                     TextButton(
-                        onClick = viewModel::openPresetSave,
+                        onClick = actions.openPresetSave,
                         enabled = uiState.devices.isNotEmpty() && !uiState.isPresetProcessing
                     ) {
                         Icon(imageVector = Icons.Filled.Save, contentDescription = null)
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("保存")
+                        Text(stringResource(R.string.action_save))
                     }
-                    TextButton(onClick = { menuExpanded = true }) {
-                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null)
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("呼び出し")
-                    }
-                    DropdownMenu(
-                        expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false }
+                    TextButton(
+                        onClick = actions.openPresetLibrary,
+                        enabled = !uiState.isPresetProcessing
                     ) {
-                        DropdownMenuItem(
-                            text = { Text("プリセット呼び出し") },
-                            onClick = {
-                                menuExpanded = false
-                                viewModel.openPresetLibrary()
-                            },
-                            enabled = !uiState.isPresetProcessing
-                        )
-
-                        DropdownMenuItem(
-                            text = { Text("設定") },
-                            onClick = {
-                                menuExpanded = false
-                                val intent = android.content.Intent(context, GraphSettingsActivity::class.java)
-                                if (context !is android.app.Activity) {
-                                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-                                }
-                                context.startActivity(intent)
+                        Text(stringResource(R.string.action_load))
+                    }
+                    IconButton(
+                        onClick = {
+                            val intent = android.content.Intent(context, GraphSettingsActivity::class.java)
+                            if (context !is android.app.Activity) {
+                                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
                             }
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = stringResource(R.string.menu_settings)
                         )
                     }
                 }
@@ -357,7 +388,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Button(
-                    onClick = viewModel::addDevice,
+                    onClick = actions.addDevice,
                     enabled = uiState.canAddDevice,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
@@ -367,7 +398,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                 ) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("デバイスを追加")
+                    Text(stringResource(R.string.action_add_device))
                 }
             }
         }
@@ -375,24 +406,15 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
         DeviceConfigSection(
             uiState = uiState,
             focusDeviceId = uiState.deviceFocusRequestId,
-            onConsumeFocusRequest = viewModel::consumeDeviceFocusRequest,
-            onRemoveDevice = viewModel::removeDevice,
-            onUpdateDeviceName = viewModel::updateDeviceName,
-            onUpdateDeviceColor = viewModel::updateDeviceColor,
-            onAddLens = viewModel::addLens,
-            onRemoveLens = viewModel::removeLens,
-            onUpdateLensFocalLength = viewModel::updateLensFocalLength,
-            onUpdateLensSensorSelection = viewModel::updateLensSensorSelection,
-            onUpdateLensManualDescriptor = viewModel::updateLensManualDescriptor,
-            onUpdateLensFNumber = viewModel::updateLensFNumber
+            actions = actions
         )
 
         Button(
-            onClick = viewModel::generateComparison,
+            onClick = actions.generateComparison,
             enabled = uiState.isGenerateEnabled,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("グラフ生成 / 更新")
+            Text(stringResource(R.string.button_generate_graph))
         }
 
         uiState.comparisonResults?.let { results ->
@@ -401,7 +423,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                 results = results,
                 graphSettings = graphSettings,
                 isExporting = isExporting,
-                onFocalLengthChanged = viewModel::updateFocalLength,
+                onFocalLengthChanged = actions.updateFocalLength,
                 onExportResultsImage = ::exportResultsImage
             )
         }
@@ -412,21 +434,13 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
         com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.SAVE -> {
             PresetSaveSheet(
                 uiState = uiState,
-                onClose = viewModel::closePresetSheet,
-                onPresetNameChange = viewModel::updatePresetNameInput,
-                onSelectTargetDevice = viewModel::updatePresetTargetDevice,
-                onSavePreset = viewModel::savePreset
+                actions = actions
             )
         }
-        com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.LIBRARY -> {    
+        com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.LIBRARY -> {
             PresetLibrarySheet(
                 uiState = uiState,
-                onClose = viewModel::closePresetSheet,
-                onLoadPreset = viewModel::loadPreset,
-                onOverwriteTargetDeviceFromPreset = viewModel::overwriteTargetDeviceFromPreset,
-                onDeletePreset = viewModel::deletePreset,
-                onRenamePreset = viewModel::renamePreset,
-                onSelectTargetDevice = viewModel::updatePresetTargetDevice
+                actions = actions
             )
         }
         com.porarrirr.sumahohikakuku.viewmodel.PresetSheet.NONE -> Unit
@@ -478,7 +492,7 @@ private fun PresetSummaryCard(
                             value = deviceLabel,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("対象デバイス") },
+                            label = { Text(stringResource(R.string.label_target_device)) },
                             modifier = Modifier
                                 .menuAnchor()
                                 .fillMaxWidth()
@@ -522,10 +536,10 @@ private fun PresetSummaryCard(
                         onClick = onOpenSave,
                         enabled = uiState.devices.isNotEmpty() && !uiState.isPresetProcessing
                     ) {
-                        Text("保存")
+                        Text(stringResource(R.string.action_save))
                     }
                     OutlinedButton(onClick = onOpenLibrary, enabled = !uiState.isPresetProcessing) {
-                        Text("一覧")
+                        Text(stringResource(R.string.action_list))
                     }
                 }
             }
@@ -540,15 +554,12 @@ private fun PresetSummaryCard(
 @Composable
 private fun PresetSaveSheet(
     uiState: SensorComparisonUiState,
-    onClose: () -> Unit,
-    onPresetNameChange: (String) -> Unit,
-    onSelectTargetDevice: (Long?) -> Unit,
-    onSavePreset: () -> Unit
+    actions: SensorComparisonActions
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
-        onDismissRequest = onClose,
+        onDismissRequest = actions.closePresetSheet,
         sheetState = sheetState
     ) {
         Column(
@@ -564,12 +575,12 @@ private fun PresetSaveSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "プリセット保存",
+                    text = stringResource(R.string.label_preset_save_title),
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
-                TextButton(onClick = onClose) {
-                    Text("閉じる")
+                TextButton(onClick = actions.closePresetSheet) {
+                    Text(stringResource(R.string.action_close))
                 }
             }
 
@@ -578,7 +589,7 @@ private fun PresetSaveSheet(
             }
 
             Text(
-                text = "保存対象のデバイス",
+                text = stringResource(R.string.label_preset_save_target_device),
                 style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold
             )
@@ -601,7 +612,7 @@ private fun PresetSaveSheet(
                         value = targetLabel,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("保存対象デバイス") },
+                        label = { Text(stringResource(R.string.label_preset_save_target_device_field)) },
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -617,7 +628,7 @@ private fun PresetSaveSheet(
                             DropdownMenuItem(
                                 text = { Text(device.name.ifBlank { "デバイス" }) },
                                 onClick = {
-                                    onSelectTargetDevice(device.id)
+                                    actions.updatePresetTargetDevice(device.id)
                                     deviceMenuExpanded = false
                                 },
                                 enabled = !uiState.isPresetProcessing
@@ -634,24 +645,25 @@ private fun PresetSaveSheet(
 
             OutlinedTextField(
                 value = uiState.presetNameInput,
-                onValueChange = onPresetNameChange,
-                label = { Text("新しいプリセット名") },
+                onValueChange = actions.updatePresetNameInput,
+                label = { Text(stringResource(R.string.label_preset_new_name)) },
                 modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                 singleLine = true,
                 enabled = !uiState.isPresetProcessing
             )
 
             Button(
-                onClick = onSavePreset,
+                onClick = actions.savePreset,
                 enabled = uiState.isPresetSaveEnabled && !uiState.isPresetProcessing,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("プリセットとして保存")
+                Text(stringResource(R.string.button_save_as_preset))
             }
 
             uiState.presetErrorMessage?.let { errorMessage ->
+                val context = LocalContext.current
                 Text(
-                    text = errorMessage,
+                    text = errorMessage.resolve(context),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.error,
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
                 )
@@ -665,12 +677,7 @@ private fun PresetSaveSheet(
 @Composable
 private fun PresetLibrarySheet(
     uiState: SensorComparisonUiState,
-    onClose: () -> Unit,
-    onLoadPreset: (String) -> Unit,
-    onOverwriteTargetDeviceFromPreset: (String) -> Unit,
-    onDeletePreset: (String) -> Unit,
-    onRenamePreset: (String, String) -> Unit,
-    onSelectTargetDevice: (Long?) -> Unit
+    actions: SensorComparisonActions
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val dateFormat = remember { SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN) }
@@ -678,7 +685,7 @@ private fun PresetLibrarySheet(
     val canAppendDevice = uiState.devices.size < MAX_DEVICES
 
     ModalBottomSheet(
-        onDismissRequest = onClose,
+        onDismissRequest = actions.closePresetSheet,
         sheetState = sheetState
     ) {
         Column(
@@ -698,8 +705,8 @@ private fun PresetLibrarySheet(
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
-                TextButton(onClick = onClose) {
-                    Text("閉じる")
+                TextButton(onClick = actions.closePresetSheet) {
+                    Text(stringResource(R.string.action_close))
                 }
             }
 
@@ -708,7 +715,7 @@ private fun PresetLibrarySheet(
             }
 
             Text(
-                text = "上書き先デバイス",
+                text = stringResource(R.string.label_preset_overwrite_target_device),
                 style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold
             )
@@ -729,7 +736,7 @@ private fun PresetLibrarySheet(
                         value = targetLabel,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("上書き先デバイス") },
+                        label = { Text(stringResource(R.string.label_preset_overwrite_target_device)) },
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -747,7 +754,7 @@ private fun PresetLibrarySheet(
                             DropdownMenuItem(
                                 text = { Text(device.name.ifBlank { "デバイス" }) },
                                 onClick = {
-                                    onSelectTargetDevice(device.id)
+                                    actions.updatePresetTargetDevice(device.id)
                                     deviceMenuExpanded = false
                                 },
                                 enabled = !uiState.isPresetProcessing
@@ -773,8 +780,9 @@ private fun PresetLibrarySheet(
             }
 
             uiState.presetErrorMessage?.let { errorMessage ->
+                val context = LocalContext.current
                 Text(
-                    text = errorMessage,
+                    text = errorMessage.resolve(context),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.error,
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
                 )
@@ -812,10 +820,10 @@ private fun PresetLibrarySheet(
                             canOverwriteTargetDevice = uiState.devices.isNotEmpty(),
                             overwriteTargetLabel = targetLabel,
                             dateFormat = dateFormat,
-                            onLoad = onLoadPreset,
-                            onOverwriteTargetDeviceFromPreset = onOverwriteTargetDeviceFromPreset,
-                            onDelete = onDeletePreset,
-                            onRename = onRenamePreset
+                            onLoad = actions.loadPreset,
+                            onOverwriteTargetDeviceFromPreset = actions.overwriteTargetDeviceFromPreset,
+                            onDelete = actions.deletePreset,
+                            onRename = actions.renamePreset
                         )
                     }
                 }
@@ -870,7 +878,7 @@ private fun PresetEntryCard(
             OutlinedTextField(
                 value = renameValue,
                 onValueChange = { renameValue = it.take(40) },
-                label = { Text("プリセット名") },
+                label = { Text(stringResource(R.string.label_preset_name)) },
                 modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                 singleLine = true,
                 enabled = !isProcessing
@@ -929,21 +937,21 @@ private fun PresetEntryCard(
                     enabled = !isProcessing && canAppendDevice,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("デバイスとして追加")
+                    Text(stringResource(R.string.action_add_device_as_device))
                 }
                 OutlinedButton(
                     onClick = { showOverwriteDialog = true },
                     enabled = canOverwrite,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("上書き")
+                    Text(stringResource(R.string.action_overwrite))
                 }
             }
 
             if (showOverwriteDialog) {
                 AlertDialog(
                     onDismissRequest = { showOverwriteDialog = false },
-                    title = { Text("上書きしますか？") },
+                    title = { Text(stringResource(R.string.dialog_title_overwrite)) },
                     text = {
                         Text(
                             text = "上書き先: $overwriteTargetLabel\n" +
@@ -958,12 +966,12 @@ private fun PresetEntryCard(
                             },
                             enabled = canOverwrite
                         ) {
-                            Text("上書きする")
+                            Text(stringResource(R.string.dialog_confirm_overwrite))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showOverwriteDialog = false }) {
-                            Text("キャンセル")
+                            Text(stringResource(R.string.action_cancel))
                         }
                     }
                 )
@@ -979,7 +987,7 @@ private fun PresetEntryCard(
                     enabled = canRename,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("名前変更")
+                    Text(stringResource(R.string.action_rename))
                 }
                 FilledTonalIconButton(
                     onClick = { onDelete(item.id) },
@@ -1001,16 +1009,7 @@ private fun PresetEntryCard(
 private fun DeviceConfigSection(
     uiState: SensorComparisonUiState,
     focusDeviceId: Long?,
-    onConsumeFocusRequest: () -> Unit,
-    onRemoveDevice: (Long) -> Unit,
-    onUpdateDeviceName: (Long, String) -> Unit,
-    onUpdateDeviceColor: (Long, String) -> Unit,
-    onAddLens: (Long) -> Unit,
-    onRemoveLens: (Long, Long) -> Unit,
-    onUpdateLensFocalLength: (Long, Long, String) -> Unit,
-    onUpdateLensSensorSelection: (Long, Long, String) -> Unit,
-    onUpdateLensManualDescriptor: (Long, Long, String) -> Unit,
-    onUpdateLensFNumber: (Long, Long, String) -> Unit
+    actions: SensorComparisonActions
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (uiState.devices.isNotEmpty()) {
@@ -1026,7 +1025,7 @@ private fun DeviceConfigSection(
                 if (index >= 0) {
                     listState.animateScrollToItem(index)
                 }
-                onConsumeFocusRequest()
+                actions.consumeDeviceFocusRequest()
             }
             LaunchedEffect(listState) {
                 snapshotFlow { listState.isScrollInProgress }
@@ -1085,15 +1084,7 @@ private fun DeviceConfigSection(
                                     device = device,
                                     availableSensors = uiState.availableSensors,
                                     availableColors = uiState.availableDeviceColors,
-                                    onRemoveDevice = onRemoveDevice,
-                                    onUpdateDeviceName = onUpdateDeviceName,
-                                    onUpdateDeviceColor = onUpdateDeviceColor,
-                                    onAddLens = onAddLens,
-                                    onRemoveLens = onRemoveLens,
-                                    onUpdateLensFocalLength = onUpdateLensFocalLength,
-                                    onUpdateLensSensorSelection = onUpdateLensSensorSelection,
-                                    onUpdateLensManualDescriptor = onUpdateLensManualDescriptor,
-                                    onUpdateLensFNumber = onUpdateLensFNumber,
+                                    actions = actions,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
@@ -1197,15 +1188,7 @@ private fun DeviceCard(
     device: DeviceInputState,
     availableSensors: List<com.porarrirr.sumahohikakuku.model.SensorSpec>,
     availableColors: List<String>,
-    onRemoveDevice: (Long) -> Unit,
-    onUpdateDeviceName: (Long, String) -> Unit,
-    onUpdateDeviceColor: (Long, String) -> Unit,
-    onAddLens: (Long) -> Unit,
-    onRemoveLens: (Long, Long) -> Unit,
-    onUpdateLensFocalLength: (Long, Long, String) -> Unit,
-    onUpdateLensSensorSelection: (Long, Long, String) -> Unit,
-    onUpdateLensManualDescriptor: (Long, Long, String) -> Unit,
-    onUpdateLensFNumber: (Long, Long, String) -> Unit,
+    actions: SensorComparisonActions,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -1220,7 +1203,7 @@ private fun DeviceCard(
                     modifier = Modifier.weight(1f)
                 )
                 FilledTonalIconButton(
-                    onClick = { onRemoveDevice(device.id) },
+                    onClick = { actions.removeDevice(device.id) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(
                         containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
                         contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
@@ -1232,15 +1215,15 @@ private fun DeviceCard(
 
             OutlinedTextField(
                 value = device.name,
-                onValueChange = { onUpdateDeviceName(device.id, it) },
-                label = { Text("名前") },
+                onValueChange = { actions.updateDeviceName(device.id, it) },
+                label = { Text(stringResource(R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus()
             )
 
             ColorSelector(
                 selectedColor = device.colorHex,
                 availableColors = availableColors,
-                onSelectColor = { onUpdateDeviceColor(device.id, it) }
+                onSelectColor = { actions.updateDeviceColor(device.id, it) }
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1250,11 +1233,7 @@ private fun DeviceCard(
                             deviceId = device.id,
                             lens = lens,
                             availableSensors = availableSensors,
-                            onRemoveLens = onRemoveLens,
-                            onUpdateLensFocalLength = onUpdateLensFocalLength,
-                            onUpdateLensSensorSelection = onUpdateLensSensorSelection,
-                            onUpdateLensManualDescriptor = onUpdateLensManualDescriptor,
-                            onUpdateLensFNumber = onUpdateLensFNumber,
+                            actions = actions,
                             canRemove = device.lenses.size > 1
                         )
                     }
@@ -1262,8 +1241,8 @@ private fun DeviceCard(
             }
 
             if (device.lenses.size < MAX_LENSES_PER_DEVICE) {
-                OutlinedButton(onClick = { onAddLens(device.id) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("レンズ追加 (最大${MAX_LENSES_PER_DEVICE}個)")
+                OutlinedButton(onClick = { actions.addLens(device.id) }, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.button_add_lens_with_max, MAX_LENSES_PER_DEVICE))
                 }
             }
         }
@@ -1276,11 +1255,7 @@ private fun LensCard(
     deviceId: Long,
     lens: LensInputState,
     availableSensors: List<com.porarrirr.sumahohikakuku.model.SensorSpec>,
-    onRemoveLens: (Long, Long) -> Unit,
-    onUpdateLensFocalLength: (Long, Long, String) -> Unit,
-    onUpdateLensSensorSelection: (Long, Long, String) -> Unit,
-    onUpdateLensManualDescriptor: (Long, Long, String) -> Unit,
-    onUpdateLensFNumber: (Long, Long, String) -> Unit,
+    actions: SensorComparisonActions,
     canRemove: Boolean
 ) {
     OutlinedCard(
@@ -1288,9 +1263,13 @@ private fun LensCard(
     ) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "レンズ", style = androidx.compose.material3.MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.label_lens),
+                    style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.weight(1f)
+                )
                 FilledTonalIconButton(
-                    onClick = { onRemoveLens(deviceId, lens.id) },
+                    onClick = { actions.removeLens(deviceId, lens.id) },
                     enabled = canRemove,
                     colors = IconButtonDefaults.filledTonalIconButtonColors(
                         containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
@@ -1305,9 +1284,9 @@ private fun LensCard(
                 OutlinedTextField(
                     value = lens.nativeFocalLength,
                     onValueChange = {
-                        onUpdateLensFocalLength(deviceId, lens.id, sanitizeDecimalInput(it))
+                        actions.updateLensFocalLength(deviceId, lens.id, sanitizeDecimalInput(it))
                     },
-                    label = { Text("焦点距離 (35mm換算)") },
+                    label = { Text(stringResource(R.string.label_focal_length)) },
                     modifier = Modifier.weight(1f).bringIntoViewOnFocus(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -1315,9 +1294,9 @@ private fun LensCard(
                 OutlinedTextField(
                     value = lens.fNumber,
                     onValueChange = {
-                        onUpdateLensFNumber(deviceId, lens.id, sanitizeDecimalInput(it))
+                        actions.updateLensFNumber(deviceId, lens.id, sanitizeDecimalInput(it))
                     },
-                    label = { Text("F値") },
+                    label = { Text(stringResource(R.string.label_f_number)) },
                     modifier = Modifier.weight(1f).bringIntoViewOnFocus(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -1335,7 +1314,7 @@ private fun LensCard(
                     value = selectedSensor?.name ?: "手動入力",
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("センサー") },
+                    label = { Text(stringResource(R.string.label_sensor)) },
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
@@ -1351,7 +1330,7 @@ private fun LensCard(
                     availableSensors = availableSensors,
                     selectedSensorValue = lens.selectedSensorValue,
                     onSelectSensor = { value ->
-                        onUpdateLensSensorSelection(deviceId, lens.id, value)
+                        actions.updateLensSensorSelection(deviceId, lens.id, value)
                         isSensorPickerOpen = false
                     },
                     onClose = { isSensorPickerOpen = false }
@@ -1362,14 +1341,14 @@ private fun LensCard(
                 val manualValid = isValidManualSensorDescriptor(lens.manualSensorDescriptor)
                 OutlinedTextField(
                     value = lens.manualSensorDescriptor,
-                    onValueChange = { onUpdateLensManualDescriptor(deviceId, lens.id, it) },
-                    label = { Text("手動入力 (例: 1/1.28)") },
+                    onValueChange = { actions.updateLensManualDescriptor(deviceId, lens.id, it) },
+                    label = { Text(stringResource(R.string.label_manual_input_example)) },
                     modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                     singleLine = true,
                     isError = !manualValid,
                     supportingText = {
                         if (!manualValid) {
-                            Text("有効な分数形式で入力してください (例: 1/1.28)")
+                            Text(stringResource(R.string.helper_invalid_fraction_format))
                         }
                     }
                 )
@@ -1440,21 +1419,21 @@ private fun SensorPickerSheet(
                     fontWeight = FontWeight.SemiBold
                 )
                 TextButton(onClick = onClose) {
-                    Text("閉じる")
+                    Text(stringResource(R.string.action_close))
                 }
             }
 
             OutlinedTextField(
                 value = query,
                 onValueChange = { query = it },
-                label = { Text("検索") },
-                placeholder = { Text("IMX989 / Samsung など") },
+                label = { Text(stringResource(R.string.label_search)) },
+                placeholder = { Text(stringResource(R.string.placeholder_search_sensor)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
                 trailingIcon = {
                     if (query.isNotBlank()) {
                         TextButton(onClick = { query = "" }) {
-                            Text("クリア")
+                            Text(stringResource(R.string.action_clear))
                         }
                     }
                 }
@@ -1468,7 +1447,7 @@ private fun SensorPickerSheet(
                     FilterChip(
                         selected = manufacturerFilter == null,
                         onClick = { manufacturerFilter = null },
-                        label = { Text("すべて") }
+                        label = { Text(stringResource(R.string.label_all)) }
                     )
                 }
                 items(manufacturerOptions, key = { it }) { manufacturer ->
@@ -1536,7 +1515,7 @@ private fun ColorSelector(
     onSelectColor: (String) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(text = "色", style = androidx.compose.material3.MaterialTheme.typography.titleSmall)
+        Text(text = stringResource(R.string.label_color), style = androidx.compose.material3.MaterialTheme.typography.titleSmall)
         var isPaletteDialogOpen by remember { mutableStateOf(false) }
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
@@ -1561,7 +1540,7 @@ private fun ColorSelector(
         }
 
         TextButton(onClick = { isPaletteDialogOpen = true }) {
-            Text("カラーパレットを開く")
+            Text(stringResource(R.string.action_open_color_palette))
         }
 
         var customColorInput by remember { mutableStateOf(selectedColor.uppercase(Locale.US)) }
@@ -1577,12 +1556,12 @@ private fun ColorSelector(
                 customColorInput = normalized
                 parseHexColor(normalized)?.let(onSelectColor)
             },
-            label = { Text("カスタム色 (#RRGGBB)") },
+            label = { Text(stringResource(R.string.label_custom_color)) },
             modifier = Modifier.fillMaxWidth().bringIntoViewOnFocus(),
             isError = !isValidHex,
             supportingText = {
                 if (!isValidHex) {
-                    Text("6桁の16進数で入力してください")
+                    Text(stringResource(R.string.helper_hex_six_digits))
                 }
             },
             trailingIcon = {
@@ -1623,7 +1602,7 @@ private fun ColorPaletteDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("カラーパレット") },
+        title = { Text(stringResource(R.string.title_color_palette)) },
         text = {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -1654,7 +1633,7 @@ private fun ColorPaletteDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("閉じる")
+                Text(stringResource(R.string.action_close))
             }
         }
     )
@@ -1674,27 +1653,33 @@ private fun ResultsSection(
     val selectedIndex = focalLengths.indexOf(uiState.selectedFocalLength).takeIf { it >= 0 } ?: 0
     val sliderSteps = (focalLengths.size - 2).coerceAtLeast(0)
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "2. 比較グラフ", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(R.string.section_comparison_graph),
+            style = androidx.compose.material3.MaterialTheme.typography.titleLarge
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             Button(
                 onClick = { onExportResultsImage(false) },
                 enabled = !isExporting,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("結果を画像で保存")
+                Text(stringResource(R.string.action_save_results_image))
             }
             OutlinedButton(
                 onClick = { onExportResultsImage(true) },
                 enabled = !isExporting,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("結果を共有")
+                Text(stringResource(R.string.action_share_results_image))
             }
         }
 
         ChartsSection(results = results, graphSettings = graphSettings)
 
-        Text(text = "3. インタラクティブ操作", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(R.string.section_interactive),
+            style = androidx.compose.material3.MaterialTheme.typography.titleLarge
+        )
         Card {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
@@ -1714,7 +1699,10 @@ private fun ResultsSection(
             }
         }
 
-        Text(text = "4. 選択焦点距離でのセンサー詳細", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(R.string.section_sensor_details),
+            style = androidx.compose.material3.MaterialTheme.typography.titleLarge
+        )
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -2314,43 +2302,15 @@ private fun SensorVisualization(metrics: FocalLengthMetrics, borderColor: Color)
             contentAlignment = Alignment.Center
         ) {}
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = "幅: ${metrics.effectiveWidthMm.format(1)} mm | 高さ: ${metrics.effectiveHeightMm.format(1)} mm", fontSize = 12.sp)
+        Text(
+            text = stringResource(
+                R.string.label_dimensions_width_height,
+                metrics.effectiveWidthMm,
+                metrics.effectiveHeightMm
+            ),
+            fontSize = 12.sp
+        )
     }
-}
-
-private fun sanitizeHexInput(raw: String): String {
-    if (raw.isEmpty()) return "#"
-    val cleaned = raw.uppercase(Locale.US)
-        .replace("#", "")
-        .filter(::isHexDigit)
-        .take(6)
-    return if (cleaned.isEmpty()) "#" else "#${cleaned}"
-}
-
-private fun sanitizeDecimalInput(raw: String): String {
-    if (raw.isEmpty()) return ""
-    val normalized = buildString(raw.length) {
-        for (char in raw) {
-            val ascii = when (char) {
-                in '０'..'９' -> (char.code - '０'.code + '0'.code).toChar()
-                '．', '。', '，', ',' -> '.'
-                else -> char
-            }
-            if (ascii.isDigit() || ascii == '.') append(ascii)
-        }
-    }
-    val firstDot = normalized.indexOf('.')
-    if (firstDot == -1) return normalized
-    return normalized.substring(0, firstDot + 1) + normalized.substring(firstDot + 1).filter { it != '.' }
-}
-
-private fun parseHexColor(input: String): String? {
-    val cleaned = input.uppercase(Locale.US).removePrefix("#")
-    return if (cleaned.length == 6 && cleaned.all(::isHexDigit)) "#${cleaned}" else null
-}
-
-private fun isHexDigit(char: Char): Boolean {
-    return char in '0'..'9' || char in 'A'..'F'
 }
 
 private fun computeBinnedPixelSize(nativePixelSize: Double, binningType: String): Double? {
