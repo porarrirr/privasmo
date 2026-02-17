@@ -2,6 +2,7 @@ package com.porarrirr.sumahohikakuku.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.porarrirr.sumahohikakuku.R
@@ -241,7 +242,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
         val color = DEFAULT_DEVICE_COLORS[state.devices.size % DEFAULT_DEVICE_COLORS.size]
         val newDevice = DeviceInputState(
             id = nextDeviceId++,
-            name = "デバイス ${state.devices.size + 1}",
+            name = defaultDeviceName(state.devices.size + 1),
             colorHex = color,
             lenses = listOf(newDefaultLens())
         )
@@ -585,7 +586,8 @@ class SensorComparisonViewModel @JvmOverloads constructor(
             devices = state.devices,
             availableSensors = state.availableSensors,
             selectedFocalLength = state.selectedFocalLength,
-            defaultFocalLengths = DEFAULT_FOCAL_LENGTHS
+            defaultFocalLengths = DEFAULT_FOCAL_LENGTHS,
+            fallbackDeviceName = ::defaultDeviceName
         )
 
         _uiState.update {
@@ -635,8 +637,8 @@ class SensorComparisonViewModel @JvmOverloads constructor(
     }
 
     private fun buildDefaultPresetName(deviceName: String?, nowEpochMillis: Long): String {
-        val timestamp = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN).format(Date(nowEpochMillis))
-        val base = deviceName?.trim().orEmpty().ifBlank { "デバイス" }
+        val timestamp = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).format(Date(nowEpochMillis))
+        val base = deviceName?.trim().orEmpty().ifBlank { defaultDeviceBaseName() }
         return "$base $timestamp".take(40)
     }
 
@@ -671,7 +673,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                     fNumber = lensSnapshot.fNumber.ifBlank { "1.8" }
                 )
             }
-        val sanitizedName = deviceSnapshot.name.ifBlank { snapshot.name.ifBlank { "プリセットデバイス" } }
+        val sanitizedName = deviceSnapshot.name.ifBlank {
+            snapshot.name.ifBlank { getString(R.string.label_preset_device_default_name) }
+        }
         val sanitizedColor = sanitizeColorHex(deviceSnapshot.colorHex, fallbackColor)
         return DeviceInputState(
             id = deviceId,
@@ -683,7 +687,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
 
     private fun DeviceInputState.toSnapshot(): PresetDeviceSnapshot {
         return PresetDeviceSnapshot(
-            name = name.ifBlank { "デバイス" },
+            name = name.ifBlank { defaultDeviceBaseName() },
             colorHex = sanitizeColorHex(colorHex),
             lenses = lenses.take(MAX_LENSES_PER_DEVICE).map { it.toSnapshot() }
         )
@@ -771,7 +775,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                     }
                 DeviceInputState(
                     id = deviceId,
-                    name = device.name.ifBlank { "デバイス ${deviceIndex + 1}" },
+                    name = device.name.ifBlank { defaultDeviceName(deviceIndex + 1) },
                     colorHex = sanitizeColorHex(device.colorHex, fallbackColor),
                     lenses = lenses.ifEmpty { listOf(newDefaultLens()) }
                 )
@@ -801,7 +805,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
     private fun createDefaultDevices(sensors: List<SensorSpec>): List<DeviceInputState> {
         val presets = listOf(
             DevicePreset(
-                name = "デバイス1",
+                name = defaultDeviceName(1),
                 lenses = listOf(
                     LensPreset(14.0, "1/2.76", 2.2),
                     LensPreset(23.0, "Sony LYT-900 (IMX06A)", 1.63),
@@ -810,7 +814,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                 )
             ),
             DevicePreset(
-                name = "デバイス2",
+                name = defaultDeviceName(2),
                 lenses = listOf(
                     LensPreset(15.0, "1/2.75", 2.0),
                     LensPreset(23.0, "Sony IMX989", 1.8),
@@ -819,7 +823,7 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                 )
             ),
             DevicePreset(
-                name = "デバイス3",
+                name = defaultDeviceName(3),
                 lenses = listOf(
                     LensPreset(14.0, "Sony IMX707", 2.0),
                     LensPreset(35.0, "Sony IMX803", 1.69),
@@ -862,6 +866,18 @@ class SensorComparisonViewModel @JvmOverloads constructor(
         val sensorName: String,
         val fNumber: Double
     )
+
+    private fun defaultDeviceName(index: Int): String {
+        return getString(R.string.label_device_numbered_name, index)
+    }
+
+    private fun defaultDeviceBaseName(): String {
+        return getString(R.string.label_device_default_name)
+    }
+
+    private fun getString(@StringRes resId: Int, vararg args: Any): String {
+        return getApplication<Application>().getString(resId, *args)
+    }
 }
 
 internal fun resolveSensorSelection(

@@ -101,7 +101,7 @@ internal suspend fun saveBitmapToPictures(
     }
 }
 
-internal fun shareImage(context: Context, uri: Uri, chooserTitle: String = "共有") {
+internal fun shareImage(context: Context, uri: Uri, chooserTitle: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "image/png"
         putExtra(Intent.EXTRA_STREAM, uri)

@@ -17,7 +17,8 @@ class GenerateComparisonUseCase {
         devices: List<DeviceInputState>,
         availableSensors: List<SensorSpec>,
         selectedFocalLength: Double,
-        defaultFocalLengths: List<Double>
+        defaultFocalLengths: List<Double>,
+        fallbackDeviceName: (Int) -> String
     ): GeneratedComparison {
         val sensorLookup = availableSensors.associateBy { it.value }
         val nativeFocals = devices.flatMap { device ->
@@ -28,7 +29,7 @@ class GenerateComparisonUseCase {
         val focalGrid = (defaultFocalLengths + nativeFocals).distinct().sorted()
 
         val processedDevices = devices.mapIndexedNotNull { index, device ->
-            val sanitizedName = device.name.ifBlank { "デバイス ${index + 1}" }
+            val sanitizedName = device.name.ifBlank { fallbackDeviceName(index + 1) }
             val rawLenses = device.lenses.mapNotNull { lens ->
                 val focal = lens.nativeFocalLength.toDoubleOrNull()
                 val fNumber = lens.fNumber.toDoubleOrNull()

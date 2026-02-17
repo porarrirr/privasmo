@@ -62,6 +62,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Slider
@@ -246,7 +247,8 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
         isExporting = true
         coroutineScope.launch {
             try {
-                val activity = context.findComponentActivity() ?: error("Activity not found")
+                val activity = context.findComponentActivity()
+                    ?: throw IllegalStateException(context.getString(R.string.error_activity_not_found))
                 val exportedAt = System.currentTimeMillis()
                 val widthPx = context.resources.displayMetrics.widthPixels
                 val bitmap = renderComposableToBitmap(activity, widthPx) {
@@ -267,7 +269,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                 }
 
                 if (share) {
-                    shareImage(context, uri)
+                    shareImage(context, uri, context.getString(R.string.title_share_image))
                 } else {
                     android.widget.Toast
                         .makeText(
@@ -344,14 +346,14 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
         Text(
-            text = "高度なスマートフォンセンサー比較ツール (総光量対応)",  
+            text = stringResource(R.string.app_title_advanced),
             style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "センサーリストから選択するか、『手動入力』を選んで 1/1.28 のような分数表記で入力してください。(センサー比率は 4:3 を前提)",
+            text = stringResource(R.string.description_manual_input_guidance),
             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
             color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -371,7 +373,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "デバイス",
+                        text = stringResource(R.string.section_devices),
                         style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f)
@@ -383,7 +385,7 @@ fun SensorComparisonScreen(viewModel: SensorComparisonViewModel = viewModel()) {
                     )
                 }
                 Text(
-                    text = "比較対象に追加したいスマホを登録します。",
+                    text = stringResource(R.string.description_devices),
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -458,7 +460,11 @@ private fun PresetSummaryCard(
     val targetDevice = uiState.presetTargetDevice
     val activePresetId = targetDevice?.let { device -> uiState.activePresetAssignments[device.id] }
     val activePresetName = activePresetId?.let { id -> uiState.presets.firstOrNull { it.id == id }?.name }
-    val deviceLabel = targetDevice?.name?.ifBlank { "無題のデバイス" } ?: "未選択"
+    val untitledDevice = stringResource(R.string.label_untitled_device)
+    val unselected = stringResource(R.string.label_unselected)
+    val defaultDevice = stringResource(R.string.label_device_default_name)
+    val none = stringResource(R.string.label_none)
+    val deviceLabel = targetDevice?.name?.ifBlank { untitledDevice } ?: unselected
     Card(
         colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant)
     ) {
@@ -473,12 +479,12 @@ private fun PresetSummaryCard(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "プリセット",
+                        text = stringResource(R.string.title_presets),
                         style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "対象デバイス1台分の構成を保存 / 呼び出しできます。",
+                        text = stringResource(R.string.description_preset_summary),
                         style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -508,7 +514,7 @@ private fun PresetSummaryCard(
                         ) {
                             uiState.devices.forEach { device ->
                                 DropdownMenuItem(
-                                    text = { Text(device.name.ifBlank { "デバイス" }) },
+                                    text = { Text(device.name.ifBlank { defaultDevice }) },
                                     onClick = {
                                         onSelectTargetDevice(device.id)
                                         deviceMenuExpanded = false
@@ -519,11 +525,11 @@ private fun PresetSummaryCard(
                         }
                     }
                     Text(
-                        text = "このデバイスの元プリセット: ${activePresetName ?: "なし"}",
+                        text = stringResource(R.string.text_source_preset_for_device, activePresetName ?: none),
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "保存済み: ${uiState.presets.size} 件",
+                        text = stringResource(R.string.text_saved_count, uiState.presets.size),
                         style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -557,6 +563,8 @@ private fun PresetSaveSheet(
     actions: SensorComparisonActions
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val defaultDevice = stringResource(R.string.label_device_default_name)
+    val unselected = stringResource(R.string.label_unselected)
 
     ModalBottomSheet(
         onDismissRequest = actions.closePresetSheet,
@@ -596,14 +604,14 @@ private fun PresetSaveSheet(
 
             if (uiState.devices.isEmpty()) {
                 Text(
-                    text = "操作できるデバイスがありません。先にデバイスを追加してください。",
+                    text = stringResource(R.string.text_no_operable_devices),
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
             } else {
                 var deviceMenuExpanded by remember { mutableStateOf(false) }
                 val targetDevice = uiState.presetTargetDevice
-                val targetLabel = targetDevice?.name?.ifBlank { "デバイス" } ?: "未選択"
+                val targetLabel = targetDevice?.name?.ifBlank { defaultDevice } ?: unselected
                 ExposedDropdownMenuBox(
                     expanded = deviceMenuExpanded,
                     onExpandedChange = { deviceMenuExpanded = it }
@@ -626,7 +634,7 @@ private fun PresetSaveSheet(
                     ) {
                         uiState.devices.forEach { device ->
                             DropdownMenuItem(
-                                text = { Text(device.name.ifBlank { "デバイス" }) },
+                                text = { Text(device.name.ifBlank { defaultDevice }) },
                                 onClick = {
                                     actions.updatePresetTargetDevice(device.id)
                                     deviceMenuExpanded = false
@@ -637,7 +645,7 @@ private fun PresetSaveSheet(
                     }
                 }
                 Text(
-                    text = "選択したデバイスの構成を保存します。",
+                    text = stringResource(R.string.description_selected_device_saved),
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -680,8 +688,10 @@ private fun PresetLibrarySheet(
     actions: SensorComparisonActions
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val dateFormat = remember { SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN) }
-    val targetLabel = uiState.presetTargetDevice?.name?.ifBlank { "デバイス" } ?: "未選択"
+    val dateFormat = remember { SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()) }
+    val defaultDevice = stringResource(R.string.label_device_default_name)
+    val unselected = stringResource(R.string.label_unselected)
+    val targetLabel = uiState.presetTargetDevice?.name?.ifBlank { defaultDevice } ?: unselected
     val canAppendDevice = uiState.devices.size < MAX_DEVICES
 
     ModalBottomSheet(
@@ -701,7 +711,7 @@ private fun PresetLibrarySheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "プリセット一覧",
+                    text = stringResource(R.string.title_preset_library),
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -722,7 +732,7 @@ private fun PresetLibrarySheet(
 
             if (uiState.devices.isEmpty()) {
                 Text(
-                    text = "上書きできるデバイスがありません。先にデバイスを追加してください。",
+                    text = stringResource(R.string.text_no_overwrite_target_devices),
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -752,7 +762,7 @@ private fun PresetLibrarySheet(
                     ) {
                         uiState.devices.forEach { device ->
                             DropdownMenuItem(
-                                text = { Text(device.name.ifBlank { "デバイス" }) },
+                                text = { Text(device.name.ifBlank { defaultDevice }) },
                                 onClick = {
                                     actions.updatePresetTargetDevice(device.id)
                                     deviceMenuExpanded = false
@@ -765,15 +775,14 @@ private fun PresetLibrarySheet(
             }
 
             Text(
-                text = "「追加」は比較対象に新しいデバイスとして追加します。\n" +
-                    "「上書き」は上書き先デバイスの設定を置き換えます。",
+                text = stringResource(R.string.description_preset_add_or_overwrite),
                 style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             if (!canAppendDevice) {
                 Text(
-                    text = "端末数が上限です (最大${MAX_DEVICES}台)。削除してから読み込んでください。",
+                    text = stringResource(R.string.text_max_devices_reached_hint, MAX_DEVICES),
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.error
                 )
@@ -791,14 +800,14 @@ private fun PresetLibrarySheet(
             HorizontalDivider()
 
             Text(
-                text = "保存済みプリセット (${uiState.presetListItems.size})",
+                text = stringResource(R.string.title_saved_presets_with_count, uiState.presetListItems.size),
                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
 
             if (uiState.presetListItems.isEmpty()) {
                 Text(
-                    text = "まだプリセットは登録されていません。",
+                    text = stringResource(R.string.text_no_presets_registered),
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -852,19 +861,17 @@ private fun PresetEntryCard(
     }
     val trimmedRename = renameValue.trim()
     val canRename = trimmedRename.isNotEmpty() && trimmedRename != item.name && !isProcessing
-    val updatedLabel = remember(item.updatedAtEpochMillis) {
-        if (item.updatedAtEpochMillis <= 0L) {
-            "最終更新: -"
-        } else {
-            "最終更新: ${dateFormat.format(Date(item.updatedAtEpochMillis))}"
-        }
+    val updatedLabel = if (item.updatedAtEpochMillis <= 0L) {
+        stringResource(R.string.label_last_updated_unknown)
+    } else {
+        stringResource(R.string.label_last_updated, dateFormat.format(Date(item.updatedAtEpochMillis)))
     }
     val fallbackColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
     val deviceColor = remember(item.colorHex, fallbackColor) {
         runCatching { Color(AndroidColor.parseColor(item.colorHex)) }
             .getOrElse { fallbackColor }
     }
-    val deviceNameLabel = item.deviceName.ifBlank { "無題のデバイス" }
+    val deviceNameLabel = item.deviceName.ifBlank { stringResource(R.string.label_untitled_device) }
     var showOverwriteDialog by remember(item.id) { mutableStateOf(false) }
     val canOverwrite = canOverwriteTargetDevice && !isProcessing
 
@@ -898,11 +905,11 @@ private fun PresetEntryCard(
                 )
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(
-                        text = "端末名: $deviceNameLabel",
+                        text = stringResource(R.string.label_device_name_with_value, deviceNameLabel),
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "レンズ数: ${item.lensCount}",
+                        text = stringResource(R.string.label_lens_count_with_value, item.lensCount),
                         style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -921,7 +928,7 @@ private fun PresetEntryCard(
                 )
                 if (isActive) {
                     Text(
-                        text = "対象の元",
+                        text = stringResource(R.string.label_source_for_target),
                         color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -954,8 +961,7 @@ private fun PresetEntryCard(
                     title = { Text(stringResource(R.string.dialog_title_overwrite)) },
                     text = {
                         Text(
-                            text = "上書き先: $overwriteTargetLabel\n" +
-                                "端末名・色・レンズ設定が置き換わります。"
+                            text = stringResource(R.string.dialog_overwrite_target_message, overwriteTargetLabel)
                         )
                     },
                     confirmButton = {
@@ -997,7 +1003,10 @@ private fun PresetEntryCard(
                         contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
                     )
                 ) {
-                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "プリセットを削除")
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.content_desc_delete_preset)
+                    )
                 }
             }
         }
@@ -1143,7 +1152,7 @@ private fun ScrollHintBanner(showSwipeHint: Boolean, modifier: Modifier = Modifi
             border = BorderStroke(1.dp, androidx.compose.material3.MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
         ) {
             Text(
-                text = "左右にスワイプしてデバイスを切り替えられます",
+                text = stringResource(R.string.hint_swipe_devices),
                 style = androidx.compose.material3.MaterialTheme.typography.labelLarge,
                 color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -1191,6 +1200,7 @@ private fun DeviceCard(
     actions: SensorComparisonActions,
     modifier: Modifier = Modifier
 ) {
+    val defaultDeviceName = stringResource(R.string.label_device_default_name)
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant)
@@ -1198,7 +1208,7 @@ private fun DeviceCard(
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = device.name.ifBlank { "デバイス" },
+                    text = device.name.ifBlank { defaultDeviceName },
                     style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
@@ -1209,7 +1219,10 @@ private fun DeviceCard(
                         contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
                     )
                 ) {
-                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "デバイスを削除")
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.content_desc_delete_device)
+                    )
                 }
             }
 
@@ -1276,7 +1289,10 @@ private fun LensCard(
                         contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onErrorContainer
                     )
                 ) {
-                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "レンズを削除")
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.content_desc_delete_lens)
+                    )
                 }
             }
 
@@ -1311,7 +1327,11 @@ private fun LensCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = selectedSensor?.name ?: "手動入力",
+                    value = when {
+                        selectedSensor == null -> stringResource(R.string.label_manual_input)
+                        selectedSensor.isManual -> stringResource(R.string.label_manual_input)
+                        else -> selectedSensor.name
+                    },
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(R.string.label_sensor)) },
@@ -1414,7 +1434,7 @@ private fun SensorPickerSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "センサー選択",
+                    text = stringResource(R.string.title_sensor_picker),
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -1466,7 +1486,7 @@ private fun SensorPickerSheet(
 
             if (filteredSensors.isEmpty()) {
                 Text(
-                    text = "該当するセンサーがありません",
+                    text = stringResource(R.string.text_no_matching_sensors),
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1481,7 +1501,11 @@ private fun SensorPickerSheet(
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    text = sensor.name,
+                                    text = if (sensor.isManual) {
+                                        stringResource(R.string.label_manual_input)
+                                    } else {
+                                        sensor.name
+                                    },
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -1493,7 +1517,7 @@ private fun SensorPickerSheet(
                             trailingIcon = {
                                 if (isSelected) {
                                     Text(
-                                        text = "選択中",
+                                        text = stringResource(R.string.label_selected_short),
                                         fontSize = 12.sp,
                                         color = androidx.compose.material3.MaterialTheme.colorScheme.primary
                                     )
@@ -1652,6 +1676,12 @@ private fun ResultsSection(
     if (focalLengths.isEmpty()) return
     val selectedIndex = focalLengths.indexOf(uiState.selectedFocalLength).takeIf { it >= 0 } ?: 0
     val sliderSteps = (focalLengths.size - 2).coerceAtLeast(0)
+    var graphRangeIndices by remember(focalLengths) {
+        mutableStateOf(0f..focalLengths.lastIndex.toFloat())
+    }
+    val graphStartIndex = graphRangeIndices.start.roundToInt().coerceIn(0, focalLengths.lastIndex)
+    val graphEndIndex = graphRangeIndices.endInclusive.roundToInt().coerceIn(graphStartIndex, focalLengths.lastIndex)
+    val graphFocalRange = focalLengths[graphStartIndex]..focalLengths[graphEndIndex]
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(
             text = stringResource(R.string.section_comparison_graph),
@@ -1674,7 +1704,61 @@ private fun ResultsSection(
             }
         }
 
-        ChartsSection(results = results, graphSettings = graphSettings)
+        Card {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.label_graph_display_range),
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = stringResource(
+                        R.string.label_graph_range_compact,
+                        formatFocalLength(graphFocalRange.start),
+                        formatFocalLength(graphFocalRange.endInclusive)
+                    ),
+                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
+                )
+                if (focalLengths.size > 1) {
+                    RangeSlider(
+                        value = graphRangeIndices,
+                        onValueChange = { range ->
+                            val start = range.start.roundToInt().coerceIn(0, focalLengths.lastIndex)
+                            val end = range.endInclusive.roundToInt().coerceIn(0, focalLengths.lastIndex)
+                            val minIndex = start.coerceAtMost(end)
+                            val maxIndex = end.coerceAtLeast(start)
+                            graphRangeIndices = minIndex.toFloat()..maxIndex.toFloat()
+                        },
+                        valueRange = 0f..focalLengths.lastIndex.toFloat(),
+                        steps = sliderSteps,
+                        colors = SliderDefaults.colors(
+                            thumbColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(R.string.label_left_edge, formatFocalLength(graphFocalRange.start)),
+                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = stringResource(R.string.label_right_edge, formatFocalLength(graphFocalRange.endInclusive)),
+                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        }
+
+        ChartsSection(
+            results = results,
+            graphSettings = graphSettings,
+            focalRange = graphFocalRange
+        )
 
         Text(
             text = stringResource(R.string.section_interactive),
@@ -1683,7 +1767,10 @@ private fun ResultsSection(
         Card {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "焦点距離 (35mm換算): ${formatFocalLength(uiState.selectedFocalLength)}mm",
+                    text = stringResource(
+                        R.string.label_selected_focal_length,
+                        formatFocalLength(uiState.selectedFocalLength)
+                    ),
                     fontWeight = FontWeight.Medium
                 )
                 Slider(
@@ -1723,23 +1810,26 @@ private fun ResultsSection(
 @Composable
 private fun ChartsSection(
     results: ComparisonResults,
-    graphSettings: GraphSettings
+    graphSettings: GraphSettings,
+    focalRange: ClosedFloatingPointRange<Double>? = null
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         ChartCard(
-            title = "有効センサー面積の比較",
+            title = stringResource(R.string.chart_title_effective_area),
             results = results,
             graphSettings = graphSettings,
-            yLabel = "有効センサー面積",
+            focalRange = focalRange,
+            yLabel = stringResource(R.string.chart_y_label_effective_area),
             yUnit = "mm²",
             yDecimals = 2,
             dataExtractor = { metric -> metric.effectiveAreaSqMm.toFloat() }
         )
         ChartCard(
-            title = "集光力 (有効面積 / F値²) の比較",
+            title = stringResource(R.string.chart_title_light_intake),
             results = results,
             graphSettings = graphSettings,
-            yLabel = "集光力",
+            focalRange = focalRange,
+            yLabel = stringResource(R.string.chart_y_label_light_intake),
             yDecimals = 3,
             dataExtractor = { metric -> metric.totalLightIntake.toFloat() }
         )
@@ -1754,7 +1844,7 @@ private fun ExportComparisonImageContent(
     exportedAtEpochMillis: Long
 ) {
     val exportedAtLabel = remember(exportedAtEpochMillis) {
-        SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN).format(Date(exportedAtEpochMillis))
+        SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).format(Date(exportedAtEpochMillis))
     }
 
     Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background) {
@@ -1765,25 +1855,25 @@ private fun ExportComparisonImageContent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "スマートフォンセンサー比較",
+                text = stringResource(R.string.export_title),
                 style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "作成: $exportedAtLabel",
+                text = stringResource(R.string.export_label_created_at, exportedAtLabel),
                 style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
-                text = "比較グラフ",
+                text = stringResource(R.string.export_section_chart),
                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
             ChartsSection(results = results, graphSettings = graphSettings)
 
             Text(
-                text = "スペック表 (${formatFocalLength(selectedFocalLength)}mm)",
+                text = stringResource(R.string.export_section_specs_at, formatFocalLength(selectedFocalLength)),
                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
@@ -1812,8 +1902,12 @@ private fun ExportSpecTable(
                 ?.let { "${it.format(2)} µm" }
             val binnedPixelPitch = computeBinnedPixelSize(sensorMetrics.nativePixelSizeUm, binning)
                 ?.let { "${it.format(2)} µm" }
-            val pixelPitchLabel = if (binnedPixelPitch != null) "画素ピッチ (ビニング後)" else "画素ピッチ"
-            val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: "N/A"
+            val pixelPitchLabel = if (binnedPixelPitch != null) {
+                stringResource(R.string.label_pixel_pitch_binned)
+            } else {
+                stringResource(R.string.label_pixel_pitch)
+            }
+            val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: stringResource(R.string.label_not_available)
 
             Card(
                 colors = CardDefaults.cardColors(
@@ -1858,12 +1952,12 @@ private fun ExportSpecTable(
                     ) {
                         DeviceMetricsKeyValueTable(
                             items = listOf(
-                                "有効面積" to "${metrics.effectiveAreaSqMm.format(2)} mm²",
+                                stringResource(R.string.metric_effective_area) to "${metrics.effectiveAreaSqMm.format(2)} mm²",
                                 pixelPitchLabel to pixelPitchValue,
-                                "集光力" to metrics.totalLightIntake.format(3),
-                                "実焦点距離" to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
-                                "F値" to "F${metrics.baseLens.fNumber.format(2)}",
-                                "使用センサー" to sensorMetrics.sensorName
+                                stringResource(R.string.metric_total_light_intake) to metrics.totalLightIntake.format(3),
+                                stringResource(R.string.metric_actual_focal_length) to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
+                                stringResource(R.string.metric_f_number) to "F${metrics.baseLens.fNumber.format(2)}",
+                                stringResource(R.string.metric_sensor_used) to sensorMetrics.sensorName
                             ),
                             modifier = Modifier.padding(12.dp)
                         )
@@ -1879,6 +1973,7 @@ private fun ChartCard(
     title: String,
     results: ComparisonResults,
     graphSettings: GraphSettings,
+    focalRange: ClosedFloatingPointRange<Double>? = null,
     yLabel: String,
     yUnit: String? = null,
     yDecimals: Int = 2,
@@ -1967,8 +2062,24 @@ private fun ChartCard(
                     }
                 },
                 update = { chart ->
+                    val fullMinFocal = results.focalLengths.firstOrNull() ?: 0.0
+                    val fullMaxFocal = results.focalLengths.lastOrNull() ?: fullMinFocal
+                    val rawMinFocal = focalRange?.start ?: fullMinFocal
+                    val rawMaxFocal = focalRange?.endInclusive ?: fullMaxFocal
+                    val clampedMinFocal = rawMinFocal
+                        .coerceAtLeast(fullMinFocal)
+                        .coerceAtMost(fullMaxFocal)
+                    val clampedMaxFocal = rawMaxFocal
+                        .coerceAtLeast(clampedMinFocal)
+                        .coerceAtMost(fullMaxFocal)
+                    val visibleFocals = results.focalLengths.filter { focal ->
+                        focal in clampedMinFocal..clampedMaxFocal
+                    }
+
                     chart.xAxis.textColor = axisTextColor
                     chart.xAxis.textSize = 12f
+                    chart.xAxis.axisMinimum = clampedMinFocal.toFloat()
+                    chart.xAxis.axisMaximum = clampedMaxFocal.toFloat()
                     chart.axisLeft.textColor = axisTextColor
                     chart.axisLeft.textSize = 12f
                     chart.axisLeft.gridColor = gridColor
@@ -2008,7 +2119,7 @@ private fun ChartCard(
                             surfaceColor = chartSurfaceColor
                         )
 
-                        val entries = results.focalLengths.mapNotNull { focal ->
+                        val entries = visibleFocals.mapNotNull { focal ->
                             val metrics = device.metricsAt(focal) ?: return@mapNotNull null
                             Entry(focal.toFloat(), dataExtractor(metrics)).apply {
                                 data = metrics
@@ -2122,8 +2233,12 @@ private fun DeviceMetricsCard(
     val binning = sensorMetrics.binningType
     val nativePixelPitch = sensorMetrics.nativePixelSizeUm.takeIf { it > 0 }?.let { "${it.format(2)} µm" }
     val binnedPixelPitch = computeBinnedPixelSize(sensorMetrics.nativePixelSizeUm, binning)?.let { "${it.format(2)} µm" }
-    val pixelPitchLabel = if (binnedPixelPitch != null) "画素ピッチ (ビニング後)" else "画素ピッチ"
-    val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: "N/A"
+    val pixelPitchLabel = if (binnedPixelPitch != null) {
+        stringResource(R.string.label_pixel_pitch_binned)
+    } else {
+        stringResource(R.string.label_pixel_pitch)
+    }
+    val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch ?: stringResource(R.string.label_not_available)
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant)
@@ -2134,9 +2249,9 @@ private fun DeviceMetricsCard(
 
             DeviceMetricsHighlightGrid(
                 items = listOf(
-                    "有効面積" to "${metrics.effectiveAreaSqMm.format(2)} mm²",
+                    stringResource(R.string.metric_effective_area) to "${metrics.effectiveAreaSqMm.format(2)} mm²",
                     pixelPitchLabel to pixelPitchValue,
-                    "集光力" to metrics.totalLightIntake.format(3)
+                    stringResource(R.string.metric_total_light_intake) to metrics.totalLightIntake.format(3)
                 )
             )
 
@@ -2145,30 +2260,39 @@ private fun DeviceMetricsCard(
             ) {
                 DeviceMetricsKeyValueTable(
                     items = listOf(
-                        "有効寸法" to "${metrics.effectiveWidthMm.format(2)} × ${metrics.effectiveHeightMm.format(2)} mm",
-                        "実焦点距離" to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
-                        "F値" to "F${metrics.baseLens.fNumber.format(2)}",
-                        "有効口径" to "${metrics.apertureDiameterMm.format(2)} mm",
-                        "デジタルズーム" to "${metrics.zoomRatio.format(2)}x",
-                        "使用センサー" to sensorMetrics.sensorName,
-                        "使用レンズ" to "${metrics.baseLens.nativeFocalLength35mm.format(1)}mm (35mm換算)"
+                        stringResource(R.string.metric_effective_dimensions) to "${metrics.effectiveWidthMm.format(2)} × ${metrics.effectiveHeightMm.format(2)} mm",
+                        stringResource(R.string.metric_actual_focal_length) to "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
+                        stringResource(R.string.metric_f_number) to "F${metrics.baseLens.fNumber.format(2)}",
+                        stringResource(R.string.metric_effective_aperture) to "${metrics.apertureDiameterMm.format(2)} mm",
+                        stringResource(R.string.metric_digital_zoom) to "${metrics.zoomRatio.format(2)}x",
+                        stringResource(R.string.metric_sensor_used) to sensorMetrics.sensorName,
+                        stringResource(R.string.metric_lens_used) to stringResource(
+                            R.string.value_lens_used_format,
+                            metrics.baseLens.nativeFocalLength35mm.format(1)
+                        )
                     ),
                     modifier = Modifier.padding(12.dp)
                 )
             }
 
             val detailItems = buildList {
-                add("ビニング特性" to binning)
-                nativePixelPitch?.let { add("ネイティブ画素ピッチ" to it) }
-                binnedPixelPitch?.let { add("実効画素ピッチ" to it) }
-                add("開口面積" to "${metrics.apertureAreaSqMm.format(2)} mm²")
+                add(stringResource(R.string.metric_binning_characteristic) to binning)
+                nativePixelPitch?.let { add(stringResource(R.string.metric_native_pixel_pitch) to it) }
+                binnedPixelPitch?.let { add(stringResource(R.string.metric_effective_pixel_pitch) to it) }
+                add(stringResource(R.string.metric_aperture_area) to "${metrics.apertureAreaSqMm.format(2)} mm²")
             }
 
             TextButton(
                 onClick = { isDetailsExpanded = !isDetailsExpanded },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(if (isDetailsExpanded) "詳細を隠す ▲" else "詳細を表示 ▼")
+                Text(
+                    if (isDetailsExpanded) {
+                        stringResource(R.string.action_hide_details)
+                    } else {
+                        stringResource(R.string.action_show_details)
+                    }
+                )
             }
 
             if (isDetailsExpanded) {

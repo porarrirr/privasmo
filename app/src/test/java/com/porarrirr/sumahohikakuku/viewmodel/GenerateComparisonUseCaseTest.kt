@@ -45,7 +45,8 @@ class GenerateComparisonUseCaseTest {
             devices = devices,
             availableSensors = listOf(sensorSpec),
             selectedFocalLength = 35.0,
-            defaultFocalLengths = defaultFocalLengths
+            defaultFocalLengths = defaultFocalLengths,
+            fallbackDeviceName = { "Device $it" }
         )
 
         assertNull(output.results)
@@ -76,10 +77,43 @@ class GenerateComparisonUseCaseTest {
             devices = devices,
             availableSensors = listOf(sensorSpec),
             selectedFocalLength = 41.0,
-            defaultFocalLengths = defaultFocalLengths
+            defaultFocalLengths = defaultFocalLengths,
+            fallbackDeviceName = { "Device $it" }
         )
 
         assertNotNull(output.results)
         assertEquals(35.0, output.selectedFocalLength, 0.0)
+    }
+
+    @Test
+    fun generate_usesFallbackDeviceNameWhenBlank() {
+        val devices = listOf(
+            DeviceInputState(
+                id = 1L,
+                name = "",
+                colorHex = "#2563EB",
+                lenses = listOf(
+                    LensInputState(
+                        id = 1L,
+                        nativeFocalLength = "24",
+                        selectedSensorValue = sensorSpec.value,
+                        manualSensorDescriptor = "",
+                        fNumber = "1.8"
+                    )
+                )
+            )
+        )
+
+        val output = useCase.generate(
+            devices = devices,
+            availableSensors = listOf(sensorSpec),
+            selectedFocalLength = 24.0,
+            defaultFocalLengths = defaultFocalLengths,
+            fallbackDeviceName = { "Fallback Device $it" }
+        )
+
+        val results = output.results
+        assertNotNull(results)
+        assertEquals("Fallback Device 1", results!!.devices.first().name)
     }
 }
