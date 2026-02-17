@@ -8,6 +8,17 @@ import java.util.Locale
 class SensorModelsTest {
 
     @Test
+    fun parseSensorCsv_handlesQuotedFields() {
+        val raw = "\"Sony, IMX999\",5000,1.0,No"
+
+        val sensors = parseSensorCsv(raw)
+        val sensor = sensors.first { !it.isManual }
+
+        assertEquals("Sony, IMX999", sensor.name)
+        assertEquals(50.0, sensor.megapixels, 0.0)
+    }
+
+    @Test
     fun isValidManualSensorDescriptor_acceptsCommaDecimal() {
         assertTrue(isValidManualSensorDescriptor("1/1,33"))
     }

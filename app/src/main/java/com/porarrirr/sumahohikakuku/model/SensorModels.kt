@@ -31,6 +31,26 @@ val DEFAULT_DEVICE_COLORS = listOf(
 
 private val manufacturerOrder = listOf("Sony", "OmniVision", "Samsung", "GalaxyCore", "SmartSens", "Toshiba", "Other")
 private val nonNumericRegex = Regex("[^0-9.]")
+private val trailingAlphaRegex = Regex("[A-Z]+$", RegexOption.IGNORE_CASE)
+private val firstDigitsRegex = Regex("\\d+")
+
+private data class NumericPattern(
+    val regex: Regex,
+    val groupIndex: Int
+)
+
+private val numericPatterns = listOf(
+    NumericPattern(
+        regex = Regex(
+            "(?:LYT-T?|IMX|S5K[A-Z]{0,2}|OV(?:[A-Z0-9]{2,3})?[A-Z]?|GC|SC|HES|CK|ISOCELL\\s[A-Z]{0,2})(\\d+[A-Z0-9]*)",
+            RegexOption.IGNORE_CASE
+        ),
+        groupIndex = 1
+    ),
+    NumericPattern(regex = Regex("(\\d+)MP", RegexOption.IGNORE_CASE), groupIndex = 1),
+    NumericPattern(regex = Regex("[A-Z]+(\\d+)", RegexOption.IGNORE_CASE), groupIndex = 1),
+    NumericPattern(regex = Regex("(\\d+)"), groupIndex = 1)
+)
 
 enum class SensorSource {
     DATABASE,
@@ -97,10 +117,10 @@ data class ComparisonResults(
 
 fun parseSensorCsv(raw: String): List<SensorSpec> {
     val sensors = raw.lineSequence()
-        .map { it.trim() }
-        .filter { it.isNotEmpty() }
+        .map { it.trim().trimStart('\uFEFF') }
+        .filter { it.isNotEmpty() && !it.startsWith('#') }
         .mapNotNull { line ->
-            val parts = line.split(',').map { part -> part.trim() }
+            val parts = parseCsvLine(line).map { part -> part.trim() }
             if (parts.size != 4) return@mapNotNull null
             val name = parts[0]
             val megapixelsValue = parts[1].toDoubleOrNull()?.div(100.0) ?: return@mapNotNull null
@@ -132,6 +152,41 @@ fun parseSensorCsv(raw: String): List<SensorSpec> {
     ))
 
     return sensors
+}
+
+private fun parseCsvLine(line: String): List<String> {
+    val fields = mutableListOf<String>()
+    val current = StringBuilder()
+    var inQuotes = false
+
+    var index = 0
+    while (index < line.length) {
+        val char = line[index]
+        when (char) {
+            '"' -> {
+                val nextIndex = index + 1
+                if (inQuotes && nextIndex < line.length && line[nextIndex] == '"') {
+                    current.append('"')
+                    index = nextIndex
+                } else {
+                    inQuotes = !inQuotes
+                }
+            }
+            ',' -> {
+                if (inQuotes) {
+                    current.append(char)
+                } else {
+                    fields.add(current.toString())
+                    current.setLength(0)
+                }
+            }
+            else -> current.append(char)
+        }
+        index++
+    }
+
+    fields.add(current.toString())
+    return fields
 }
 
 fun calculateNativeSensorMetrics(sensorSpec: SensorSpec?, manualDescriptor: String?): SensorMetrics {
@@ -284,10 +339,14 @@ private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {
     return numerator / denominator
 }
 
-private fun sensorComparator(): Comparator<SensorSpec> = Comparator { a, b ->
-    val manuA = manufacturerOrder.indexOf(a.manufacturer).let { if (it == -1) manufacturerOrder.size else it }
-    val manuB = manufacturerOrder.indexOf(b.manufacturer).let { if (it == -1) manufacturerOrder.size else it }
-    if (manuA != manuB) return@Comparator manuA - manuB
+private fun sensorComparator(): Comparator<SensorSpec> = Comparator { a, b ->   
+    val manufacturerRankA = manufacturerOrder.indexOf(a.manufacturer).let { index ->
+        if (index == -1) manufacturerOrder.size else index
+    }
+    val manufacturerRankB = manufacturerOrder.indexOf(b.manufacturer).let { index ->
+        if (index == -1) manufacturerOrder.size else index
+    }
+    if (manufacturerRankA != manufacturerRankB) return@Comparator manufacturerRankA - manufacturerRankB
 
     if (a.manufacturer == "Sony" && b.manufacturer == "Sony") {
         val (isALyt, isBLyt) = a.name.startsWith("Sony LYT") to b.name.startsWith("Sony LYT")
@@ -313,26 +372,17 @@ private fun sensorComparator(): Comparator<SensorSpec> = Comparator { a, b ->
 }
 
 private fun getNumericPartForSort(name: String): Int {
-    val patterns = listOf(
-        Regex("(?:LYT-T?|IMX|S5K[A-Z]{0,2}|OV(?:[A-Z0-9]{2,3})?[A-Z]?|GC|SC|HES|CK|ISOCELL\\s[A-Z]{0,2})(\\d+[A-Z0-9]*)", RegexOption.IGNORE_CASE),
-        Regex("(\\d+MP)", RegexOption.IGNORE_CASE),
-        Regex("([A-Z]+)(\\d+)", RegexOption.IGNORE_CASE),
-        Regex("(\\d+)")
-    )
-    for (pattern in patterns) {
-        val match = pattern.find(name)
-        if (match != null) {
-            var numericStr = match.groupValues.getOrNull(1).orEmpty()
-            if (pattern.pattern.contains("([A-Z]+)(\\\\d+)")) {
-                numericStr = match.groupValues.getOrNull(2).orEmpty()
-            }
-            numericStr = numericStr.replace(Regex("[A-Z]+$", RegexOption.IGNORE_CASE), "")
-            if (numericStr.matches(Regex("\\d+"))) {
-                return numericStr.toInt()
-            }
+    for (pattern in numericPatterns) {
+        val match = pattern.regex.find(name) ?: continue
+        val groupValue = match.groupValues.getOrNull(pattern.groupIndex).orEmpty()
+        val withoutSuffix = groupValue.replace(trailingAlphaRegex, "")
+        if (withoutSuffix.isNotBlank() && withoutSuffix.all { it.isDigit() }) {
+            return withoutSuffix.toInt()
         }
+        val digits = firstDigitsRegex.find(groupValue)?.value ?: continue
+        return digits.toIntOrNull() ?: continue
     }
-    return Regex("\\d+").find(name)?.value?.toIntOrNull() ?: 0
+    return 0
 }
 
 internal fun normalizeBinning(raw: String): String {
