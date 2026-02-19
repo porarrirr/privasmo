@@ -1,6 +1,7 @@
 package com.porarrirr.sumahohikakuku.model
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
@@ -29,6 +30,25 @@ class SensorModelsTest {
     }
 
     @Test
+    fun isValidManualSensorDescriptor_rejectsMalformedFractions() {
+        val invalidInputs = listOf(
+            "abc/1.28",
+            "1//1.28",
+            "1/1.28/2",
+            "/1.28",
+            "1/",
+            "1/0"
+        )
+
+        invalidInputs.forEach { input ->
+            assertFalse(
+                "Expected invalid manual descriptor: $input",
+                isValidManualSensorDescriptor(input)
+            )
+        }
+    }
+
+    @Test
     fun calculateNativeSensorMetrics_handlesCommaDecimal() {
         val metrics = calculateNativeSensorMetrics(sensorSpec = null, manualDescriptor = "1/1,33")
 
@@ -37,11 +57,28 @@ class SensorModelsTest {
     }
 
     @Test
+    fun calculateNativeSensorMetrics_returnsZeroAreaForMalformedManualDescriptor() {
+        val metrics = calculateNativeSensorMetrics(sensorSpec = null, manualDescriptor = "1/1.28/2")
+
+        assertEquals(0.0, metrics.areaSqMm, 0.0)
+    }
+
+    @Test
     fun calculateNativeSensorMetrics_handlesFullWidthDigitsAndPreservesLabel() {
         val metrics = calculateNativeSensorMetrics(sensorSpec = null, manualDescriptor = "１／１．３３")
 
         assertTrue(metrics.areaSqMm > 0.0)
         assertEquals("１／１．３３", metrics.sensorName)
+    }
+
+    @Test
+    fun parseSensorCsv_interpretsMegapixelColumnAsHundredBasedValue() {
+        val raw = "Test Sensor,50,1.0,No"
+
+        val sensors = parseSensorCsv(raw)
+        val sensor = sensors.first { !it.isManual }
+
+        assertEquals(0.5, sensor.megapixels, 0.0)
     }
 
     @Test

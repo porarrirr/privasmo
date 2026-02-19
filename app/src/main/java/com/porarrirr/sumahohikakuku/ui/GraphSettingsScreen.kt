@@ -1,13 +1,18 @@
 package com.porarrirr.sumahohikakuku.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -23,6 +28,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -32,6 +38,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -83,6 +90,17 @@ fun GraphSettingsScreen(
         lineWidth = settings.lineWidth
     }
 
+    var exportAspectWidthInput by remember {
+        mutableStateOf(settings.exportAspectWidth.toString())
+    }
+    var exportAspectHeightInput by remember {
+        mutableStateOf(settings.exportAspectHeight.toString())
+    }
+    LaunchedEffect(settings.exportAspectWidth, settings.exportAspectHeight) {
+        exportAspectWidthInput = settings.exportAspectWidth.toString()
+        exportAspectHeightInput = settings.exportAspectHeight.toString()
+    }
+
     var builtInSensors by remember { mutableStateOf<List<SensorSpec>>(emptyList()) }
     LaunchedEffect(Unit) {
         builtInSensors = withContext(Dispatchers.IO) {
@@ -119,49 +137,192 @@ fun GraphSettingsScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.settings_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.action_back)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.10f),
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                    )
+                )
+            )
+    ) {
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            containerColor = Color.Transparent,
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.settings_title)) },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.action_back)
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(text = stringResource(R.string.label_chart_line_width), fontWeight = FontWeight.SemiBold)
+                        Text(text = String.format(Locale.US, "%.1f", lineWidth))
+                        Slider(
+                            value = lineWidth,
+                            onValueChange = { lineWidth = it },
+                            onValueChangeFinished = {
+                                coroutineScope.launch { repository.setLineWidth(lineWidth) }
+                            },
+                            valueRange = GraphSettings.MIN_LINE_WIDTH..GraphSettings.MAX_LINE_WIDTH,
+                            steps = (((GraphSettings.MAX_LINE_WIDTH - GraphSettings.MIN_LINE_WIDTH) / 0.5f).toInt() - 1)
+                                .coerceAtLeast(0),
+                            colors = SliderDefaults.colors()
                         )
                     }
                 }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Card {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(text = stringResource(R.string.label_chart_line_width), fontWeight = FontWeight.SemiBold)
-                    Text(text = String.format(Locale.US, "%.1f", lineWidth))
-                    Slider(
-                        value = lineWidth,
-                        onValueChange = { lineWidth = it },
-                        onValueChangeFinished = {
-                            coroutineScope.launch { repository.setLineWidth(lineWidth) }
-                        },
-                        valueRange = GraphSettings.MIN_LINE_WIDTH..GraphSettings.MAX_LINE_WIDTH,
-                        steps = (((GraphSettings.MAX_LINE_WIDTH - GraphSettings.MIN_LINE_WIDTH) / 0.5f).toInt() - 1)
-                            .coerceAtLeast(0),
-                        colors = SliderDefaults.colors()
-                    )
+
+                val aspectWidth = exportAspectWidthInput.toIntOrNull()
+                val aspectHeight = exportAspectHeightInput.toIntOrNull()
+                val isAspectValid =
+                    aspectWidth != null &&
+                        aspectHeight != null &&
+                        aspectWidth in GraphSettings.MIN_EXPORT_ASPECT_COMPONENT..GraphSettings.MAX_EXPORT_ASPECT_COMPONENT &&
+                        aspectHeight in GraphSettings.MIN_EXPORT_ASPECT_COMPONENT..GraphSettings.MAX_EXPORT_ASPECT_COMPONENT
+
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.label_export_image_aspect_ratio),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.helper_export_image_aspect_ratio_range,
+                                GraphSettings.MIN_EXPORT_ASPECT_COMPONENT,
+                                GraphSettings.MAX_EXPORT_ASPECT_COMPONENT
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.label_current_export_aspect_ratio,
+                                settings.exportAspectWidth,
+                                settings.exportAspectHeight
+                            ),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            OutlinedButton(
+                                onClick = {
+                                    exportAspectWidthInput = "4"
+                                    exportAspectHeightInput = "3"
+                                    coroutineScope.launch {
+                                        repository.setExportAspectRatio(width = 4, height = 3)
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("4:3")
+                            }
+                            OutlinedButton(
+                                onClick = {
+                                    exportAspectWidthInput = "1"
+                                    exportAspectHeightInput = "1"
+                                    coroutineScope.launch {
+                                        repository.setExportAspectRatio(width = 1, height = 1)
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("1:1")
+                            }
+                            OutlinedButton(
+                                onClick = {
+                                    exportAspectWidthInput = "16"
+                                    exportAspectHeightInput = "9"
+                                    coroutineScope.launch {
+                                        repository.setExportAspectRatio(width = 16, height = 9)
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("16:9")
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = exportAspectWidthInput,
+                                onValueChange = { exportAspectWidthInput = sanitizeIntegerInput(it) },
+                                label = { Text(stringResource(R.string.label_aspect_ratio_width)) },
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = exportAspectWidthInput.isNotBlank() && (
+                                    aspectWidth == null ||
+                                        aspectWidth !in GraphSettings.MIN_EXPORT_ASPECT_COMPONENT..
+                                        GraphSettings.MAX_EXPORT_ASPECT_COMPONENT
+                                    )
+                            )
+                            OutlinedTextField(
+                                value = exportAspectHeightInput,
+                                onValueChange = { exportAspectHeightInput = sanitizeIntegerInput(it) },
+                                label = { Text(stringResource(R.string.label_aspect_ratio_height)) },
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = exportAspectHeightInput.isNotBlank() && (
+                                    aspectHeight == null ||
+                                        aspectHeight !in GraphSettings.MIN_EXPORT_ASPECT_COMPONENT..
+                                        GraphSettings.MAX_EXPORT_ASPECT_COMPONENT
+                                    )
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+                                val width = aspectWidth ?: return@Button
+                                val height = aspectHeight ?: return@Button
+                                coroutineScope.launch {
+                                    repository.setExportAspectRatio(width = width, height = height)
+                                }
+                            },
+                            enabled = isAspectValid,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.action_apply_export_image_aspect_ratio))
+                        }
+                    }
                 }
-            }
 
             Card {
                 Column(
@@ -252,6 +413,7 @@ fun GraphSettingsScreen(
             }
         }
     }
+    }
 
     if (isEditorOpen) {
         CustomSensorEditorDialog(
@@ -299,6 +461,10 @@ fun GraphSettingsScreen(
             }
         )
     }
+}
+
+private fun sanitizeIntegerInput(value: String): String {
+    return value.filter { it.isDigit() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

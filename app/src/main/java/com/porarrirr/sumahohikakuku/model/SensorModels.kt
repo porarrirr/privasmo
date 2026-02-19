@@ -30,9 +30,9 @@ val DEFAULT_DEVICE_COLORS = listOf(
 )
 
 private val manufacturerOrder = listOf("Sony", "OmniVision", "Samsung", "GalaxyCore", "SmartSens", "Toshiba", "Other")
-private val nonNumericRegex = Regex("[^0-9.]")
 private val trailingAlphaRegex = Regex("[A-Z]+$", RegexOption.IGNORE_CASE)
 private val firstDigitsRegex = Regex("\\d+")
+private val manualDescriptorFractionRegex = Regex("^([0-9]+(?:\\.[0-9]+)?)/([0-9]+(?:\\.[0-9]+)?)$")
 
 private data class NumericPattern(
     val regex: Regex,
@@ -311,7 +311,7 @@ fun isValidManualSensorDescriptor(descriptor: String): Boolean {
     return manualDescriptorToDiagonalInches(descriptor.trim()) != null
 }
 
-private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {     
+private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {
     if (descriptor.isBlank()) return null
     val normalized = buildString(descriptor.length) {
         descriptor.forEach { char ->
@@ -324,18 +324,10 @@ private fun manualDescriptorToDiagonalInches(descriptor: String): Double? {
             append(ascii)
         }
     }
-    if (!normalized.contains('/')) return null
-    val parts = normalized.split('/').map { it.trim() }
-    val numerator = parts.getOrNull(0)
-        ?.replace(nonNumericRegex, "")
-        ?.toDoubleOrNull()
-        ?.takeIf { it > 0.0 }
-        ?: 1.0
-    val denominator = parts.getOrNull(1)
-        ?.replace(nonNumericRegex, "")
-        ?.toDoubleOrNull()
-        ?.takeIf { it > 0.0 }
-        ?: return null
+    val compact = normalized.replace("\\s+".toRegex(), "")
+    val match = manualDescriptorFractionRegex.matchEntire(compact) ?: return null
+    val numerator = match.groupValues[1].toDoubleOrNull()?.takeIf { it > 0.0 } ?: return null
+    val denominator = match.groupValues[2].toDoubleOrNull()?.takeIf { it > 0.0 } ?: return null
     return numerator / denominator
 }
 

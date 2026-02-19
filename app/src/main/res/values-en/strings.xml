@@ -34,9 +34,10 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_reset_default">Reset to Default</string>
+    <string name="action_regenerate">Regenerate</string>
 
-    <string name="menu_settings">language</string>
-    <string name="settings_title">language</string>
+    <string name="menu_settings">Settings</string>
+    <string name="settings_title">Settings</string>
 
     <string name="button_generate_graph">Generate / Update Graph</string>
     <string name="button_add_lens_with_max">Add Lens (max %d)</string>
@@ -58,6 +59,12 @@
     <string name="label_pixel_size_um">Pixel size (µm)</string>
     <string name="label_binning">Binning</string>
     <string name="label_chart_line_width">Graph line width</string>
+    <string name="label_export_image_aspect_ratio">Shared image aspect ratio</string>
+    <string name="helper_export_image_aspect_ratio_range">Set width and height from %1$d to %2$d.</string>
+    <string name="label_current_export_aspect_ratio">Current ratio: %1$d:%2$d</string>
+    <string name="label_aspect_ratio_width">Width</string>
+    <string name="label_aspect_ratio_height">Height</string>
+    <string name="action_apply_export_image_aspect_ratio">Apply aspect ratio</string>
     <string name="label_custom_sensor_list">Sensor list (custom)</string>
     <string name="label_manual_input_example">Manual input (e.g., 1/1.28)</string>
     <string name="helper_invalid_fraction_format">Enter a valid fraction format (e.g., 1/1.28)</string>
@@ -72,6 +79,8 @@
     <string name="dialog_confirm_overwrite">Overwrite</string>
     <string name="dialog_delete_sensor_title">Delete Sensor</string>
     <string name="dialog_delete_sensor_message">Delete "%1$s"?</string>
+    <string name="dialog_delete_device_title">Delete Device</string>
+    <string name="dialog_delete_device_message">Delete "%1$s"?\nAll lens settings will be lost.</string>
 
     <string name="toast_image_saved">Image saved</string>
     <string name="error_failed_to_save_image">Failed to save image</string>
@@ -89,6 +98,11 @@
 
     <string name="label_lens">Lens</string>
     <string name="label_color">Color</string>
+    <string name="tab_device_input">Device Input</string>
+    <string name="tab_comparison_graph">Comparison Graph</string>
+    <string name="tab_sensor_details">Sensor Details at Selected Focal Length</string>
+    <string name="message_generate_graph_first">To view the comparison graph, run "Generate / Update Graph" in Device Input.</string>
+    <string name="message_generate_sensor_details_first">Generate the graph first to view sensor details.</string>
     <string name="section_comparison_graph">2. Comparison Graph</string>
     <string name="section_interactive">3. Interactive Controls</string>
     <string name="section_sensor_details">4. Sensor Details at Selected Focal Length</string>
@@ -147,6 +161,7 @@
     <string name="chart_y_label_light_intake">Light Intake</string>
     <string name="export_title">Smartphone Sensor Comparison</string>
     <string name="export_label_created_at">Created: %1$s</string>
+    <string name="export_label_range">Range: %1$smm - %2$smm</string>
     <string name="export_section_chart">Comparison Graph</string>
     <string name="export_section_specs_at">Spec Table (%1$smm)</string>
     <string name="label_pixel_pitch">Pixel pitch</string>

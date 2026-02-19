@@ -35,8 +35,8 @@
     <string name="action_delete">刪除</string>
     <string name="action_reset_default">還原預設</string>
 
-    <string name="menu_settings">language</string>
-    <string name="settings_title">language</string>
+    <string name="menu_settings">設定</string>
+    <string name="settings_title">設定</string>
 
     <string name="button_generate_graph">產生 / 更新圖表</string>
     <string name="button_add_lens_with_max">新增鏡頭（最多 %d 個）</string>
@@ -58,6 +58,12 @@
     <string name="label_pixel_size_um">像素尺寸 (µm)</string>
     <string name="label_binning">像素合併</string>
     <string name="label_chart_line_width">圖表線寬</string>
+    <string name="label_export_image_aspect_ratio">共享圖片長寬比</string>
+    <string name="helper_export_image_aspect_ratio_range">寬與高可設定為 %1$d 到 %2$d。</string>
+    <string name="label_current_export_aspect_ratio">目前比例：%1$d:%2$d</string>
+    <string name="label_aspect_ratio_width">寬</string>
+    <string name="label_aspect_ratio_height">高</string>
+    <string name="action_apply_export_image_aspect_ratio">套用長寬比</string>
     <string name="label_custom_sensor_list">感測器清單（自訂）</string>
     <string name="label_manual_input_example">手動輸入（例：1/1.28）</string>
     <string name="helper_invalid_fraction_format">請輸入有效的分數格式（例：1/1.28）</string>
@@ -72,6 +78,8 @@
     <string name="dialog_confirm_overwrite">覆寫</string>
     <string name="dialog_delete_sensor_title">刪除感測器</string>
     <string name="dialog_delete_sensor_message">要刪除「%1$s」嗎？</string>
+    <string name="dialog_delete_device_title">刪除裝置</string>
+    <string name="dialog_delete_device_message">要刪除「%1$s」嗎？\n所有鏡頭設定將會遺失。</string>
 
     <string name="toast_image_saved">圖片已儲存</string>
     <string name="error_failed_to_save_image">儲存圖片失敗</string>
@@ -147,6 +155,7 @@
     <string name="chart_y_label_light_intake">進光量</string>
     <string name="export_title">智慧手機感測器比較</string>
     <string name="export_label_created_at">建立時間：%1$s</string>
+    <string name="export_label_range">範圍：%1$smm - %2$smm</string>
     <string name="export_section_chart">比較圖表</string>
     <string name="export_section_specs_at">規格表（%1$smm）</string>
     <string name="label_pixel_pitch">像素間距</string>

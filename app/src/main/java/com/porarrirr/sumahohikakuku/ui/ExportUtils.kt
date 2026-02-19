@@ -1,6 +1,7 @@
 package com.porarrirr.sumahohikakuku.ui
 
 import android.content.ContentValues
+import android.content.ClipData
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -11,11 +12,16 @@ import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
+import androidx.core.content.FileProvider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.porarrirr.sumahohikakuku.ui.theme.SumahohikakukuTheme
+import java.io.File
+import java.io.FileOutputStream
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -101,10 +107,68 @@ internal suspend fun saveBitmapToPictures(
     }
 }
 
-internal fun shareImage(context: Context, uri: Uri, chooserTitle: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
+internal suspend fun saveBitmapToShareCache(
+    context: Context,
+    bitmap: Bitmap,
+    displayName: String
+): Uri = withContext(Dispatchers.IO) {
+    val cacheDirectory = File(context.cacheDir, "shared_images").apply {
+        mkdirs()
+    }
+    val imageFile = File(cacheDirectory, displayName)
+    FileOutputStream(imageFile).use { output ->
+        val ok = bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+        if (!ok) throw IllegalStateException("Failed to compress bitmap.")
+    }
+    FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", imageFile)
+}
+
+internal fun fitBitmapToAspectRatio(
+    source: Bitmap,
+    aspectWidth: Int,
+    aspectHeight: Int
+): Bitmap {
+    val safeWidth = aspectWidth.coerceAtLeast(1)
+    val safeHeight = aspectHeight.coerceAtLeast(1)
+    val targetRatio = safeWidth.toFloat() / safeHeight.toFloat()
+    val sourceRatio = source.width.toFloat() / source.height.toFloat()
+    if (abs(sourceRatio - targetRatio) < 0.0001f) {
+        return source
+    }
+
+    val targetWidth: Int
+    val targetHeight: Int
+    if (sourceRatio > targetRatio) {
+        targetWidth = source.width
+        targetHeight = (source.width / targetRatio).roundToInt().coerceAtLeast(1)
+    } else {
+        targetHeight = source.height
+        targetWidth = (source.height * targetRatio).roundToInt().coerceAtLeast(1)
+    }
+
+    return Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888).also { canvasBitmap ->
+        val canvas = Canvas(canvasBitmap)
+        val backgroundColor = source.getPixel(0, 0)
+        canvas.drawColor(backgroundColor)
+        val left = (targetWidth - source.width) / 2f
+        val top = (targetHeight - source.height) / 2f
+        canvas.drawBitmap(source, left, top, null)
+    }
+}
+
+internal fun shareImages(context: Context, uris: List<Uri>, chooserTitle: String) {
+    require(uris.isNotEmpty()) { "No image URIs to share." }
+
+    val clipData = ClipData.newUri(context.contentResolver, chooserTitle, uris.first()).apply {
+        uris.drop(1).forEach { uri ->
+            addItem(ClipData.Item(uri))
+        }
+    }
+
+    val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
         type = "image/png"
-        putExtra(Intent.EXTRA_STREAM, uri)
+        putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
+        this.clipData = clipData
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     context.startActivity(Intent.createChooser(intent, chooserTitle))

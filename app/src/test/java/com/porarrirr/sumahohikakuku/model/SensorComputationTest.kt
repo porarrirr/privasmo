@@ -1,0 +1,121 @@
+package com.porarrirr.sumahohikakuku.model
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+class SensorComputationTest {
+
+    private val wideSensorMetrics = SensorMetrics(
+        diagonalMm = 10.0,
+        widthMm = 8.0,
+        heightMm = 6.0,
+        areaSqMm = 48.0,
+        sensorName = "Wide Sensor",
+        binningType = "None",
+        nativePixelSizeUm = 1.0,
+        source = SensorSource.DATABASE
+    )
+
+    private val teleSensorMetrics = SensorMetrics(
+        diagonalMm = 8.0,
+        widthMm = 6.4,
+        heightMm = 4.8,
+        areaSqMm = 30.72,
+        sensorName = "Tele Sensor",
+        binningType = "None",
+        nativePixelSizeUm = 1.0,
+        source = SensorSource.DATABASE
+    )
+
+    private val wideLens = LensProcessed(
+        nativeFocalLength35mm = 24.0,
+        fNumber = 2.0,
+        actualFocalLengthMm = 5.5,
+        sensorMetrics = wideSensorMetrics
+    )
+
+    private val teleLens = LensProcessed(
+        nativeFocalLength35mm = 70.0,
+        fNumber = 2.8,
+        actualFocalLengthMm = 12.9,
+        sensorMetrics = teleSensorMetrics
+    )
+
+    private val lenses = listOf(wideLens, teleLens)
+
+    @Test
+    fun calculateEffectiveMetrics_returnsUnityZoomAtNativeFocal() {
+        val metrics = calculateEffectiveMetrics(focalLength35mm = 24.0, lenses = lenses)
+
+        assertNotNull(metrics)
+        assertEquals(1.0, metrics!!.zoomRatio, 1e-9)
+        assertEquals(48.0, metrics.effectiveAreaSqMm, 1e-9)
+        assertEquals(12.0, metrics.totalLightIntake, 1e-9)
+    }
+
+    @Test
+    fun calculateEffectiveMetrics_appliesInverseSquareAreaForDigitalZoom() {
+        val metrics = calculateEffectiveMetrics(focalLength35mm = 48.0, lenses = lenses)
+
+        assertNotNull(metrics)
+        assertEquals(2.0, metrics!!.zoomRatio, 1e-9)
+        assertEquals(12.0, metrics.effectiveAreaSqMm, 1e-9)
+        assertEquals(3.0, metrics.totalLightIntake, 1e-9)
+    }
+
+    @Test
+    fun calculateEffectiveMetrics_switchesBaseLensAtBoundary() {
+        val beforeBoundary = calculateEffectiveMetrics(focalLength35mm = 69.0, lenses = lenses)
+        val atBoundary = calculateEffectiveMetrics(focalLength35mm = 70.0, lenses = lenses)
+
+        assertNotNull(beforeBoundary)
+        assertNotNull(atBoundary)
+        assertEquals(24.0, beforeBoundary!!.baseLens.nativeFocalLength35mm, 0.0)
+        assertEquals(70.0, atBoundary!!.baseLens.nativeFocalLength35mm, 0.0)
+    }
+
+    @Test
+    fun computeProcessedDevice_returnsNullWhenAllLensesAreInvalid() {
+        val invalidMetrics = wideSensorMetrics.copy(
+            diagonalMm = 0.0,
+            widthMm = 0.0,
+            heightMm = 0.0,
+            areaSqMm = 0.0
+        )
+        val rawLenses = listOf(
+            24.0 to (2.0 to invalidMetrics)
+        )
+
+        val processed = computeProcessedDevice(
+            name = "Device A",
+            colorHex = "#2563EB",
+            rawLenses = rawLenses,
+            focalLengths = listOf(24.0, 35.0)
+        )
+
+        assertNull(processed)
+    }
+
+    @Test
+    fun computeProcessedDevice_generatesMetricsForReachableFocals() {
+        val rawLenses = listOf(
+            24.0 to (2.0 to wideSensorMetrics),
+            70.0 to (2.8 to teleSensorMetrics)
+        )
+
+        val processed = computeProcessedDevice(
+            name = "Device A",
+            colorHex = "#2563EB",
+            rawLenses = rawLenses,
+            focalLengths = listOf(14.0, 24.0, 35.0, 70.0)
+        )
+
+        assertNotNull(processed)
+        assertEquals(
+            listOf(24.0, 35.0, 70.0),
+            processed!!.metricsByFocalLength.map { it.focalLength35mm }
+        )
+    }
+}

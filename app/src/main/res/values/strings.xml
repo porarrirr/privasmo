@@ -34,9 +34,10 @@
     <string name="action_edit">編集</string>
     <string name="action_delete">削除</string>
     <string name="action_reset_default">デフォルトに戻す</string>
+    <string name="action_regenerate">再生成</string>
 
-    <string name="menu_settings">language</string>
-    <string name="settings_title">language</string>
+    <string name="menu_settings">設定</string>
+    <string name="settings_title">設定</string>
 
     <string name="button_generate_graph">グラフ生成 / 更新</string>
     <string name="button_add_lens_with_max">レンズ追加 (最大%d個)</string>
@@ -58,6 +59,12 @@
     <string name="label_pixel_size_um">ピクセルサイズ (µm)</string>
     <string name="label_binning">ビニング</string>
     <string name="label_chart_line_width">グラフ線の太さ</string>
+    <string name="label_export_image_aspect_ratio">共有画像のアスペクト比</string>
+    <string name="helper_export_image_aspect_ratio_range">幅と高さは %1$d 〜 %2$d の範囲で入力してください。</string>
+    <string name="label_current_export_aspect_ratio">現在の比率: %1$d:%2$d</string>
+    <string name="label_aspect_ratio_width">幅</string>
+    <string name="label_aspect_ratio_height">高さ</string>
+    <string name="action_apply_export_image_aspect_ratio">この比率を適用</string>
     <string name="label_custom_sensor_list">センサー一覧（カスタム）</string>
     <string name="label_manual_input_example">手動入力 (例: 1/1.28)</string>
     <string name="helper_invalid_fraction_format">有効な分数形式で入力してください (例: 1/1.28)</string>
@@ -72,6 +79,8 @@
     <string name="dialog_confirm_overwrite">上書きする</string>
     <string name="dialog_delete_sensor_title">センサーを削除</string>
     <string name="dialog_delete_sensor_message">「%1$s」を削除しますか？</string>
+    <string name="dialog_delete_device_title">デバイスを削除</string>
+    <string name="dialog_delete_device_message">「%1$s」を削除しますか？\nすべてのレンズ設定が失われます。</string>
 
     <string name="toast_image_saved">画像を保存しました</string>
     <string name="error_failed_to_save_image">画像の保存に失敗しました</string>
@@ -89,6 +98,11 @@
 
     <string name="label_lens">レンズ</string>
     <string name="label_color">色</string>
+    <string name="tab_device_input">デバイス入力</string>
+    <string name="tab_comparison_graph">比較グラフ</string>
+    <string name="tab_sensor_details">選択焦点距離でのセンサー詳細</string>
+    <string name="message_generate_graph_first">比較グラフを表示するには、デバイス入力で「グラフ生成 / 更新」を実行してください。</string>
+    <string name="message_generate_sensor_details_first">センサー詳細を表示するには、先にグラフを生成してください。</string>
     <string name="section_comparison_graph">2. 比較グラフ</string>
     <string name="section_interactive">3. インタラクティブ操作</string>
     <string name="section_sensor_details">4. 選択焦点距離でのセンサー詳細</string>
@@ -147,6 +161,7 @@
     <string name="chart_y_label_light_intake">集光力</string>
     <string name="export_title">スマートフォンセンサー比較</string>
     <string name="export_label_created_at">作成: %1$s</string>
+    <string name="export_label_range">表示範囲: %1$smm 〜 %2$smm</string>
     <string name="export_section_chart">比較グラフ</string>
     <string name="export_section_specs_at">スペック表 (%1$smm)</string>
     <string name="label_pixel_pitch">画素ピッチ</string>
