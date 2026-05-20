@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
-project(sumahohikakuku LANGUAGES Swift OBJC)
 
+set(CMAKE_SYSTEM_NAME iOS)
+set(CMAKE_OSX_SYSROOT iphonesimulator CACHE STRING "iOS SDK")
+set(CMAKE_OSX_DEPLOYMENT_TARGET 16.0)
 set(CMAKE_Swift_LANGUAGE_VERSION 5.0)
 
-# Set iOS system target
-set(CMAKE_SYSTEM_NAME iOS)
-set(CMAKE_OSX_DEPLOYMENT_TARGET 16.0)
+project(sumahohikakuku LANGUAGES Swift OBJC)
 
 # Set Bundle properties
 set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.porarrirr.sumahohikakuku")
@@ -36,6 +36,10 @@ set_source_files_properties(${RESOURCES} PROPERTIES
 
 # Set target properties for iOS app
 set_target_properties(sumahohikakuku PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
+    XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.porarrirr.sumahohikakuku"
+    XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS "iphonesimulator iphoneos"
+    XCODE_ATTRIBUTE_SDKROOT "iphonesimulator"
     XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1" # iPhone
     XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "16.0"
     XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"

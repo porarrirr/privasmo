@@ -5,6 +5,7 @@ public struct SensorComparisonScreen: View {
     @StateObject private var settingsRepository = GraphSettingsRepository()
     
     @State private var selectedTab = 0
+    @State private var selectedDeviceId: Int64? = nil
     @State private var isShowingSettings = false
     @State private var isShowingSavePresetSheet = false
     @State private var isShowingLoadPresetSheet = false
@@ -98,31 +99,18 @@ public struct SensorComparisonScreen: View {
         VStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    ForEach(viewModel.state.devices) { device in
+                    deviceSelector
+                    
+                    if let device = selectedInputDevice {
                         DeviceCardView(viewModel: viewModel, device: device)
                     }
-                    
-                    Button(action: {
-                        viewModel.addDevice()
-                    }) {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text(LocalizedStrings.actionAddDevice)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor.opacity(0.1))
-                        .foregroundColor(.accentColor)
-                        .cornerRadius(12)
-                    }
-                    .disabled(viewModel.state.devices.count >= MAX_DEVICES)
-                    .padding(.top, 8)
                 }
                 .padding()
             }
             
             // Bottom floating action to update graph
             Button(action: {
+                dismissKeyboard()
                 viewModel.generateComparison()
                 selectedTab = 1 // Switch to graph automatically
             }) {
@@ -138,6 +126,89 @@ public struct SensorComparisonScreen: View {
             .disabled(!viewModel.state.isGenerateEnabled)
             .padding()
         }
+        .onAppear {
+            syncSelectedDevice()
+        }
+        .onChange(of: viewModel.state.devices) { _ in
+            syncSelectedDevice()
+        }
+    }
+    
+    private var selectedInputDevice: DeviceInputState? {
+        if let selectedDeviceId,
+           let selected = viewModel.state.devices.first(where: { $0.id == selectedDeviceId }) {
+            return selected
+        }
+        return viewModel.state.devices.first
+    }
+    
+    private var deviceSelector: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(LocalizedStrings.tabDeviceInput)
+                    .font(.subheadline.bold())
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                Text("\(viewModel.state.devices.count)/\(MAX_DEVICES)")
+                    .font(.caption.bold())
+                    .foregroundColor(.secondary)
+            }
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(viewModel.state.devices) { device in
+                        Button(action: {
+                            selectedDeviceId = device.id
+                        }) {
+                            DeviceSelectorChip(
+                                device: device,
+                                isSelected: selectedInputDevice?.id == device.id
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    
+                    Button(action: {
+                        viewModel.addDevice()
+                        selectedDeviceId = viewModel.state.devices.last?.id
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "plus")
+                            Text(LocalizedStrings.actionAddDevice)
+                        }
+                        .font(.subheadline.bold())
+                        .padding(.horizontal, 14)
+                        .frame(height: 44)
+                        .background(Color.accentColor.opacity(viewModel.state.canAddDevice ? 0.12 : 0.04))
+                        .foregroundColor(viewModel.state.canAddDevice ? .accentColor : .secondary)
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(!viewModel.state.canAddDevice)
+                }
+                .padding(.vertical, 2)
+            }
+        }
+        .padding(12)
+        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .cornerRadius(12)
+    }
+    
+    private func syncSelectedDevice() {
+        let devices = viewModel.state.devices
+        guard !devices.isEmpty else {
+            selectedDeviceId = nil
+            return
+        }
+        
+        if let selectedDeviceId,
+           devices.contains(where: { $0.id == selectedDeviceId }) {
+            return
+        }
+        
+        selectedDeviceId = devices.first?.id
     }
     
     // TAB 2: Comparison Graph
@@ -314,5 +385,46 @@ public struct SensorComparisonScreen: View {
                 rootVC.present(activityVC, animated: true)
             }
         }
+    }
+
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+    }
+}
+
+private struct DeviceSelectorChip: View {
+    let device: DeviceInputState
+    let isSelected: Bool
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Circle()
+                .fill(Color(hex: device.colorHex) ?? .blue)
+                .frame(width: 12, height: 12)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(device.name.isEmpty ? LocalizedStrings.labelName : device.name)
+                    .font(.subheadline.bold())
+                    .lineLimit(1)
+                
+                Text("\(device.lenses.count) レンズ")
+                    .font(.caption2.bold())
+                    .foregroundColor(isSelected ? .white.opacity(0.82) : .secondary)
+            }
+        }
+        .padding(.horizontal, 12)
+        .frame(height: 44)
+        .background(isSelected ? Color.accentColor : Color(uiColor: .systemBackground))
+        .foregroundColor(isSelected ? .white : .primary)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(isSelected ? Color.accentColor : Color(uiColor: .separator).opacity(0.35), lineWidth: 1)
+        )
     }
 }
