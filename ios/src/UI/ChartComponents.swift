@@ -211,12 +211,14 @@ struct ChartContainerView: View {
         dragFocalLength = nil
     }
 
-    private var deviceColorScale: KeyValuePairs<String, Color> {
-        KeyValuePairs(
-            results.devices.map { device in
-                (key: device.id, value: Color(hex: device.colorHex) ?? .blue)
-            }
-        )
+    private var deviceColorDomain: [String] {
+        results.devices.map(\.id)
+    }
+
+    private var deviceColorRange: [Color] {
+        results.devices.map { device in
+            Color(hex: device.colorHex) ?? .blue
+        }
     }
     
     var body: some View {
@@ -228,7 +230,7 @@ struct ChartContainerView: View {
                 displayFocal: displayFocal
             )
         }
-        .chartForegroundStyleScale(deviceColorScale)
+        .chartForegroundStyleScale(domain: deviceColorDomain, range: deviceColorRange)
         .chartXScale(domain: (results.focalLengths.first ?? 14.0)...(results.focalLengths.last ?? 260.0))
         .frame(height: 220)
         .padding(.top, 10)
