@@ -180,6 +180,8 @@ public class SensorComparisonViewModel: ObservableObject {
         
         if !hasRestoredState {
             restoreState(sensors: merged)
+        } else {
+            refreshComparisonResults()
         }
     }
     
@@ -199,6 +201,7 @@ public class SensorComparisonViewModel: ObservableObject {
         let devices = restoredDevices ?? createDefaultDevices(sensors: sensors)
         state.devices = devices
         state.presetTargetDeviceId = devices.first?.id
+        refreshComparisonResults()
     }
     
     public func persistDevices() {
@@ -247,12 +250,12 @@ public class SensorComparisonViewModel: ObservableObject {
         nextDeviceId += 1
         
         state.devices.append(newDevice)
-        state.comparisonResults = nil
         if state.presetTargetDeviceId == nil {
             state.presetTargetDeviceId = newDevice.id
         }
         state.deviceFocusRequestId = newDevice.id
         state.presetErrorMessage = nil
+        refreshComparisonResults()
         
         persistDevices()
     }
@@ -267,8 +270,8 @@ public class SensorComparisonViewModel: ObservableObject {
             state.presetTargetDeviceId = state.devices.first?.id
         }
         
-        state.comparisonResults = nil
         state.presetErrorMessage = nil
+        refreshComparisonResults()
         
         persistDevices()
     }
@@ -276,8 +279,8 @@ public class SensorComparisonViewModel: ObservableObject {
     public func updateDeviceName(deviceId: Int64, name: String) {
         if let idx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             state.devices[idx].name = name
-            state.comparisonResults = nil
             state.presetErrorMessage = nil
+            refreshComparisonResults()
             persistDevices()
         }
     }
@@ -285,8 +288,8 @@ public class SensorComparisonViewModel: ObservableObject {
     public func updateDeviceColor(deviceId: Int64, colorHex: String) {
         if let idx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             state.devices[idx].colorHex = colorHex
-            state.comparisonResults = nil
             state.presetErrorMessage = nil
+            refreshComparisonResults()
             persistDevices()
         }
     }
@@ -295,8 +298,8 @@ public class SensorComparisonViewModel: ObservableObject {
         if let idx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             if state.devices[idx].lenses.count >= MAX_LENSES_PER_DEVICE { return }
             state.devices[idx].lenses.append(newDefaultLens())
-            state.comparisonResults = nil
             state.presetErrorMessage = nil
+            refreshComparisonResults()
             persistDevices()
         }
     }
@@ -307,8 +310,8 @@ public class SensorComparisonViewModel: ObservableObject {
             if state.devices[idx].lenses.isEmpty {
                 state.devices[idx].lenses.append(newDefaultLens())
             }
-            state.comparisonResults = nil
             state.presetErrorMessage = nil
+            refreshComparisonResults()
             persistDevices()
         }
     }
@@ -405,12 +408,12 @@ public class SensorComparisonViewModel: ObservableObject {
         
         state.devices.append(newDevice)
         state.activePresetAssignments[newDeviceId] = presetId
-        state.comparisonResults = nil
         state.presetSheet = .none
         state.presetNameInput = ""
         state.presetErrorMessage = nil
         state.presetTargetDeviceId = newDeviceId
         state.deviceFocusRequestId = newDeviceId
+        refreshComparisonResults()
         
         persistDevices()
         postMessage(String(format: LocalizedStrings.messageDeviceAdded, newDevice.name))
@@ -436,11 +439,11 @@ public class SensorComparisonViewModel: ObservableObject {
         
         if let idx = state.devices.firstIndex(where: { $0.id == targetDeviceId }) {
             state.devices[idx] = overwritten
-            state.comparisonResults = nil
             state.presetSheet = .none
             state.presetErrorMessage = nil
             state.deviceFocusRequestId = targetDeviceId
             state.activePresetAssignments[targetDeviceId] = presetId
+            refreshComparisonResults()
             
             persistDevices()
             postMessage(String(format: LocalizedStrings.messageDeviceOverwritten, overwritten.name))
@@ -507,6 +510,10 @@ public class SensorComparisonViewModel: ObservableObject {
     }
     
     public func generateComparison() {
+        refreshComparisonResults()
+    }
+
+    private func refreshComparisonResults() {
         if !state.isGenerateEnabled {
             state.comparisonResults = nil
             return
@@ -531,8 +538,8 @@ public class SensorComparisonViewModel: ObservableObject {
         if let devIdx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             if let lensIdx = state.devices[devIdx].lenses.firstIndex(where: { $0.id == lensId }) {
                 state.devices[devIdx].lenses[lensIdx] = transform(state.devices[devIdx].lenses[lensIdx])
-                state.comparisonResults = nil
                 state.presetErrorMessage = nil
+                refreshComparisonResults()
                 persistDevices()
             }
         }

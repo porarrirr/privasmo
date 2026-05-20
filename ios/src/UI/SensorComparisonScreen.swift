@@ -107,24 +107,6 @@ public struct SensorComparisonScreen: View {
                 }
                 .padding()
             }
-            
-            // Bottom floating action to update graph
-            Button(action: {
-                dismissKeyboard()
-                viewModel.generateComparison()
-                selectedTab = 1 // Switch to graph automatically
-            }) {
-                Text(LocalizedStrings.buttonGenerateGraph)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(viewModel.state.isGenerateEnabled ? Color.accentColor : Color.gray)
-                    .cornerRadius(12)
-                    .shadow(radius: 4)
-            }
-            .disabled(!viewModel.state.isGenerateEnabled)
-            .padding()
         }
         .onAppear {
             syncSelectedDevice()
