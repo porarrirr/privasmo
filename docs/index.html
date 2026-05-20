@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>スマホセンサー比較</title>
+  <meta name="description" content="スマートフォンカメラのセンサーサイズ、焦点距離、F値から有効センサー面積と集光力を比較するiOSアプリです。">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --accent: #2563eb;
+      --text: #172033;
+      --muted: #5b6578;
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --border: #d7deea;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f4f7fb;
+        --muted: #bcc7d8;
+        --bg: #10141d;
+        --surface: #171d29;
+        --border: #2b3546;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+    header {
+      padding: 44px 0 32px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin-top: 40px;
+      font-size: 1.35rem;
+    }
+    p { color: var(--muted); }
+    a { color: var(--accent); }
+    .lead {
+      max-width: 760px;
+      font-size: 1.12rem;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .panel {
+      margin-top: 24px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    ul {
+      padding-left: 1.25rem;
+    }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .92rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>スマホセンサー比較</h1>
+      <p class="lead">スマートフォンカメラのセンサーサイズ、焦点距離、F値をもとに、有効センサー面積や集光力を比較できるiOSアプリです。</p>
+      <nav class="links" aria-label="関連ページ">
+        <a href="./support.html">サポート</a>
+        <a href="./privacy.html">プライバシーポリシー</a>
+        <a href="./terms.html">免責事項</a>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <h2>できること</h2>
+      <ul>
+        <li>複数端末、複数レンズ構成の比較</li>
+        <li>有効センサー面積と集光力のグラフ表示</li>
+        <li>センサーサイズや画素ピッチなどの詳細確認</li>
+        <li>端末構成のプリセット保存</li>
+        <li>比較結果画像の共有</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>データの扱い</h2>
+      <p>本アプリはログイン、広告、解析、トラッキングを行いません。入力内容と設定は端末内に保存され、外部サーバへ送信されません。</p>
+      <p>センサー仕様や計算結果は比較の参考情報です。端末・レンズ・撮影条件により実際の画質や性能は変わります。</p>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 haruto nomura. スマホセンサー比較</p>
+    </footer>
+  </main>
+</body>
+</html>
