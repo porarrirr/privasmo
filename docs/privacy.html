@@ -7,15 +7,20 @@
   <style>
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; line-height: 1.8; color: #172033; background: #f6f8fb; }
     main { max-width: 860px; margin: 0 auto; padding: 44px 20px 64px; }
-    article { background: #fff; border: 1px solid #d7deea; border-radius: 8px; padding: 28px; }
-    h1 { margin-top: 0; line-height: 1.2; letter-spacing: 0; }
-    h2 { margin-top: 32px; font-size: 1.2rem; }
+    article { background: #fff; border: 1px solid #d7deea; border-radius: 8px; padding: 28px 36px; }
+    h1 { margin-top: 0; line-height: 1.2; }
+    h2 { margin-top: 32px; font-size: 1.15rem; border-left: 4px solid #2563eb; padding-left: 10px; }
     a { color: #2563eb; }
     p, li { color: #4d586b; }
+    .disclaimer { background: #fff8e1; border: 1px solid #ffe082; border-radius: 6px; padding: 14px 18px; margin: 24px 0; }
+    .disclaimer p { color: #5d4037; margin: 0; }
+    .updated { font-size: 0.9rem; color: #888; }
     @media (prefers-color-scheme: dark) {
       body { color: #f4f7fb; background: #10141d; }
       article { background: #171d29; border-color: #2b3546; }
       p, li { color: #bcc7d8; }
+      .disclaimer { background: #2a2000; border-color: #665500; }
+      .disclaimer p { color: #ffd54f; }
     }
   </style>
 </head>
@@ -23,31 +28,43 @@
   <main>
     <article>
       <h1>プライバシーポリシー</h1>
-      <p>スマホセンサー比較（以下「本アプリ」）は、スマートフォンカメラのセンサー、焦点距離、F値などを入力し、比較結果を表示するためのアプリです。</p>
+      <p class="updated">制定日: 2026年5月20日　最終更新: 2026年5月20日</p>
 
-      <h2>収集する情報</h2>
-      <p>本アプリは、個人を特定できる情報を収集しません。アカウント登録、ログイン、広告、解析、トラッキングは行いません。</p>
+      <p>porarrirr（以下「開発者」）が提供するアプリ「スマホセンサー比較」（以下「本アプリ」）のプライバシーポリシー（以下「本ポリシー」）です。本アプリをご利用になる前に必ずお読みください。本アプリを利用された場合、本ポリシーに同意したものとみなします。</p>
 
-      <h2>端末内に保存される情報</h2>
-      <p>本アプリは、ユーザーが入力した端末名、レンズ設定、カスタムセンサー、プリセット、表示設定を、アプリの利便性のために端末内へ保存します。これらの情報は外部サーバへ送信されません。</p>
+      <h2>1. 収集する個人情報</h2>
+      <p>本アプリは、氏名・メールアドレス・電話番号・位置情報・端末識別子など、<strong>個人を特定できる情報を一切収集しません</strong>。アカウント登録・ログイン・広告表示・外部解析ツール・トラッキングの仕組みは実装していません。</p>
 
-      <h2>写真ライブラリ</h2>
-      <p>ユーザーが比較結果画像を保存または共有する場合のみ、写真ライブラリへの追加権限またはiOS標準の共有機能を使用します。この権限は、ユーザーが作成した比較結果画像を保存する目的に限定して使用されます。</p>
+      <h2>2. 端末内へのデータ保存</h2>
+      <p>本アプリは、ユーザーが入力した端末名・レンズ設定・カスタムセンサー情報・プリセット・表示設定を、利便性向上のためにお使いの端末のローカルストレージ（UserDefaultsなど）に保存します。これらのデータは外部サーバへ送信されず、開発者はアクセスできません。</p>
 
-      <h2>第三者提供</h2>
-      <p>本アプリは、ユーザー情報を第三者へ提供しません。</p>
+      <h2>3. 写真ライブラリへのアクセス</h2>
+      <p>ユーザーが比較結果画像を端末に保存する操作を行った場合のみ、写真ライブラリへの追加権限（NSPhotoLibraryAddUsageDescription）を使用します。この権限は画像の書き込み専用であり、既存の写真・動画の読み取りには使用しません。</p>
 
-      <h2>免責</h2>
-      <p>本アプリのセンサー仕様、計算結果、比較表示は参考情報として提供されます。データの正確性、完全性、特定目的への適合性を保証するものではありません。</p>
+      <h2>4. 第三者への情報提供</h2>
+      <p>本アプリは、いかなる第三者（広告ネットワーク・分析サービス・パートナー企業を含む）にも、ユーザーに関する情報を提供・販売・共有しません。</p>
 
-      <h2>お問い合わせ</h2>
-      <p>不具合やお問い合わせは、<a href="https://github.com/porarrirr/privasmo/issues">GitHub Issues</a> からご連絡ください。</p>
+      <h2>5. 外部サービスへの通信</h2>
+      <p>本アプリは、アプリの機能提供に際して外部サーバへのネットワーク通信を行いません。すべての処理はお使いの端末内で完結します。</p>
 
-      <h2>改定</h2>
-      <p>本ポリシーは、必要に応じて改定されることがあります。</p>
+      <h2>6. お子さまのプライバシー</h2>
+      <p>本アプリは、13歳未満のお子さまを対象としたサービスは提供しておらず、意図的に13歳未満の個人情報を収集することはありません。</p>
 
-      <p>制定日: 2026年5月20日</p>
-      <p><a href="./index.html">トップへ戻る</a></p>
+      <div class="disclaimer">
+        <p><strong>【免責事項】</strong><br>
+        本アプリが表示するカメラセンサーサイズ・焦点距離・F値・被写界深度・画角等の仕様値および計算結果は、公開情報をもとに開発者が独自に整理した参考情報です。メーカー公式仕様・最新情報と異なる場合があり、数値の正確性・完全性・最新性・特定目的への適合性を一切保証しません。本アプリの情報を利用して生じたいかなる損害（機会損失・データ損失・機器購入の意思決定に伴う損失を含む）についても、開発者は一切の責任を負いません。重要な判断を行う際は必ずメーカー公式サイト等の一次情報をご確認ください。</p>
+      </div>
+
+      <h2>7. 保証の否認</h2>
+      <p>本アプリは「現状有姿」で提供されます。開発者は、本アプリの継続的な提供・無中断・無エラーを保証しません。Apple Inc. はアプリ内コンテンツの正確性について一切の責任を負いません。</p>
+
+      <h2>8. 本ポリシーの変更</h2>
+      <p>本ポリシーは法令の改正やアプリの機能変更に伴い、予告なく改定される場合があります。改定後は本ページにて最新版を公開します。重要な変更がある場合はアプリのアップデートノート等でお知らせする場合があります。</p>
+
+      <h2>9. お問い合わせ</h2>
+      <p>本ポリシーに関するご質問・ご要望は、<a href="https://github.com/porarrirr/privasmo/issues">GitHub Issues</a> からご連絡ください。</p>
+
+      <p style="margin-top:40px;"><a href="./index.html">← トップへ戻る</a></p>
     </article>
   </main>
 </body>
