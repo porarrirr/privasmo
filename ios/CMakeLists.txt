@@ -6,7 +6,7 @@ set(CMAKE_Swift_LANGUAGE_VERSION 5.0)
 
 project(sumahohikakuku LANGUAGES Swift OBJC)
 
-set(IOS_DEVELOPMENT_TEAM "HZ5XFG62KH" CACHE STRING "Apple Developer Team ID for signing App Store builds")
+set(IOS_DEVELOPMENT_TEAM "77V64TWCFD" CACHE STRING "Apple Developer Team ID for signing App Store builds")
 
 # Set Bundle properties
 set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.porarrirr.sumahohikakuku")
@@ -48,7 +48,11 @@ set_target_properties(sumahohikakuku PROPERTIES
     XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
     XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
     XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+    XCODE_ATTRIBUTE_INFOPLIST_KEY_CFBundleDisplayName "スマホセンサー比較"
+    XCODE_ATTRIBUTE_INFOPLIST_KEY_CFBundleIconName "AppIcon"
+    XCODE_ATTRIBUTE_INFOPLIST_KEY_ITSAppUsesNonExemptEncryption "NO"
     XCODE_ATTRIBUTE_INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription "比較結果の画像を写真ライブラリに保存するために使用します。"
+    XCODE_ATTRIBUTE_INFOPLIST_KEY_UISupportedInterfaceOrientations "UIInterfaceOrientationPortrait"
 )
 
 if (IOS_DEVELOPMENT_TEAM)

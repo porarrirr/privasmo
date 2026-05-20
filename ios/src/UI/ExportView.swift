@@ -39,9 +39,7 @@ public struct ExportView: View {
             ComparisonChart(
                 results: results,
                 metricType: metricType,
-                selectedFocalLength: selectedFocalLength,
-                lineWidth: settings.lineWidth,
-                onFocalLengthChanged: { _ in }
+                lineWidth: settings.lineWidth
             )
         }
         .padding(24)

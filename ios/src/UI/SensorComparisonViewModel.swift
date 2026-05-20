@@ -56,7 +56,7 @@ public struct SensorComparisonUiState: Equatable {
     public var availableDeviceColors: [String] = DEFAULT_DEVICE_COLORS
     public var selectedFocalLength: Double = 14.0
     public var comparisonResults: ComparisonResults? = nil
-    public var focalLengths: [Double] = (14...260).map { Double($0) }
+    public var focalLengths: [Double] = defaultComparisonFocalLengths
     public var presets: [PresetSnapshot] = []
     public var presetSheet: PresetSheet = .none
     public var presetNameInput: String = ""
@@ -106,6 +106,8 @@ public struct SensorComparisonUiState: Equatable {
     }
 }
 
+private let defaultComparisonFocalLengths = (14...260).map { Double($0) }
+
 public class SensorComparisonViewModel: ObservableObject {
     @Published public var state = SensorComparisonUiState()
     @Published public var toastMessage: String? = nil
@@ -117,6 +119,8 @@ public class SensorComparisonViewModel: ObservableObject {
     private let generateComparisonUseCase: GenerateComparisonUseCase
     
     private var cancellables = Set<AnyCancellable>()
+    private var pendingRefreshWorkItem: DispatchWorkItem?
+    private var pendingPersistWorkItem: DispatchWorkItem?
     private var nextDeviceId: Int64 = 1
     private var nextLensId: Int64 = 1
     private var hasRestoredState = false
@@ -137,6 +141,11 @@ public class SensorComparisonViewModel: ObservableObject {
         
         setupBindings()
         loadInitialData()
+    }
+
+    deinit {
+        pendingRefreshWorkItem?.cancel()
+        pendingPersistWorkItem?.cancel()
     }
     
     private func setupBindings() {
@@ -280,8 +289,7 @@ public class SensorComparisonViewModel: ObservableObject {
         if let idx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             state.devices[idx].name = name
             state.presetErrorMessage = nil
-            refreshComparisonResults()
-            persistDevices()
+            scheduleRefreshAndPersist()
         }
     }
     
@@ -289,8 +297,7 @@ public class SensorComparisonViewModel: ObservableObject {
         if let idx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             state.devices[idx].colorHex = colorHex
             state.presetErrorMessage = nil
-            refreshComparisonResults()
-            persistDevices()
+            scheduleRefreshAndPersist()
         }
     }
     
@@ -510,6 +517,7 @@ public class SensorComparisonViewModel: ObservableObject {
     }
     
     public func generateComparison() {
+        pendingRefreshWorkItem?.cancel()
         refreshComparisonResults()
     }
 
@@ -523,7 +531,7 @@ public class SensorComparisonViewModel: ObservableObject {
             devices: state.devices,
             availableSensors: state.availableSensors,
             selectedFocalLength: state.selectedFocalLength,
-            defaultFocalLengths: (14...260).map { Double($0) },
+            defaultFocalLengths: defaultComparisonFocalLengths,
             fallbackDeviceName: { [weak self] index in
                 self?.defaultDeviceName(index: index) ?? "Device \(index)"
             }
@@ -533,14 +541,29 @@ public class SensorComparisonViewModel: ObservableObject {
         state.selectedFocalLength = output.selectedFocalLength
         state.focalLengths = output.focalLengths
     }
+
+    private func scheduleRefreshAndPersist() {
+        pendingRefreshWorkItem?.cancel()
+        let refreshWork = DispatchWorkItem { [weak self] in
+            self?.refreshComparisonResults()
+        }
+        pendingRefreshWorkItem = refreshWork
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: refreshWork)
+
+        pendingPersistWorkItem?.cancel()
+        let persistWork = DispatchWorkItem { [weak self] in
+            self?.persistDevices()
+        }
+        pendingPersistWorkItem = persistWork
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: persistWork)
+    }
     
     private func updateLens(deviceId: Int64, lensId: Int64, transform: (LensInputState) -> LensInputState) {
         if let devIdx = state.devices.firstIndex(where: { $0.id == deviceId }) {
             if let lensIdx = state.devices[devIdx].lenses.firstIndex(where: { $0.id == lensId }) {
                 state.devices[devIdx].lenses[lensIdx] = transform(state.devices[devIdx].lenses[lensIdx])
                 state.presetErrorMessage = nil
-                refreshComparisonResults()
-                persistDevices()
+                scheduleRefreshAndPersist()
             }
         }
     }

@@ -1,0 +1,11 @@
+Target dependency graph (4 targets)
+Target 'ALL_BUILD' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'sumahohikakuku' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'sumahohikakukuTests' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'ZERO_CHECK' in project 'sumahohikakuku'
+Target 'sumahohikakukuTests' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'sumahohikakuku' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'ZERO_CHECK' in project 'sumahohikakuku'
+Target 'sumahohikakuku' in project 'sumahohikakuku'
+➜ Explicit dependency on target 'ZERO_CHECK' in project 'sumahohikakuku'
+Target 'ZERO_CHECK' in project 'sumahohikakuku' (no dependencies)

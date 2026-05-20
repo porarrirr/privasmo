@@ -1,0 +1,103 @@
+{
+  "" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.dia",
+    "emit-module-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary-emit-module.dia",
+    "pch" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/CustomSensorRepository.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/CustomSensorRepository.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/DeviceInputRepository.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/DeviceInputRepository.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GraphSettingsRepository.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GraphSettingsRepository.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PreferencesKeyEncoding.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PreferencesKeyEncoding.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetRepository.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetRepository.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorDatabaseRepository.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorDatabaseRepository.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GenerateComparisonUseCase.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GenerateComparisonUseCase.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/InputSanitizer.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/InputSanitizer.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/CustomSensorModels.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/CustomSensorModels.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetModels.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetModels.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorModels.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorModels.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/LocalizedStrings.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/LocalizedStrings.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonApp.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonApp.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ChartComponents.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ChartComponents.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/DeviceCardView.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/DeviceCardView.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ExportView.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ExportView.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GraphSettingsScreen.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/GraphSettingsScreen.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetSheetsView.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/PresetSheetsView.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ResultsSectionView.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/ResultsSectionView.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonScreen.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonScreen.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonViewModel.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorComparisonViewModel.o"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift" : {
+    "llvm-bc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorPickerSheetView.bc",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/SensorPickerSheetView.o"
+  }
+}

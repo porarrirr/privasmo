@@ -1,0 +1,23 @@
+{
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/CustomSensorRepository.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/CustomSensorRepository.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/CustomSensorRepository.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/CustomSensorRepository.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/CustomSensorRepository.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/DeviceInputRepository.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/DeviceInputRepository.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/DeviceInputRepository.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/DeviceInputRepository.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/DeviceInputRepository.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/GraphSettingsRepository.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/GraphSettingsRepository.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/GraphSettingsRepository.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/GraphSettingsRepository.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/GraphSettingsRepository.swiftdeps"
+  }
+}

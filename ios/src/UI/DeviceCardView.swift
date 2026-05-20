@@ -4,8 +4,7 @@ public struct DeviceCardView: View {
     @ObservedObject var viewModel: SensorComparisonViewModel
     let device: DeviceInputState
     
-    @State private var isShowingSensorPicker = false
-    @State private var activeLensIdForPicker: Int64? = nil
+    @State private var activeLensPicker: LensPickerPresentation? = nil
     
     public init(viewModel: SensorComparisonViewModel, device: DeviceInputState) {
         self.viewModel = viewModel
@@ -119,8 +118,7 @@ public struct DeviceCardView: View {
                             viewModel.updateLensFNumber(deviceId: device.id, lensId: lens.id, value: val)
                         },
                         onSensorTap: {
-                            activeLensIdForPicker = lens.id
-                            isShowingSensorPicker = true
+                            activeLensPicker = LensPickerPresentation(lensId: lens.id)
                         },
                         onManualDescriptorChanged: { val in
                             viewModel.updateLensManualDescriptor(deviceId: device.id, lensId: lens.id, descriptor: val)
@@ -136,14 +134,18 @@ public struct DeviceCardView: View {
         .background(Color(uiColor: .secondarySystemGroupedBackground))
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
-        .sheet(isPresented: $isShowingSensorPicker) {
-            if let lensId = activeLensIdForPicker {
-                SensorPickerSheetView(viewModel: viewModel) { selectedValue in
-                    viewModel.updateLensSensorSelection(deviceId: device.id, lensId: lensId, newValue: selectedValue)
-                }
+        .sheet(item: $activeLensPicker) { picker in
+            SensorPickerSheetView(viewModel: viewModel) { selectedValue in
+                viewModel.updateLensSensorSelection(deviceId: device.id, lensId: picker.lensId, newValue: selectedValue)
+                activeLensPicker = nil
             }
         }
     }
+}
+
+private struct LensPickerPresentation: Identifiable {
+    let lensId: Int64
+    var id: Int64 { lensId }
 }
 
 struct LensRowView: View {

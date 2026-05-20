@@ -1,0 +1,12 @@
+{
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift" : {
+    "abi-baseline-json" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku.abi.json",
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-primary.dia",
+    "objc-header" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku-Swift.h",
+    "swiftdoc" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku.swiftdoc",
+    "swiftmodule" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku.swiftmodule",
+    "swiftsourceinfo" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Release-iphoneos/Objects-normal/arm64/sumahohikakuku.swiftsourceinfo"
+  }
+}

@@ -19,7 +19,6 @@ public struct SensorComparisonScreen: View {
                 Picker("Tabs", selection: $selectedTab) {
                     Text(LocalizedStrings.tabDeviceInput).tag(0)
                     Text(LocalizedStrings.tabComparisonGraph).tag(1)
-                    Text(LocalizedStrings.tabSensorDetails).tag(2)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
@@ -28,10 +27,8 @@ public struct SensorComparisonScreen: View {
                 // Tab Content
                 if selectedTab == 0 {
                     deviceInputTab
-                } else if selectedTab == 1 {
-                    comparisonGraphTab
                 } else {
-                    sensorDetailsTab
+                    comparisonGraphTab
                 }
             }
             .navigationTitle(LocalizedStrings.sensorComparisonTitle)
@@ -199,42 +196,18 @@ public struct SensorComparisonScreen: View {
             if let results = viewModel.state.comparisonResults {
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Slider for focal length control
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(String(format: LocalizedStrings.labelSelectedFocalLength, String(format: "%.0f", viewModel.state.selectedFocalLength)))
-                                .font(.subheadline.bold())
-                            
-                            Slider(
-                                value: Binding(
-                                    get: { viewModel.state.selectedFocalLength },
-                                    set: { viewModel.updateFocalLength(focalLength: $0) }
-                                ),
-                                in: (viewModel.state.focalLengths.first ?? 14.0)...(viewModel.state.focalLengths.last ?? 260.0)
-                            )
-                        }
-                        .padding()
-                        .background(Color(uiColor: .secondarySystemGroupedBackground))
-                        .cornerRadius(12)
-                        .padding(.horizontal)
-                        
                         ComparisonChart(
                             results: results,
                             metricType: .effectiveArea,
-                            selectedFocalLength: viewModel.state.selectedFocalLength,
                             lineWidth: settingsRepository.settings.lineWidth
-                        ) { focal in
-                            viewModel.updateFocalLength(focalLength: focal)
-                        }
+                        )
                         .padding(.horizontal)
                         
                         ComparisonChart(
                             results: results,
                             metricType: .lightIntake,
-                            selectedFocalLength: viewModel.state.selectedFocalLength,
                             lineWidth: settingsRepository.settings.lineWidth
-                        ) { focal in
-                            viewModel.updateFocalLength(focalLength: focal)
-                        }
+                        )
                         .padding(.horizontal)
                         
                         // Share & Export Actions
@@ -276,54 +249,6 @@ public struct SensorComparisonScreen: View {
                         .font(.system(size: 64))
                         .foregroundColor(.secondary)
                     Text(LocalizedStrings.messageGenerateGraphFirst)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
-                }
-                .frame(maxHeight: .infinity)
-            }
-        }
-    }
-    
-    // TAB 3: Sensor Details
-    private var sensorDetailsTab: some View {
-        VStack {
-            if let results = viewModel.state.comparisonResults {
-                VStack(spacing: 12) {
-                    // Slider to change focal length
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(String(format: LocalizedStrings.labelSelectedFocalLength, String(format: "%.0f", viewModel.state.selectedFocalLength)))
-                            .font(.subheadline.bold())
-                        
-                        Slider(
-                            value: Binding(
-                                get: { viewModel.state.selectedFocalLength },
-                                set: { viewModel.updateFocalLength(focalLength: $0) }
-                            ),
-                            in: (viewModel.state.focalLengths.first ?? 14.0)...(viewModel.state.focalLengths.last ?? 260.0)
-                        )
-                    }
-                    .padding()
-                    .background(Color(uiColor: .secondarySystemGroupedBackground))
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    ResultsSectionView(
-                        results: results,
-                        selectedFocalLength: viewModel.state.selectedFocalLength,
-                        availableSensors: viewModel.state.availableSensors
-                    )
-                    
-                    Spacer()
-                }
-            } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "tablecells")
-                        .font(.system(size: 64))
-                        .foregroundColor(.secondary)
-                    Text(LocalizedStrings.messageGenerateSensorDetailsFirst)
                         .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)

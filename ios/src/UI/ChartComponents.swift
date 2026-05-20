@@ -30,15 +30,10 @@ public enum ChartMetricType {
 public struct ComparisonChart: View {
     let results: ComparisonResults
     let metricType: ChartMetricType
-    let selectedFocalLength: Double
     let lineWidth: Float
-    let onFocalLengthChanged: (Double) -> Void
-    
-    @State private var dragFocalLength: Double? = nil
     
     public var body: some View {
-        let displayFocal = dragFocalLength ?? selectedFocalLength
-        return VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             Text(metricType.title)
                 .font(.headline)
                 .foregroundColor(.primary)
@@ -46,11 +41,7 @@ public struct ComparisonChart: View {
             ChartContainerView(
                 results: results,
                 metricType: metricType,
-                lineWidth: lineWidth,
-                displayFocal: displayFocal,
-                selectedFocalLength: selectedFocalLength,
-                dragFocalLength: $dragFocalLength,
-                onFocalLengthChanged: onFocalLengthChanged
+                lineWidth: lineWidth
             )
             
             ChartLegendView(devices: results.devices)
@@ -99,11 +90,15 @@ struct DeviceChartContent: ChartContent {
     let device: ProcessedDevice
     let metricType: ChartMetricType
     let lineWidth: Float
+
+    private var chartMetrics: [FocalLengthMetrics] {
+        downsampleChartMetrics(device.metricsByFocalLength, nativeFocals: device.lenses.map(\.nativeFocalLength35mm))
+    }
     
     var body: some ChartContent {
         let color = Color(hex: device.colorHex) ?? .blue
         let lenses = device.lenses
-        ForEach(device.metricsByFocalLength, id: \.focalLength35mm) { metric in
+        ForEach(chartMetrics, id: \.focalLength35mm) { metric in
             let yValue = (metricType == .effectiveArea) ? metric.effectiveAreaSqMm : metric.totalLightIntake
             let isNative = lenses.contains(where: { abs($0.nativeFocalLength35mm - metric.focalLength35mm) < 0.01 })
             
@@ -127,39 +122,39 @@ struct DeviceChartContent: ChartContent {
     }
 }
 
-struct RuleMarkAnnotationView: View {
-    let focal: Double
-    
-    var body: some View {
-        Text(String(format: "%.0fmm", focal))
-            .font(.caption2.bold())
-            .foregroundColor(.white)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 3)
-            .background(Color.accentColor)
-            .cornerRadius(4)
-            .shadow(radius: 2)
+private func downsampleChartMetrics(
+    _ metrics: [FocalLengthMetrics],
+    nativeFocals: [Double],
+    maxPoints: Int = 90
+) -> [FocalLengthMetrics] {
+    guard metrics.count > maxPoints else { return metrics }
+
+    var selectedFocals = Set<Double>()
+    let stride = Int(ceil(Double(metrics.count) / Double(maxPoints)))
+
+    for index in metrics.indices where index % stride == 0 || index == metrics.indices.last {
+        selectedFocals.insert(metrics[index].focalLength35mm)
     }
+
+    for nativeFocal in nativeFocals {
+        if let nearest = metrics.min(by: {
+            abs($0.focalLength35mm - nativeFocal) < abs($1.focalLength35mm - nativeFocal)
+        }) {
+            selectedFocals.insert(nearest.focalLength35mm)
+        }
+    }
+
+    return metrics.filter { selectedFocals.contains($0.focalLength35mm) }
 }
 
 struct ComparisonChartContent: ChartContent {
     let results: ComparisonResults
     let metricType: ChartMetricType
     let lineWidth: Float
-    let displayFocal: Double
     
     var body: some ChartContent {
         ForEach(results.devices) { device in
             DeviceChartContent(device: device, metricType: metricType, lineWidth: lineWidth)
-        }
-        
-        RuleMark(
-            x: .value("Focal Length", displayFocal)
-        )
-        .foregroundStyle(Color.accentColor.opacity(0.6))
-        .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4, 4]))
-        .annotation(position: .top, alignment: .center) {
-            RuleMarkAnnotationView(focal: displayFocal)
         }
     }
 }
@@ -191,25 +186,6 @@ struct ChartContainerView: View {
     let results: ComparisonResults
     let metricType: ChartMetricType
     let lineWidth: Float
-    let displayFocal: Double
-    let selectedFocalLength: Double
-    @Binding var dragFocalLength: Double?
-    let onFocalLengthChanged: (Double) -> Void
-    
-    private func handleDragChanged(value: DragGesture.Value, geometry: GeometryProxy, proxy: ChartProxy) {
-        let x = value.location.x
-        if let focalLength = proxy.value(atX: x, as: Double.self) {
-            let minFocal = results.focalLengths.first ?? 14.0
-            let maxFocal = results.focalLengths.last ?? 260.0
-            let clamped = max(minFocal, min(focalLength, maxFocal))
-            dragFocalLength = clamped
-            onFocalLengthChanged(clamped)
-        }
-    }
-    
-    private func handleDragEnded() {
-        dragFocalLength = nil
-    }
 
     private var deviceColorDomain: [String] {
         results.devices.map(\.id)
@@ -226,28 +202,13 @@ struct ChartContainerView: View {
             ComparisonChartContent(
                 results: results,
                 metricType: metricType,
-                lineWidth: lineWidth,
-                displayFocal: displayFocal
+                lineWidth: lineWidth
             )
         }
         .chartForegroundStyleScale(domain: deviceColorDomain, range: deviceColorRange)
+        .chartLegend(.hidden)
         .chartXScale(domain: (results.focalLengths.first ?? 14.0)...(results.focalLengths.last ?? 260.0))
         .frame(height: 220)
         .padding(.top, 10)
-        .chartOverlay { proxy in
-            GeometryReader { geometry in
-                Color.clear
-                    .contentShape(Rectangle())
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                handleDragChanged(value: value, geometry: geometry, proxy: proxy)
-                            }
-                            .onEnded { _ in
-                                handleDragEnded()
-                            }
-                    )
-            }
-        }
     }
 }
