@@ -1,0 +1,23 @@
+{
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/PresetModels.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/PresetModels.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/PresetModels.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/PresetModels.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/PresetModels.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/SensorModels.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/SensorModels.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/SensorModels.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/SensorModels.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/SensorModels.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/LocalizedStrings.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/LocalizedStrings.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/LocalizedStrings.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/LocalizedStrings.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphoneos/Objects-normal/arm64/LocalizedStrings.swiftdeps"
+  }
+}

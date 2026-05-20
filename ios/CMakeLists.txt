@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_SYSTEM_NAME iOS)
-set(CMAKE_OSX_SYSROOT iphonesimulator CACHE STRING "iOS SDK")
 set(CMAKE_OSX_DEPLOYMENT_TARGET 16.0)
 set(CMAKE_Swift_LANGUAGE_VERSION 5.0)
 
 project(sumahohikakuku LANGUAGES Swift OBJC)
+
+set(IOS_DEVELOPMENT_TEAM "HZ5XFG62KH" CACHE STRING "Apple Developer Team ID for signing App Store builds")
 
 # Set Bundle properties
 set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.porarrirr.sumahohikakuku")
@@ -21,6 +22,8 @@ file(GLOB_RECURSE SOURCES
 # Reference CSV resource
 set(RESOURCES
     "resources/sensor_database.csv"
+    "resources/PrivacyInfo.xcprivacy"
+    "resources/Assets.xcassets"
 )
 
 # App target
@@ -39,16 +42,20 @@ set_target_properties(sumahohikakuku PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.porarrirr.sumahohikakuku"
     XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS "iphonesimulator iphoneos"
-    XCODE_ATTRIBUTE_SDKROOT "iphonesimulator"
     XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1" # iPhone
     XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "16.0"
-    XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"
-    XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
-    XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
-    XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ""
+    XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic"
+    XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+    XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
+    XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
     XCODE_ATTRIBUTE_INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription "比較結果の画像を写真ライブラリに保存するために使用します。"
-    XCODE_ATTRIBUTE_ENABLE_TESTABILITY YES
 )
+
+if (IOS_DEVELOPMENT_TEAM)
+    set_target_properties(sumahohikakuku PROPERTIES
+        XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${IOS_DEVELOPMENT_TEAM}"
+    )
+endif()
 
 # Collect Test files
 file(GLOB TEST_SOURCES
@@ -67,14 +74,9 @@ if (TEST_SOURCES)
         XCODE_ATTRIBUTE_WRAPPER_EXTENSION xctest
         XCODE_ATTRIBUTE_BUNDLE_LOADER "$(TEST_HOST)"
         XCODE_ATTRIBUTE_TEST_HOST "$(BUILT_PRODUCTS_DIR)/sumahohikakuku.app/sumahohikakuku"
-        XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"
-        XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
-        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
-        XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ""
         XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "16.0"
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
         XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS "iphonesimulator iphoneos"
-        XCODE_ATTRIBUTE_SDKROOT "iphonesimulator"
         XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS "$(PLATFORM_DIR)/Developer/Library/Frameworks"
     )
     

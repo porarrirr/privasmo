@@ -109,7 +109,8 @@ struct DeviceChartContent: ChartContent {
             
             LineMark(
                 x: .value(LocalizedStrings.labelFocalLength, metric.focalLength35mm),
-                y: .value(metricType.yAxisLabel, yValue)
+                y: .value(metricType.yAxisLabel, yValue),
+                series: .value(LocalizedStrings.labelDeviceDefaultName, device.id)
             )
             .foregroundStyle(color)
             .lineStyle(StrokeStyle(lineWidth: CGFloat(lineWidth), lineCap: .round, lineJoin: .round))
@@ -209,6 +210,14 @@ struct ChartContainerView: View {
     private func handleDragEnded() {
         dragFocalLength = nil
     }
+
+    private var deviceColorScale: KeyValuePairs<String, Color> {
+        KeyValuePairs(
+            results.devices.map { device in
+                (key: device.id, value: Color(hex: device.colorHex) ?? .blue)
+            }
+        )
+    }
     
     var body: some View {
         Chart {
@@ -219,6 +228,7 @@ struct ChartContainerView: View {
                 displayFocal: displayFocal
             )
         }
+        .chartForegroundStyleScale(deviceColorScale)
         .chartXScale(domain: (results.focalLengths.first ?? 14.0)...(results.focalLengths.last ?? 260.0))
         .frame(height: 220)
         .padding(.top, 10)
@@ -239,4 +249,3 @@ struct ChartContainerView: View {
         }
     }
 }
-

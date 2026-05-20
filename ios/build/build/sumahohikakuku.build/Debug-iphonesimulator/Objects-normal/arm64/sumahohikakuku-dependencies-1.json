@@ -196,392 +196,392 @@
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/Accessibility.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Accessibility-DYLUST5L0K5IB33U7Z4R5L6GU.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Accessibility-3H6O0MVVODD8U3BGUGPTER06V.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Accessibility"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CFNetwork.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CFNetwork-7A4QGDU1P4NWPPGVL30ZIP30M.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CFNetwork-96E1V3I8YU09EP0M0QQKXO90I.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CFNetwork"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreData.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreData-4HXEOJ82P61T7BTR1MGG3K0C8.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreData-F3WX9YGRKMJDW3MJTQN7E0EZW.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreData"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreFoundation-CUEG3OWFHJCSG40J0JJ6WYOUD.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreFoundation-3B8SPQHC4G7JOBC15MHSJ8A2Z.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreFoundation"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreGraphics.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreGraphics-8HE1XFDGCLWAGQWSDWQZLA0LJ.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreGraphics-97N8VVRM308FYCYVZ6R0DZ4NP.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreGraphics"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreImage.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreImage-1TSUJO3066FE6R5UIYSTKTL0B.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreImage-EKEHGL7WJMYP15IK6AJH1D3HY.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreImage"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreText.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreText-BRN0EP19DKIL1PG8EZPHBGF7S.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreText-EQUC9ET2O041JLBHWUTWG9KKC.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreText"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreTransferable.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreTransferable-AX0TPKCUYDQ1TBOOM1HU8JDVV.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreTransferable-79BLDW6SYFEV2Z66IC0MEEOEV.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreTransferable"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/CoreVideo.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/CoreVideo-B7M2NL15TSL3YCGXPPGRQLZ8C.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/CoreVideo-AFD25W73CUXEC8KVV4YN04T1C.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "CoreVideo"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/Darwin.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Darwin-1PHVPUJV5XKNHV3RFKG3S8PE1.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Darwin-820P93RYLS1BHIVTMD61PH99C.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Darwin"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/DataDetection.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/DataDetection-1IIJ40ZAE6Y57U7JT48HRZE99.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/DataDetection-E7A9ZZZEVL0CP6T8GZGCADLPC.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "DataDetection"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/DeveloperToolsSupport.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/DeveloperToolsSupport-8KJIN7LL1QLH893BX68RQ6NQI.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/DeveloperToolsSupport-CF6VSGL76PZIXTYALU66EJRSG.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "DeveloperToolsSupport"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/dispatch.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Dispatch-8AIX1BHWQMBM8UMH2Z5OTPBH1.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Dispatch-CFU7HWSN3ON8NRXRSEKWZ8FIC.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Dispatch"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/FileProvider.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/FileProvider-C0JCFJSE1YPJAZMQF0OT6KKCS.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/FileProvider-5UQ8XAHIV92HG8C8BW9CGRWP5.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "FileProvider"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Foundation-7TCU9YTQHXV7R98791XLAV6I5.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Foundation-CYHW0CH6LLK0ZUVRDY32U0ENG.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Foundation"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/IOSurface.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/IOSurface-8TSKE6ZU2N1ZT2ACV3HJ6NT0Q.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/IOSurface-CU0LSNXTQMHSKZSKGTZVAEHL1.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "IOSurface"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/ImageIO.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/ImageIO-9ODLPPF1VSTYS5KX4ZZ776LDZ.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/ImageIO-ABU5KR37ZJ659KQLK3U624D7U.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "ImageIO"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinBasic.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/MachO-5AI2YOC48KY6191OVMDLWUVLF.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/MachO-9YOEKQQT3GHAZPM1ECWP2OV60.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "MachO"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/Metal.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Metal-9R6IW0AFXPN8IWIJ0KJ5CV90M.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Metal-7S8G4J96NNTKW9J0U6M72RBM7.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Metal"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/OSLog.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/OSLog-H0X6VLD99F70E7VHIKMGOWN1.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/OSLog-3CUS02SJTV5WKQDEHAX3877LA.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "OSLog"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/ObjectiveC.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/ObjectiveC-6LG9V4FVUEPI2AOONLQIJEBZ6.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/ObjectiveC-EKWWH5OZCRQCV541T0D95BDT8.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "ObjectiveC"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/OpenGLES.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/OpenGLES-5FOJ395QK8KX81KR4R5LB6A9C.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/OpenGLES-8E3926HD43N1UE15403HQ9TGP.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "OpenGLES"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/QuartzCore.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/QuartzCore-1KQZOZPJAV1XD2T6LACOIW2Q9.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/QuartzCore-147E23TKBSMEHRXSNQM17Z7GV.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "QuartzCore"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Security-E0PQRFJUTUWNGCQ7Q5LB91QLK.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Security-BJEXATEGL223JWASXHGH267QW.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Security"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/Spatial\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Spatial-ERBQ4I9RHTE2NOSMID5CV6OQE.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Spatial-L9T94DOBP4OJ0BL8GTN4QDKT.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Spatial"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/SwiftShims-6BHG4HTZ3O5NVOXG30N1G333K.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/SwiftShims-9MVXHSL3BTMI4A6BEVYT6IPST.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "SwiftShims"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/SwiftUI.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/SwiftUI-1WN1L7CP583XPMBC3ILV0U11D.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/SwiftUI-DBUL42IILFCA9A464E5BV2BUR.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "SwiftUI"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/SwiftUICore.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/SwiftUICore-B875D2K14BIDH44TIEOGHBGAY.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/SwiftUICore-C4AWFGAA8CZ90GITS8767ZT87.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "SwiftUICore"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/Symbols.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/Symbols-6R9M3R8HJBVE1WQA5YC2DY9NE.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/Symbols-8UROO4TB86YE0989AKYDNNTVQ.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "Symbols"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/UIKit.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/UIKit-5QH0CJ0C4PVNLMT266T6JDH7Y.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/UIKit-1GPR8T6L4YLB4LLTAK93DO6X.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "UIKit"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/SubFrameworks\/UIUtilities.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/UIUtilities-SVG6RRTL0K6ZDDGZV1M511RH.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/UIUtilities-D94OXU7DNNRFNJ9M0OWWNC7LL.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "UIUtilities"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/UniformTypeIdentifiers.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/UniformTypeIdentifiers-2DMCVQUX3IJX2B1FZ5SBMQ5W9.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/UniformTypeIdentifiers-9AKBA41AJKXEDOOCJJPMURHMG.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "UniformTypeIdentifiers"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/System\/Library\/Frameworks\/UserNotifications.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/UserNotifications-2F5E6N6U2AQVNOS767NEULK7A.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/UserNotifications-1YSNTVIMBNI2K7H5ZTOEIOS26.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "UserNotifications"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/xpc.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/XPC-8BEXVMVZ1M51CEZZB9DNXIT8T.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/XPC-EGMRFDI5C5A36D3PCNGJZL7XO.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "XPC"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinFoundation1.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_AvailabilityInternal-BY20U3BLP7FBDBH2KP21J6EPT.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_AvailabilityInternal-5LBIK0UKYG3WKF7SSP3SD9LBF.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_AvailabilityInternal"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_float-AXCE7HRKEDJ7WQ5NFTY8NMSWM.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_float-55S5I5YBM3WW555VJI1P5OXI1.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_float"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_intrinsics-7JY4NCCKKI9Q70G14D6ET0XHR.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_intrinsics-6Q56CKHTFRBQ6O3R0CYFWMRDD.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_intrinsics"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_inttypes-5V5BPGSMF14F0484RAMGWAW1Q.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_inttypes-D9W81TG6SCPZ4AU3O31KAENY3.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_inttypes"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_limits-EPWQDAFVYBYOR7JPIQNBRKILW.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_limits-2RR4M62R5WBG4200W4U74W73I.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_limits"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdarg-8V7ASDMSFTGGR27HB9JWYEO69.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_stdarg-8EU9CKOEZ13LO3OQJIMQMSK9K.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_stdarg"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdatomic-CPO3XLXD8F9A9B2GMAU716D3L.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_stdatomic-4L4PVD3XQAIKOK1LS4XK86AL7.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_stdatomic"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdbool-DTCEU9DL2F36KI066W6NM7XRQ.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_stdbool-C0SWOYLSD9K56A1YSAV02ELDH.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_stdbool"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stddef-8E4V45CHXLUZ6S7N2SMBZPM8A.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_stddef-8OOC5THSNGLR79QS9VBCL9X1G.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_stddef"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdint-D0FUBA3DTMCR3W9059AQ2INM9.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_stdint-6EV98Z8A88XWMSSVFA7RI9YJI.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_stdint"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_Builtin_tgmath-D6RMDZMKDIY9YMZSYXAWMR4LL.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_Builtin_tgmath-DIVZPM36GRBZRKA96PSNNO2GR.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_Builtin_tgmath"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinFoundation1.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation1-6I18MIG6N8X6YWQ24L1KZG6I8.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_DarwinFoundation1-E2BW29XL9QW6JYHFRWB6MJDXY.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_DarwinFoundation1"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinFoundation2.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation2-77EWZ9991XUPL6BRE4HZLIEAE.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_DarwinFoundation2-5QQZPKFV7DEAFDCBBKNAT4EZU.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_DarwinFoundation2"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinFoundation3.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation3-EU932NDEXRDGKK31EQ9JACTG4.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_DarwinFoundation3-23Z9OAG6T37TIX91M0KAFS93P.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_DarwinFoundation3"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/_SwiftConcurrencyShims-4K8E6IERM3K1KTCT7519CB0F2.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/_SwiftConcurrencyShims-6SMD4X60NPFBW8251GQU9TBBX.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "_SwiftConcurrencyShims"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/os-BVYW85VL6XMNUUKKBLC4210ZZ.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/os-CQTA90ASO6C8WF4MCHFGVC1KM.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "os"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/os_object-9XI1NGOWTLOJAOOC2P788HHK6.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/os_object-BP6IBD9LTUQSE4EDQW1K9JMHN.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "os_object"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/os_workgroup-ATEY3YO03DA7M387YYXX70UVB.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/os_workgroup-5WX591IAXS7SM0KB6DJEPSGKZ.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "os_workgroup"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/ptrauth-EYL9TDY277541EH393O2THKJW.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/ptrauth-1FXYODD4KNXSOKCPMU4MFROZ6.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "ptrauth"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/ptrcheck-O8DWIBUDIAJRI5M1XS6RBE8M.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/ptrcheck-A15W4GFAUK153WMBWCUTVTRBG.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "ptrcheck"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/simd\/module.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/simd-9U5U17X8H7ASFDQVM2MW31DOM.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/simd-9M4Y11YYXOA3U7YNWZIAQHVAU.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "simd"
   },
   {
     "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/iPhoneSimulator.platform\/Developer\/SDKs\/iPhoneSimulator.sdk\/usr\/include\/DarwinFoundation2.modulemap",
-    "clangModulePath" : "\/Users\/porari\/kaihatu\/cross\/privasmo\/ios\/build\/build\/SwiftExplicitPrecompiledModules\/sys_types-EHBFG8TQWY2XRRQRC4E01BC1K.pcm",
+    "clangModulePath" : "\/Users\/porari\/Library\/Developer\/Xcode\/DerivedData\/ModuleCache.noindex\/sys_types-8WUSL7R4UWVRG09SGQLALGYPY.pcm",
     "isBridgingHeaderDependency" : false,
     "isFramework" : false,
     "moduleName" : "sys_types"
