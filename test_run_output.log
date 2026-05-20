@@ -1,0 +1,414 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project ios/build/sumahohikakuku.xcodeproj -scheme sumahohikakukuTests -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 17" test
+
+Build settings from command line:
+    SDKROOT = iphonesimulator26.5
+
+2026-05-20 20:51:08.078 xcodebuild[83170:483131] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+ComputePackagePrebuildTargetDependencyGraph
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'sumahohikakukuTests' in project 'sumahohikakuku'
+        ➜ Explicit dependency on target 'sumahohikakuku' in project 'sumahohikakuku'
+        ➜ Explicit dependency on target 'ZERO_CHECK' in project 'sumahohikakuku'
+    Target 'sumahohikakuku' in project 'sumahohikakuku'
+        ➜ Explicit dependency on target 'ZERO_CHECK' in project 'sumahohikakuku'
+    Target 'ZERO_CHECK' in project 'sumahohikakuku' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 63d54e1f695da0431854399928ae4014
+Build description path: /Users/porari/kaihatu/cross/privasmo/ios/build/build/XCBuildData/63d54e1f695da0431854399928ae4014.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache
+    cd /Users/porari/kaihatu/cross/privasmo/ios/build/sumahohikakuku.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -o /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache
+
+PhaseScriptExecution Generate\ CMakeFiles/ZERO_CHECK /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/ZERO_CHECK.build/Script-D48CDD245A2A79697C428945.sh (in target 'ZERO_CHECK' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /bin/sh -c /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/ZERO_CHECK.build/Script-D48CDD245A2A79697C428945.sh
+make: `/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/cmake.check_cache' is up to date.
+
+MkDir /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /bin/mkdir -p /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns
+
+MkDir /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /bin/mkdir -p /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+
+MkDir /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /bin/mkdir -p /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/libXCTestSwiftSupport.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+ProcessInfoPlistFile /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Info.plist /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-infoPlistUtility /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Info.plist
+/Users/porari/kaihatu/cross/privasmo/ios/build/sumahohikakuku.xcodeproj: warning: User-supplied CFBundleIdentifier value 'com.porarrirr.sumahohikakuku' in the Info.plist must be the same as the PRODUCT_BUNDLE_IDENTIFIER build setting value ''. (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/libXCTestBundleInject.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCUnit.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework/XCUnit (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCUIAutomation.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework/XCUIAutomation (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCTestSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework/XCTestSupport (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCTestCore.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework/XCTestCore (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriver sumahohikakuku normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakuku -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.SwiftFileList -Onone -swift-version 5.0 -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCTest.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework/XCTest (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/XCTAutomationSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework/XCTAutomationSupport (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks/Testing.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks
+warning: not stripping binary because it is signed: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework/Testing (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 Compiling\ PresetModels.swift,\ SensorModels.swift,\ LocalizedStrings.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ CustomSensorRepository.swift,\ DeviceInputRepository.swift,\ GraphSettingsRepository.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ GenerateComparisonUseCase.swift,\ InputSanitizer.swift,\ CustomSensorModels.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ SensorComparisonApp.swift,\ ChartComponents.swift,\ DeviceCardView.swift /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ ExportView.swift,\ GraphSettingsScreen.swift,\ PresetSheetsView.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ sumahohikakuku (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+EmitSwiftModule normal arm64 (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ SensorComparisonViewModel.swift,\ SensorPickerSheetView.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ ResultsSectionView.swift,\ SensorComparisonScreen.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ PreferencesKeyEncoding.swift,\ PresetRepository.swift,\ SensorDatabaseRepository.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for sumahohikakuku (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriver\ Compilation\ Requirements sumahohikakuku normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakuku -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.SwiftFileList -Onone -swift-version 5.0 -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling CustomSensorRepository.swift, DeviceInputRepository.swift, GraphSettingsRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriverJobDiscovery normal arm64 Compiling GenerateComparisonUseCase.swift, InputSanitizer.swift, CustomSensorModels.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.swiftmodule/arm64-apple-ios-simulator.abi.json /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.abi.json (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.abi.json /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+SwiftDriver sumahohikakukuTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakukuTests -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.SwiftFileList -Onone -swift-version 5.0 -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -Xcc -DsumahohikakukuTests_EXPORTS -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling PreferencesKeyEncoding.swift, PresetRepository.swift, SensorDatabaseRepository.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 Compiling\ SensorComputationTests.swift /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ sumahohikakukuTests (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+EmitSwiftModule normal arm64 (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftCompile normal arm64 Compiling\ SensorModelsTests.swift /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+SwiftCompile normal arm64 /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling PresetModels.swift, SensorModels.swift, LocalizedStrings.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for sumahohikakukuTests (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+SwiftDriver\ Compilation\ Requirements sumahohikakukuTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakukuTests -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.SwiftFileList -Onone -swift-version 5.0 -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -Xcc -DsumahohikakukuTests_EXPORTS -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling ResultsSectionView.swift, SensorComparisonScreen.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+Copy /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.swiftmodule/arm64-apple-ios-simulator.abi.json /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.abi.json (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.abi.json /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+SwiftDriverJobDiscovery normal arm64 Compiling SensorModelsTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SensorComputationTests.swift (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+SwiftDriver\ Compilation sumahohikakukuTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakukuTests -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.SwiftFileList -Onone -swift-version 5.0 -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -Xcc -DsumahohikakukuTests_EXPORTS -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling SensorComparisonApp.swift, ChartComponents.swift, DeviceCardView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriverJobDiscovery normal arm64 Compiling ExportView.swift, GraphSettingsScreen.swift, PresetSheetsView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SensorComparisonViewModel.swift, SensorPickerSheetView.swift (in target 'sumahohikakuku' from project 'sumahohikakuku')
+
+SwiftDriver\ Compilation sumahohikakuku normal arm64 com.apple.xcode.tools.swift.compiler (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name sumahohikakuku -O @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.SwiftFileList -Onone -swift-version 5.0 -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F /Users/porari/kaihatu/cross/privasmo/ios/build/Debug -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/porari/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/porari/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_const_extract_protocols.json -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/include -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources-normal/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources/arm64 -Xcc -I/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/DerivedSources -Xcc -DCMAKE_INTDIR\=\"Debug-iphonesimulator\" -emit-objc-header -emit-objc-header-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-Swift.h -working-directory /Users/porari/kaihatu/cross/privasmo/ios -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku normal (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/porari/kaihatu/cross/privasmo/ios/build/build/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F/Users/porari/kaihatu/cross/privasmo/ios/build/build/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/porari/kaihatu/cross/privasmo/ios/build/Debug -filelist /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.swiftmodule @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku-linker-args.resp -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku
+
+GenerateDSYMFile /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app.dSYM /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app.dSYM
+
+ExtractAppIntentsMetadata (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name sumahohikakuku --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F42 --platform-family iOS --deployment-target 16.0 --output /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app --target-triple arm64-apple-ios16.0-simulator --binary-file /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku --dependency-file /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku_dependency_info.dat --stringsdata-file /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.SwiftFileList --metadata-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/sumahohikakuku.DependencyMetadataFileList --static-metadata-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/sumahohikakuku.DependencyStaticMetadataFileList --swift-const-vals-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakuku.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-05-20 20:51:12.456 appintentsmetadataprocessor[83207:483399] Starting appintentsmetadataprocessor export
+2026-05-20 20:51:12.458 appintentsmetadataprocessor[83207:483399] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CopySwiftLibs /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/SystemExtensions --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+ProcessInfoPlistFile /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Info.plist /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-infoPlistUtility /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphonesimulator -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Info.plist
+/Users/porari/kaihatu/cross/privasmo/ios/build/sumahohikakuku.xcodeproj: warning: User-supplied CFBundleIdentifier value 'com.porarrirr.sumahohikakuku' in the Info.plist must be the same as the PRODUCT_BUNDLE_IDENTIFIER build setting value ''. (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+
+Ld /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests normal (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/porari/kaihatu/cross/privasmo/ios/build/build/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/porari/kaihatu/cross/privasmo/ios/build/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/Users/porari/kaihatu/cross/privasmo/ios/build/build/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/porari/kaihatu/cross/privasmo/ios/build/Debug -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -filelist /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @loader_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -bundle_loader /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/sumahohikakuku -Xlinker -object_path_lto -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_lto.o -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.swiftmodule @/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests-linker-args.resp -framework XCTest -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests
+
+CopySwiftLibs /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Frameworks --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/PlugIns --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/SystemExtensions --scan-folder /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+ExtractAppIntentsMetadata (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name sumahohikakukuTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F42 --platform-family iOS --deployment-target 16.0 --output /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest --target-triple arm64-apple-ios16.0-simulator --binary-file /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests --dependency-file /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests_dependency_info.dat --stringsdata-file /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.SwiftFileList --metadata-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/sumahohikakukuTests.DependencyMetadataFileList --static-metadata-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/sumahohikakukuTests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/Objects-normal/arm64/sumahohikakukuTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-05-20 20:51:12.817 appintentsmetadataprocessor[83211:483425] Starting appintentsmetadataprocessor export
+2026-05-20 20:51:12.818 appintentsmetadataprocessor[83211:483425] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+GenerateDSYMFile /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest.dSYM /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/sumahohikakukuTests -o /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest.dSYM
+
+AppIntentsSSUTraining (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Info.plist --temp-dir-path /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/ssu --bundle-id  --product-path /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest --extracted-metadata-path /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Metadata.appintents --metadata-file-list /Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/Debug-iphonesimulator/sumahohikakukuTests.DependencyMetadataFileList --source-file /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest/Info.plist --archive-ssu-assets
+2026-05-20 20:51:12.835 appintentsnltrainingprocessor[83213:483429] Parsing options for appintentsnltrainingprocessor
+2026-05-20 20:51:12.835 appintentsnltrainingprocessor[83213:483429] Starting AppIntents SSU YAML Generation
+2026-05-20 20:51:12.835 appintentsnltrainingprocessor[83213:483429] No AppShortcuts found - Skipping.
+
+RegisterExecutionPolicyException /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-RegisterExecutionPolicyException /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest
+
+Touch /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest (in target 'sumahohikakukuTests' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    /usr/bin/touch -c /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app/PlugIns/sumahohikakukuTests.xctest
+
+Validate /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app (in target 'sumahohikakuku' from project 'sumahohikakuku')
+    cd /Users/porari/kaihatu/cross/privasmo/ios
+    builtin-validationUtility /Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakuku.app -shallow-bundle -infoplist-subpath Info.plist
+
+warning: Stale file '/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.xctest' is located outside of the allowed root paths.
+
+warning: Stale file '/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.xctest.dSYM/Contents/Resources/DWARF/sumahohikakukuTests' is located outside of the allowed root paths.
+
+warning: Stale file '/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.xctest/Info.plist' is located outside of the allowed root paths.
+
+warning: Stale file '/Users/porari/kaihatu/cross/privasmo/ios/build/Debug/sumahohikakukuTests.xctest/sumahohikakukuTests' is located outside of the allowed root paths.
+
+note: Run script build phase 'Generate CMakeFiles/ZERO_CHECK' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'ZERO_CHECK' from project 'sumahohikakuku')
+2026-05-20 20:51:51.804499+0900 sumahohikakuku[83475:487999] [General] Failed to send CA Event for app launch measurements for ca_event_type: 0 event_name: com.apple.app_launch_measurement.FirstFramePresentationMetric
+2026-05-20 20:51:52.194712+0900 sumahohikakuku[83475:488009] [General] Failed to send CA Event for app launch measurements for ca_event_type: 1 event_name: com.apple.app_launch_measurement.ExtendedLaunchMetrics
+Test Suite 'All tests' started at 2026-05-20 20:51:53.182.
+Test Suite 'sumahohikakukuTests.xctest' started at 2026-05-20 20:51:53.182.
+Test Suite 'SensorComputationTests' started at 2026-05-20 20:51:53.182.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_appliesInverseSquareAreaForDigitalZoom]' started.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_appliesInverseSquareAreaForDigitalZoom]' passed (0.027 seconds).
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_returnsUnityZoomAtNativeFocal]' started.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_returnsUnityZoomAtNativeFocal]' passed (0.001 seconds).
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_switchesBaseLensAtBoundary]' started.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testCalculateEffectiveMetrics_switchesBaseLensAtBoundary]' passed (0.001 seconds).
+Test Case '-[sumahohikakukuTests.SensorComputationTests testComputeProcessedDevice_generatesMetricsForReachableFocals]' started.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testComputeProcessedDevice_generatesMetricsForReachableFocals]' passed (0.010 seconds).
+Test Case '-[sumahohikakukuTests.SensorComputationTests testComputeProcessedDevice_returnsNilWhenAllLensesAreInvalid]' started.
+Test Case '-[sumahohikakukuTests.SensorComputationTests testComputeProcessedDevice_returnsNilWhenAllLensesAreInvalid]' passed (0.000 seconds).
+Test Suite 'SensorComputationTests' passed at 2026-05-20 20:51:53.225.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.039 (0.042) seconds
+Test Suite 'SensorModelsTests' started at 2026-05-20 20:51:53.225.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_handlesCommaDecimal]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_handlesCommaDecimal]' passed (0.001 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_handlesFullWidthDigitsAndPreservesLabel]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_handlesFullWidthDigitsAndPreservesLabel]' passed (0.016 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_returnsZeroAreaForMalformedManualDescriptor]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testCalculateNativeSensorMetrics_returnsZeroAreaForMalformedManualDescriptor]' passed (0.001 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testDetectManufacturer_isLocaleIndependent]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testDetectManufacturer_isLocaleIndependent]' passed (0.000 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_acceptsCommaDecimal]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_acceptsCommaDecimal]' passed (0.009 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_acceptsFullWidthDigitsAndSlash]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_acceptsFullWidthDigitsAndSlash]' passed (0.000 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_rejectsMalformedFractions]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testIsValidManualSensorDescriptor_rejectsMalformedFractions]' passed (0.000 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testNormalizeBinning_isLocaleIndependent]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testNormalizeBinning_isLocaleIndependent]' passed (0.000 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testParseSensorCsv_handlesQuotedFields]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testParseSensorCsv_handlesQuotedFields]' passed (0.005 seconds).
+Test Case '-[sumahohikakukuTests.SensorModelsTests testParseSensorCsv_interpretsMegapixelColumnAsHundredBasedValue]' started.
+Test Case '-[sumahohikakukuTests.SensorModelsTests testParseSensorCsv_interpretsMegapixelColumnAsHundredBasedValue]' passed (0.001 seconds).
+Test Suite 'SensorModelsTests' passed at 2026-05-20 20:51:53.272.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.034 (0.047) seconds
+Test Suite 'sumahohikakukuTests.xctest' passed at 2026-05-20 20:51:53.272.
+	 Executed 15 tests, with 0 failures (0 unexpected) in 0.073 (0.090) seconds
+Test Suite 'All tests' passed at 2026-05-20 20:51:53.272.
+	 Executed 15 tests, with 0 failures (0 unexpected) in 0.073 (0.091) seconds
+2026-05-20 20:51:53.643 xcodebuild[83170:483131] [MT] IDETestOperationsObserverDebug: 40.715 elapsed -- Testing started completed.
+2026-05-20 20:51:53.643 xcodebuild[83170:483131] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-05-20 20:51:53.643 xcodebuild[83170:483131] [MT] IDETestOperationsObserverDebug: 40.715 sec, +40.715 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/porari/Library/Developer/Xcode/DerivedData/sumahohikakuku-daullqiyfmvncibaivyvzkohfwrv/Logs/Test/Test-sumahohikakukuTests-2026.05.20_20-51-08-+0900.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

@@ -1,0 +1,4 @@
+objc[84358]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x124674398) and /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x126ed0310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+2026-05-20 21:07:05.496 sumahohikakuku[84358:501518] Simulator slow-motion animations are now off
+IOSurfaceClientSetSurfaceNotify failed e00002c7
+com.porarrirr.sumahohikakuku: 84358

@@ -1,0 +1,1153 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		76CEF07CC389EBD0012F7273 /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4E7A99100C8246D5965E8711 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				063F784351B694E007969583 /* Generate CMakeFiles/ALL_BUILD */,
+			);
+			dependencies = (
+				B74CECAAD54B400099CC8D40 /* PBXTargetDependency */,
+				C1732D629AD94FD887094670 /* PBXTargetDependency */,
+				BC6AC93E88EE41CE8988732D /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+		9AA0E84425ADAD33E785C00F /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 97F99DB05F54468C8AD36D53 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				D48CDD245A2A79697C428945 /* Generate CMakeFiles/ZERO_CHECK */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		0A945C4A64A047BA99256CB8 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift */ = {isa = PBXBuildFile; fileRef = 6710A27629B54764980568F7 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift */; };
+		0AAF1EEE0FA843468D7B97A3 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift */ = {isa = PBXBuildFile; fileRef = 4BDC11DE977B4C5793AEE806 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift */; };
+		0C2E4CA4CA3F476481B9FAA3 /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift */ = {isa = PBXBuildFile; fileRef = D5544A2D241C4E7A88481F4A /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift */; };
+		0D419480C543423FBFEE018C /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift */ = {isa = PBXBuildFile; fileRef = C92550478E914BE0B05C2C9D /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift */; };
+		1865D15F2D2A4BCEACFD7B72 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift */ = {isa = PBXBuildFile; fileRef = 7144AB5D2B9F491288F383E1 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift */; };
+		25A9EEC4FC024A5BB64120ED /* /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift */ = {isa = PBXBuildFile; fileRef = 30FBF84C9C63439E818C6A3A /* /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift */; };
+		2974CA2C7A1E40779F8383A6 /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 82EDDE25B0A2468A8B6E17AD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */; };
+		2B60EDB82DBD4733A37A513F /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift */ = {isa = PBXBuildFile; fileRef = 433E8E3682F94F70AFC8180E /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift */; };
+		2FE4BDFE73BB4278A7CAB2CD /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift */ = {isa = PBXBuildFile; fileRef = AE35D2B9B62B4D5BB8EACC78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift */; };
+		36107175E9504571B8690608 /* /Users/porari/kaihatu/cross/privasmo/ios/resources/sensor_database.csv */ = {isa = PBXBuildFile; fileRef = 642F604F21F54044A59CBB50 /* /Users/porari/kaihatu/cross/privasmo/ios/resources/sensor_database.csv */; };
+		3FC4652C1C564D3AA0248F8D /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift */ = {isa = PBXBuildFile; fileRef = 4E8460FE8EFA448F91D431E4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift */; };
+		46A7BEE45DC144FCB902A19F /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift */ = {isa = PBXBuildFile; fileRef = CC2AFA69B616428FA9B5694B /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift */; };
+		57C266C10A004FD89ADCA8BC /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift */ = {isa = PBXBuildFile; fileRef = FACE12EB4AC44B2BA399B769 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift */; };
+		58725CC68EBE460386078059 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift */ = {isa = PBXBuildFile; fileRef = ED97B65184054E76B3D664FD /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift */; };
+		5C6B695BA4F140438862978C /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift */ = {isa = PBXBuildFile; fileRef = 6BC5DFFD9AD5499F8C659E06 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift */; };
+		7D228C9F9157427E97F7DAF1 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift */ = {isa = PBXBuildFile; fileRef = 3D03FF4F7F7E4E2289D07EED /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift */; };
+		87D92C84B2BC492193D59487 /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift */ = {isa = PBXBuildFile; fileRef = 23BAEC51521F4548879954FB /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift */; };
+		898EE9A0A83C493FAD6F18CA /* /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = D2F3D2A34B674EDABEC1686B /* /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist */; };
+		986B7D1DC73F425B897AF575 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift */ = {isa = PBXBuildFile; fileRef = ED38053AD1B041069D07AACF /* /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift */; };
+		9D8FE9925D0745FEBDD70B86 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift */ = {isa = PBXBuildFile; fileRef = 052BA6601D4948BF870DEEAA /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift */; };
+		A1796F49FD1D409599239674 /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 5F4B60B709D34698B6616CAD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */; };
+		A56F4DFAF2464A4E8AB77467 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift */ = {isa = PBXBuildFile; fileRef = 733535E2F79645E7A4D21A40 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift */; };
+		BDECC646A6B54357899B1FA9 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift */ = {isa = PBXBuildFile; fileRef = 113FD24FCFAB48F3B41C9720 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift */; };
+		D2547CE8243541CDBED42EAF /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift */ = {isa = PBXBuildFile; fileRef = 08D2F15573DA4C15BF8EEF6E /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift */; };
+		DE5012DB6C794F77B3F0F90D /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift */ = {isa = PBXBuildFile; fileRef = 9968AA53D7D44716AE6CB9A4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift */; };
+		F2124DB7982B411F921A1E3A /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift */ = {isa = PBXBuildFile; fileRef = 9E1071AAA2C944708BBE9B03 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift */; };
+		FA05E93109B940A6840DB9CD /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift */ = {isa = PBXBuildFile; fileRef = 1111D26308B442FD94EF9E78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift */; };
+		FB00DAA06A964A6E9746B770 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift */ = {isa = PBXBuildFile; fileRef = 2ED008F704D64B0FBEF01261 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		891ABACE29BD4B998F320F18 /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		8E7ACC3086D64D7391CD3725 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		9A5837CEF052409C805D1424 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		B49AE317C32E4FFAA444155E /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		51983F54451F41A0B1C2C3EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56BB31FE930F3B72C17CEB60;
+			remoteInfo = sumahohikakuku;
+		};
+		53C59FC5B9124BBA966EC5EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F5F6CD9E4103FA60F7727B7;
+			remoteInfo = sumahohikakukuTests;
+		};
+		603C6EA340444FE2AE10970C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AA0E84425ADAD33E785C00F;
+			remoteInfo = ZERO_CHECK;
+		};
+		8AA1872BA6E149FD98C0B516 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AA0E84425ADAD33E785C00F;
+			remoteInfo = ZERO_CHECK;
+		};
+		C01753FA1D954422B6271213 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AA0E84425ADAD33E785C00F;
+			remoteInfo = ZERO_CHECK;
+		};
+		D05F20F9F99645BC8D41460E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FF030B185874A308DC22EC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56BB31FE930F3B72C17CEB60;
+			remoteInfo = sumahohikakuku;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		052BA6601D4948BF870DEEAA /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = DeviceInputRepository.swift; path = src/Data/DeviceInputRepository.swift; sourceTree = SOURCE_ROOT; };
+		08D2F15573DA4C15BF8EEF6E /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = InputSanitizer.swift; path = src/Domain/InputSanitizer.swift; sourceTree = SOURCE_ROOT; };
+		1111D26308B442FD94EF9E78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorPickerSheetView.swift; path = src/UI/SensorPickerSheetView.swift; sourceTree = SOURCE_ROOT; };
+		113FD24FCFAB48F3B41C9720 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = CustomSensorModels.swift; path = src/Models/CustomSensorModels.swift; sourceTree = SOURCE_ROOT; };
+		23BAEC51521F4548879954FB /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorModelsTests.swift; path = tests/SensorModelsTests.swift; sourceTree = SOURCE_ROOT; };
+		2ED008F704D64B0FBEF01261 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = PresetRepository.swift; path = src/Data/PresetRepository.swift; sourceTree = SOURCE_ROOT; };
+		30FBF84C9C63439E818C6A3A /* /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorComparisonApp.swift; path = src/SensorComparisonApp.swift; sourceTree = SOURCE_ROOT; };
+		3D03FF4F7F7E4E2289D07EED /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = GraphSettingsScreen.swift; path = src/UI/GraphSettingsScreen.swift; sourceTree = SOURCE_ROOT; };
+		433E8E3682F94F70AFC8180E /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = DeviceCardView.swift; path = src/UI/DeviceCardView.swift; sourceTree = SOURCE_ROOT; };
+		4BDC11DE977B4C5793AEE806 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorComparisonScreen.swift; path = src/UI/SensorComparisonScreen.swift; sourceTree = SOURCE_ROOT; };
+		4E8460FE8EFA448F91D431E4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = PreferencesKeyEncoding.swift; path = src/Data/PreferencesKeyEncoding.swift; sourceTree = SOURCE_ROOT; };
+		5167784C42FF4CF4A0B30FB9 /* sumahohikakukuTests */ = {isa = PBXFileReference; explicitFileType = "wrapper.plug-in"; path = sumahohikakukuTests.xctest/Contents/MacOS/sumahohikakukuTests; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F4B60B709D34698B6616CAD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		642F604F21F54044A59CBB50 /* /Users/porari/kaihatu/cross/privasmo/ios/resources/sensor_database.csv */ = {isa = PBXFileReference; explicitFileType = default; fileEncoding = 4; name = sensor_database.csv; path = resources/sensor_database.csv; sourceTree = SOURCE_ROOT; };
+		6710A27629B54764980568F7 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = PresetModels.swift; path = src/Models/PresetModels.swift; sourceTree = SOURCE_ROOT; };
+		6BC5DFFD9AD5499F8C659E06 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorDatabaseRepository.swift; path = src/Data/SensorDatabaseRepository.swift; sourceTree = SOURCE_ROOT; };
+		7144AB5D2B9F491288F383E1 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorComparisonViewModel.swift; path = src/UI/SensorComparisonViewModel.swift; sourceTree = SOURCE_ROOT; };
+		733535E2F79645E7A4D21A40 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = ExportView.swift; path = src/UI/ExportView.swift; sourceTree = SOURCE_ROOT; };
+		82EDDE25B0A2468A8B6E17AD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		9968AA53D7D44716AE6CB9A4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = GraphSettingsRepository.swift; path = src/Data/GraphSettingsRepository.swift; sourceTree = SOURCE_ROOT; };
+		9E1071AAA2C944708BBE9B03 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = CustomSensorRepository.swift; path = src/Data/CustomSensorRepository.swift; sourceTree = SOURCE_ROOT; };
+		AE35D2B9B62B4D5BB8EACC78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = GenerateComparisonUseCase.swift; path = src/Domain/GenerateComparisonUseCase.swift; sourceTree = SOURCE_ROOT; };
+		C92550478E914BE0B05C2C9D /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = PresetSheetsView.swift; path = src/UI/PresetSheetsView.swift; sourceTree = SOURCE_ROOT; };
+		CC2AFA69B616428FA9B5694B /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorModels.swift; path = src/Models/SensorModels.swift; sourceTree = SOURCE_ROOT; };
+		D2F3D2A34B674EDABEC1686B /* /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = build/CMakeFiles/sumahohikakuku.dir/Info.plist; sourceTree = SOURCE_ROOT; };
+		D5544A2D241C4E7A88481F4A /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = SensorComputationTests.swift; path = tests/SensorComputationTests.swift; sourceTree = SOURCE_ROOT; };
+		E135BCB315154697A596D4C0 /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		ED38053AD1B041069D07AACF /* /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = LocalizedStrings.swift; path = src/Resources/LocalizedStrings.swift; sourceTree = SOURCE_ROOT; };
+		ED97B65184054E76B3D664FD /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = ChartComponents.swift; path = src/UI/ChartComponents.swift; sourceTree = SOURCE_ROOT; };
+		F7E5E36563414F5485520923 /* sumahohikakuku */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = sumahohikakuku; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACE12EB4AC44B2BA399B769 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; name = ResultsSectionView.swift; path = src/UI/ResultsSectionView.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		36EDA9143AE645E2AA6A69F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		818935A0827C40ACAA0680B1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		55B4163D0E984737889EFCBA = {
+			isa = PBXGroup;
+			children = (
+				CC2C33AD7FAA4923AC91CB23 /* ALL_BUILD */,
+				9A38C5F819964DC19392DEBB /* sumahohikakuku */,
+				81E9CF65434B43E7B202F45A /* sumahohikakukuTests */,
+				640C151623664583A2355CFA /* Products */,
+				7F66354B48F24A7EA0A0DE87 /* Frameworks */,
+				A80A3D1BC5C34F179D483E69 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		640C151623664583A2355CFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F7E5E36563414F5485520923 /* sumahohikakuku */,
+				5167784C42FF4CF4A0B30FB9 /* sumahohikakukuTests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F66354B48F24A7EA0A0DE87 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81E9CF65434B43E7B202F45A /* sumahohikakukuTests */ = {
+			isa = PBXGroup;
+			children = (
+				5F4B60B709D34698B6616CAD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */,
+				D5544A2D241C4E7A88481F4A /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift */,
+				23BAEC51521F4548879954FB /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift */,
+			);
+			name = sumahohikakukuTests;
+			sourceTree = "<group>";
+		};
+		978D67C3D3294FC78D385E3B /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		9A38C5F819964DC19392DEBB /* sumahohikakuku */ = {
+			isa = PBXGroup;
+			children = (
+				CB001FC94E4B4A0FABA4139B /* Resources */,
+				82EDDE25B0A2468A8B6E17AD /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */,
+				642F604F21F54044A59CBB50 /* /Users/porari/kaihatu/cross/privasmo/ios/resources/sensor_database.csv */,
+				9E1071AAA2C944708BBE9B03 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift */,
+				052BA6601D4948BF870DEEAA /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift */,
+				9968AA53D7D44716AE6CB9A4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift */,
+				4E8460FE8EFA448F91D431E4 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift */,
+				2ED008F704D64B0FBEF01261 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift */,
+				6BC5DFFD9AD5499F8C659E06 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift */,
+				AE35D2B9B62B4D5BB8EACC78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift */,
+				08D2F15573DA4C15BF8EEF6E /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift */,
+				113FD24FCFAB48F3B41C9720 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift */,
+				6710A27629B54764980568F7 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift */,
+				CC2AFA69B616428FA9B5694B /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift */,
+				ED38053AD1B041069D07AACF /* /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift */,
+				30FBF84C9C63439E818C6A3A /* /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift */,
+				ED97B65184054E76B3D664FD /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift */,
+				433E8E3682F94F70AFC8180E /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift */,
+				733535E2F79645E7A4D21A40 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift */,
+				3D03FF4F7F7E4E2289D07EED /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift */,
+				C92550478E914BE0B05C2C9D /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift */,
+				FACE12EB4AC44B2BA399B769 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift */,
+				4BDC11DE977B4C5793AEE806 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift */,
+				7144AB5D2B9F491288F383E1 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift */,
+				1111D26308B442FD94EF9E78 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift */,
+			);
+			name = sumahohikakuku;
+			sourceTree = "<group>";
+		};
+		A80A3D1BC5C34F179D483E69 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		CB001FC94E4B4A0FABA4139B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D2F3D2A34B674EDABEC1686B /* /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		CC2C33AD7FAA4923AC91CB23 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				978D67C3D3294FC78D385E3B /* CMake Rules */,
+				E135BCB315154697A596D4C0 /* /Users/porari/kaihatu/cross/privasmo/ios/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56BB31FE930F3B72C17CEB60 /* sumahohikakuku */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6140FF58761742AF9F66A0AC /* Build configuration list for PBXNativeTarget "sumahohikakuku" */;
+			buildPhases = (
+				FC2E7C9B73D34D8ABB374782 /* Resources */,
+				82F1ACCCF390434B8E76F885 /* Sources */,
+				36EDA9143AE645E2AA6A69F9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84BEE78E2A494D899C2235B3 /* PBXTargetDependency */,
+			);
+			name = sumahohikakuku;
+			productName = sumahohikakuku;
+			productReference = F7E5E36563414F5485520923 /* sumahohikakuku */;
+			productType = "com.apple.product-type.application";
+		};
+		6F5F6CD9E4103FA60F7727B7 /* sumahohikakukuTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 148A11D897104981A4860E44 /* Build configuration list for PBXNativeTarget "sumahohikakukuTests" */;
+			buildPhases = (
+				A50D6CF263274F74884BCBE5 /* Sources */,
+				818935A0827C40ACAA0680B1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				58204F47C62E4449A6EB7CD1 /* PBXTargetDependency */,
+				990BCF8E7B8749298B8CD182 /* PBXTargetDependency */,
+			);
+			name = sumahohikakukuTests;
+			productName = sumahohikakukuTests;
+			productReference = 5167784C42FF4CF4A0B30FB9 /* sumahohikakukuTests */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7FF030B185874A308DC22EC7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2650;
+			};
+			buildConfigurationList = FE0D0C03A0914E24993E9ED1 /* Build configuration list for PBXProject "sumahohikakuku" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				9A5837CEF052409C805D1424 /* Debug */,
+				B49AE317C32E4FFAA444155E /* Release */,
+				8E7ACC3086D64D7391CD3725 /* MinSizeRel */,
+				891ABACE29BD4B998F320F18 /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 55B4163D0E984737889EFCBA;
+			projectDirPath = /Users/porari/kaihatu/cross/privasmo/ios;
+			projectRoot = "";
+			targets = (
+				76CEF07CC389EBD0012F7273 /* ALL_BUILD */,
+				56BB31FE930F3B72C17CEB60 /* sumahohikakuku */,
+				6F5F6CD9E4103FA60F7727B7 /* sumahohikakukuTests */,
+				9AA0E84425ADAD33E785C00F /* ZERO_CHECK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		063F784351B694E007969583 /* Generate CMakeFiles/ALL_BUILD */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ALL_BUILD";
+			outputPaths = (
+/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/ALL_BUILD			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		3C0110FC8322DE7E50886E21 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		9B50530E35CC49C82C2FACCF = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		D48CDD245A2A79697C428945 /* Generate CMakeFiles/ZERO_CHECK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ZERO_CHECK";
+			outputPaths = (
+/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/ZERO_CHECK			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  make -f /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  make -f /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  make -f /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/porari/kaihatu/cross/privasmo/ios/build
+  make -f /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FC2E7C9B73D34D8ABB374782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36107175E9504571B8690608 /* /Users/porari/kaihatu/cross/privasmo/ios/resources/sensor_database.csv */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		82F1ACCCF390434B8E76F885 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2124DB7982B411F921A1E3A /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/CustomSensorRepository.swift */,
+				9D8FE9925D0745FEBDD70B86 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/DeviceInputRepository.swift */,
+				DE5012DB6C794F77B3F0F90D /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/GraphSettingsRepository.swift */,
+				3FC4652C1C564D3AA0248F8D /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PreferencesKeyEncoding.swift */,
+				FB00DAA06A964A6E9746B770 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/PresetRepository.swift */,
+				5C6B695BA4F140438862978C /* /Users/porari/kaihatu/cross/privasmo/ios/src/Data/SensorDatabaseRepository.swift */,
+				2FE4BDFE73BB4278A7CAB2CD /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/GenerateComparisonUseCase.swift */,
+				D2547CE8243541CDBED42EAF /* /Users/porari/kaihatu/cross/privasmo/ios/src/Domain/InputSanitizer.swift */,
+				BDECC646A6B54357899B1FA9 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/CustomSensorModels.swift */,
+				0A945C4A64A047BA99256CB8 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/PresetModels.swift */,
+				46A7BEE45DC144FCB902A19F /* /Users/porari/kaihatu/cross/privasmo/ios/src/Models/SensorModels.swift */,
+				986B7D1DC73F425B897AF575 /* /Users/porari/kaihatu/cross/privasmo/ios/src/Resources/LocalizedStrings.swift */,
+				25A9EEC4FC024A5BB64120ED /* /Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift */,
+				58725CC68EBE460386078059 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift */,
+				2B60EDB82DBD4733A37A513F /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift */,
+				A56F4DFAF2464A4E8AB77467 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ExportView.swift */,
+				7D228C9F9157427E97F7DAF1 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/GraphSettingsScreen.swift */,
+				0D419480C543423FBFEE018C /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/PresetSheetsView.swift */,
+				57C266C10A004FD89ADCA8BC /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/ResultsSectionView.swift */,
+				0AAF1EEE0FA843468D7B97A3 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonScreen.swift */,
+				1865D15F2D2A4BCEACFD7B72 /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorComparisonViewModel.swift */,
+				FA05E93109B940A6840DB9CD /* /Users/porari/kaihatu/cross/privasmo/ios/src/UI/SensorPickerSheetView.swift */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A50D6CF263274F74884BCBE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C2E4CA4CA3F476481B9FAA3 /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorComputationTests.swift */,
+				87D92C84B2BC492193D59487 /* /Users/porari/kaihatu/cross/privasmo/ios/tests/SensorModelsTests.swift */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		58204F47C62E4449A6EB7CD1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56BB31FE930F3B72C17CEB60 /* sumahohikakuku */;
+			targetProxy = D05F20F9F99645BC8D41460E /* PBXContainerItemProxy */;
+		};
+		84BEE78E2A494D899C2235B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AA0E84425ADAD33E785C00F /* ZERO_CHECK */;
+			targetProxy = 603C6EA340444FE2AE10970C /* PBXContainerItemProxy */;
+		};
+		990BCF8E7B8749298B8CD182 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AA0E84425ADAD33E785C00F /* ZERO_CHECK */;
+			targetProxy = C01753FA1D954422B6271213 /* PBXContainerItemProxy */;
+		};
+		B74CECAAD54B400099CC8D40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56BB31FE930F3B72C17CEB60 /* sumahohikakuku */;
+			targetProxy = 51983F54451F41A0B1C2C3EB /* PBXContainerItemProxy */;
+		};
+		BC6AC93E88EE41CE8988732D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AA0E84425ADAD33E785C00F /* ZERO_CHECK */;
+			targetProxy = 8AA1872BA6E149FD98C0B516 /* PBXContainerItemProxy */;
+		};
+		C1732D629AD94FD887094670 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F5F6CD9E4103FA60F7727B7 /* sumahohikakukuTests */;
+			targetProxy = 53C59FC5B9124BBA966EC5EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0054771E7B7F43D78443055C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				MACOSX_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = "";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = /Users/porari/kaihatu/cross/privasmo/ios/build/build;
+			};
+			name = Debug;
+		};
+		0CE22B67894C4B6493D72F20 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		144F11916E314500A6AE34D3 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/RelWithDebInfo;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "比較結果の画像を写真ライブラリに保存するために使用します。";
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("      -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakuku;
+				SECTORDER_FLAGS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		290AE267F7CF49ABADCF11AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/Release;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "比較結果の画像を写真ライブラリに保存するために使用します。";
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("   -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakuku;
+				SECTORDER_FLAGS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		2ED8A2A1BCB9406080579D01 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		3C109B8369664F94AD28AA14 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/MinSizeRel;
+				DEVELOPMENT_TEAM = "";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = ("$(PLATFORM_DIR)/Developer/Library/Frameworks","$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",sumahohikakukuTests_EXPORTS,"$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LIBRARY_STYLE = BUNDLE;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","-framework XCTest","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("-Osize -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakukuTests;
+				SDKROOT = iphonesimulator;
+				SECTORDER_FLAGS = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sumahohikakuku.app/sumahohikakuku";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = MinSizeRel;
+		};
+		511237660DE74F47BFFD2D0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		51D90425488243269AA11D19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		5BF4BF85E37946DFA7C926FC /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/MinSizeRel;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "比較結果の画像を写真ライブラリに保存するために使用します。";
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("-Osize -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakuku;
+				SECTORDER_FLAGS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		6574231E258B4C7185D6F04A /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/RelWithDebInfo;
+				DEVELOPMENT_TEAM = "";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = ("$(PLATFORM_DIR)/Developer/Library/Frameworks","$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",sumahohikakukuTests_EXPORTS,"$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LIBRARY_STYLE = BUNDLE;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","-framework XCTest","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("      -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakukuTests;
+				SDKROOT = iphonesimulator;
+				SECTORDER_FLAGS = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sumahohikakuku.app/sumahohikakuku";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = RelWithDebInfo;
+		};
+		7A6EDE6762F14F83A275A737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		7ABD62A265C44FF2898C3B22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				MACOSX_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				SYMROOT = /Users/porari/kaihatu/cross/privasmo/ios/build/build;
+			};
+			name = Release;
+		};
+		7E715DA1B7C5453F9B29ABC5 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		8D0C739E40B34DFFBD01052D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/Debug;
+				DEVELOPMENT_TEAM = "";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = ("$(PLATFORM_DIR)/Developer/Library/Frameworks","$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",sumahohikakukuTests_EXPORTS,"$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LIBRARY_STYLE = BUNDLE;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","-framework XCTest","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("-Onone    -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakukuTests;
+				SDKROOT = iphonesimulator;
+				SECTORDER_FLAGS = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sumahohikakuku.app/sumahohikakuku";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		98CF70BBAE70499CA1601B77 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				MACOSX_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				SYMROOT = /Users/porari/kaihatu/cross/privasmo/ios/build/build;
+			};
+			name = MinSizeRel;
+		};
+		BF47F1C784C04C8C8E0B38EB /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				MACOSX_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				SYMROOT = /Users/porari/kaihatu/cross/privasmo/ios/build/build;
+			};
+			name = RelWithDebInfo;
+		};
+		E4331331F6B0447DAD371004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		E7218A1FD7684DA6BA2FB211 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		F7CA66BE7C2A49C6BE5BFB05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/Debug;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "比較結果の画像を写真ライブラリに保存するために使用します。";
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("-Onone    -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakuku;
+				SECTORDER_FLAGS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		F8D0DCB2F9484A5684AF375F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/porari/kaihatu/cross/privasmo/ios/build/Release;
+				DEVELOPMENT_TEAM = "";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = ("$(PLATFORM_DIR)/Developer/Library/Frameworks","$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",sumahohikakukuTests_EXPORTS,"$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = /Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LIBRARY_STYLE = BUNDLE;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","-framework XCTest","$(inherited)");
+				OTHER_REZFLAGS = "";
+				OTHER_SWIFT_FLAGS = ("   -swift-version 5.0 ","$(inherited)");
+				PRODUCT_NAME = sumahohikakukuTests;
+				SDKROOT = iphonesimulator;
+				SECTORDER_FLAGS = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ("$(inherited)");
+				TARGETED_DEVICE_FAMILY = 1;
+				TARGET_TEMP_DIR = "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakukuTests.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sumahohikakuku.app/sumahohikakuku";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		148A11D897104981A4860E44 /* Build configuration list for PBXNativeTarget "sumahohikakukuTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D0C739E40B34DFFBD01052D /* Debug */,
+				F8D0DCB2F9484A5684AF375F /* Release */,
+				3C109B8369664F94AD28AA14 /* MinSizeRel */,
+				6574231E258B4C7185D6F04A /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4E7A99100C8246D5965E8711 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51D90425488243269AA11D19 /* Debug */,
+				7A6EDE6762F14F83A275A737 /* Release */,
+				7E715DA1B7C5453F9B29ABC5 /* MinSizeRel */,
+				2ED8A2A1BCB9406080579D01 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6140FF58761742AF9F66A0AC /* Build configuration list for PBXNativeTarget "sumahohikakuku" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7CA66BE7C2A49C6BE5BFB05 /* Debug */,
+				290AE267F7CF49ABADCF11AA /* Release */,
+				5BF4BF85E37946DFA7C926FC /* MinSizeRel */,
+				144F11916E314500A6AE34D3 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		97F99DB05F54468C8AD36D53 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				511237660DE74F47BFFD2D0B /* Debug */,
+				E4331331F6B0447DAD371004 /* Release */,
+				E7218A1FD7684DA6BA2FB211 /* MinSizeRel */,
+				0CE22B67894C4B6493D72F20 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FE0D0C03A0914E24993E9ED1 /* Build configuration list for PBXProject "sumahohikakuku" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0054771E7B7F43D78443055C /* Debug */,
+				7ABD62A265C44FF2898C3B22 /* Release */,
+				98CF70BBAE70499CA1601B77 /* MinSizeRel */,
+				BF47F1C784C04C8C8E0B38EB /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7FF030B185874A308DC22EC7 /* Project object */;
+}

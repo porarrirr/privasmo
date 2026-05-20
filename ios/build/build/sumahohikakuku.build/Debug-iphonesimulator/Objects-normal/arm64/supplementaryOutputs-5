@@ -1,0 +1,23 @@
+{
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/SensorComparisonApp.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/SensorComparisonApp.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/SensorComparisonApp.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/SensorComparisonApp.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/SensorComparisonApp.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/SensorComparisonApp.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/ChartComponents.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ChartComponents.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ChartComponents.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ChartComponents.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ChartComponents.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/ChartComponents.swiftdeps"
+  },
+  "/Users/porari/kaihatu/cross/privasmo/ios/src/UI/DeviceCardView.swift" : {
+    "const-values" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/DeviceCardView.swiftconstvalues",
+    "dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/DeviceCardView.d",
+    "diagnostics" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/DeviceCardView.dia",
+    "object" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/DeviceCardView.o",
+    "swift-dependencies" : "/Users/porari/kaihatu/cross/privasmo/ios/build/build/sumahohikakuku.build/Debug-iphonesimulator/Objects-normal/arm64/DeviceCardView.swiftdeps"
+  }
+}
