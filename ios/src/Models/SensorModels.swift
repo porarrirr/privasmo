@@ -23,6 +23,7 @@ public let DEFAULT_DEVICE_COLORS = [
 ]
 
 private let manufacturerOrder = ["Sony", "OmniVision", "Samsung", "GalaxyCore", "SmartSens", "Toshiba", "Other"]
+private let invariantLocale = Locale(identifier: "en_US_POSIX")
 private let trailingAlphaRegex = try! NSRegularExpression(pattern: "[A-Z]+$", options: .caseInsensitive)
 private let firstDigitsRegex = try! NSRegularExpression(pattern: "\\d+")
 private let manualDescriptorFractionRegex = try! NSRegularExpression(pattern: "^([0-9]+(?:\\.[0-9]+)?)/([0-9]+(?:\\.[0-9]+)?)$")
@@ -238,7 +239,10 @@ public func parseSensorCsv(raw: String) -> [SensorSpec] {
     
     let lines = raw.components(separatedBy: .newlines)
     for line in lines {
-        let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+        var trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.hasPrefix("\u{FEFF}") {
+            trimmed.removeFirst()
+        }
         if trimmed.isEmpty || trimmed.hasPrefix("#") {
             continue
         }
@@ -583,7 +587,7 @@ private func getNumericPartForSort(_ name: String) -> Int {
 }
 
 internal func normalizeBinning(raw: String) -> String {
-    let binningRaw = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    let binningRaw = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(with: invariantLocale)
     if binningRaw == "yes" {
         return "Quad Bayer (2x2)"
     } else if binningRaw.contains("nona") {
@@ -600,7 +604,7 @@ internal func normalizeBinning(raw: String) -> String {
 }
 
 internal func detectManufacturer(name: String) -> String {
-    let lower = name.lowercased()
+    let lower = name.lowercased(with: invariantLocale)
     if lower.contains("sony") || name.contains("ソニー") {
         return "Sony"
     } else if lower.contains("omnivision") {

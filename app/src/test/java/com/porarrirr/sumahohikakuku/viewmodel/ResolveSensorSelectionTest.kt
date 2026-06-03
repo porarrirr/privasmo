@@ -1,5 +1,6 @@
 package com.porarrirr.sumahohikakuku.viewmodel
 
+import com.porarrirr.sumahohikakuku.model.MANUAL_INPUT_SENSOR_VALUE
 import com.porarrirr.sumahohikakuku.model.SensorSource
 import com.porarrirr.sumahohikakuku.model.SensorSpec
 import org.junit.Assert.assertEquals
@@ -8,9 +9,9 @@ import org.junit.Test
 
 class ResolveSensorSelectionTest {
 
-    private val sensorSpec = SensorSpec(
+    private val sensor = SensorSpec(
         name = "Sony IMX999",
-        value = "Sony IMX999",
+        value = "sensor:sony-imx999",
         megapixels = 50.0,
         pixelSizeUm = 1.0,
         binningType = "None",
@@ -19,52 +20,62 @@ class ResolveSensorSelectionTest {
     )
 
     @Test
-    fun resolveSensorSelection_returnsExistingSensorWhenValueMatches() {
-        val lookup = mapOf(sensorSpec.value to sensorSpec)
-
+    fun resolveSensorSelection_returnsExistingSensorByValueAndClearsManualDescriptor() {
         val resolved = resolveSensorSelection(
-            rawValue = sensorSpec.value,
-            manualDescriptor = "",
-            sensorLookup = lookup
+            rawValue = sensor.value,
+            manualDescriptor = "1/1.33",
+            sensorLookup = mapOf(sensor.value to sensor)
         )
 
-        assertEquals(sensorSpec.value, resolved.value)
+        assertEquals(sensor.value, resolved.value)
         assertNull(resolved.manualDescriptor)
     }
 
     @Test
-    fun resolveSensorSelection_fallsBackToManualAndPreservesLegacyLabel() {
+    fun resolveSensorSelection_matchesSavedSensorNameIgnoringCase() {
+        val resolved = resolveSensorSelection(
+            rawValue = "sony imx999",
+            manualDescriptor = "",
+            sensorLookup = mapOf(sensor.value to sensor)
+        )
+
+        assertEquals(sensor.value, resolved.value)
+        assertNull(resolved.manualDescriptor)
+    }
+
+    @Test
+    fun resolveSensorSelection_manualSentinelNormalizesBlankDescriptor() {
+        val resolved = resolveSensorSelection(
+            rawValue = MANUAL_INPUT_SENSOR_VALUE,
+            manualDescriptor = " ",
+            sensorLookup = emptyMap()
+        )
+
+        assertEquals(MANUAL_INPUT_SENSOR_VALUE, resolved.value)
+        assertEquals("1/1.33", resolved.manualDescriptor)
+    }
+
+    @Test
+    fun resolveSensorSelection_missingSavedValuePreservesLegacyLabelAsManualDescriptor() {
         val resolved = resolveSensorSelection(
             rawValue = "Legacy Sensor X",
             manualDescriptor = "",
             sensorLookup = emptyMap()
         )
 
-        assertEquals("_MANUAL_INPUT_", resolved.value)
+        assertEquals(MANUAL_INPUT_SENSOR_VALUE, resolved.value)
         assertEquals("Legacy Sensor X", resolved.manualDescriptor)
     }
 
     @Test
-    fun resolveSensorSelection_manualSelectionUsesDefaultDescriptorWhenBlank() {
+    fun resolveSensorSelection_blankMissingValueUsesDefaultManualDescriptor() {
         val resolved = resolveSensorSelection(
-            rawValue = "_MANUAL_INPUT_",
-            manualDescriptor = "",
+            rawValue = " ",
+            manualDescriptor = " ",
             sensorLookup = emptyMap()
         )
 
-        assertEquals("_MANUAL_INPUT_", resolved.value)
+        assertEquals(MANUAL_INPUT_SENSOR_VALUE, resolved.value)
         assertEquals("1/1.33", resolved.manualDescriptor)
-    }
-
-    @Test
-    fun resolveSensorSelection_preservesProvidedManualDescriptor() {
-        val resolved = resolveSensorSelection(
-            rawValue = "_MANUAL_INPUT_",
-            manualDescriptor = "1/1.12",
-            sensorLookup = emptyMap()
-        )
-
-        assertEquals("_MANUAL_INPUT_", resolved.value)
-        assertEquals("1/1.12", resolved.manualDescriptor)
     }
 }

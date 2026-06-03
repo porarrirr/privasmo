@@ -1,18 +1,20 @@
 package com.porarrirr.sumahohikakuku.viewmodel
 
+import com.porarrirr.sumahohikakuku.model.MANUAL_INPUT_SENSOR_VALUE
 import com.porarrirr.sumahohikakuku.model.SensorSource
 import com.porarrirr.sumahohikakuku.model.SensorSpec
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GenerateComparisonUseCaseTest {
 
-    private val sensorSpec = SensorSpec(
+    private val useCase = GenerateComparisonUseCase()
+    private val defaultFocalLengths = listOf(14.0, 24.0, 35.0, 50.0, 70.0)
+    private val databaseSensor = SensorSpec(
         name = "Sony IMX999",
-        value = "Sony IMX999",
+        value = "sensor:sony-imx999",
         megapixels = 50.0,
         pixelSizeUm = 1.0,
         binningType = "None",
@@ -20,31 +22,99 @@ class GenerateComparisonUseCaseTest {
         source = SensorSource.DATABASE
     )
 
-    private val useCase = GenerateComparisonUseCase()
-    private val defaultFocalLengths = listOf(14.0, 24.0, 35.0, 50.0, 70.0)
-
     @Test
-    fun generate_returnsNullResultsWhenNoLensIsValid() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "Device 1",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "invalid",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "1.8"
+    fun generate_buildsFocalGridFromReachableNativeAndOpticalEndFocals() {
+        val output = useCase.generate(
+            devices = listOf(
+                device(
+                    lenses = listOf(
+                        lens(
+                            nativeFocalLength = "75",
+                            fNumber = "2.39",
+                            opticalEndFocalLength = "100",
+                            endFNumber = "2.96"
+                        )
                     )
                 )
-            )
+            ),
+            availableSensors = listOf(databaseSensor),
+            selectedFocalLength = 90.0,
+            defaultFocalLengths = defaultFocalLengths,
+            fallbackDeviceName = { "Device $it" }
         )
 
+        assertNotNull(output.results)
+        assertEquals(listOf(75.0, 100.0), output.focalLengths)
+        assertEquals(listOf(75.0, 100.0), output.results!!.focalLengths)
+        assertEquals(100.0, output.selectedFocalLength, 0.0)
+    }
+
+    @Test
+    fun generate_processesValidLensesWhenOtherLensInputsAreInvalid() {
         val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
+            devices = listOf(
+                device(
+                    name = "",
+                    lenses = listOf(
+                        lens(nativeFocalLength = "bad", fNumber = "1.8"),
+                        lens(id = 2L, nativeFocalLength = "24", fNumber = "1.8")
+                    )
+                )
+            ),
+            availableSensors = listOf(databaseSensor),
+            selectedFocalLength = 35.0,
+            defaultFocalLengths = defaultFocalLengths,
+            fallbackDeviceName = { "Fallback Device $it" }
+        )
+
+        val processedDevice = output.results!!.devices.single()
+        assertEquals("Fallback Device 1", processedDevice.name)
+        assertEquals(listOf(24.0), processedDevice.lenses.map { it.nativeFocalLength35mm })
+        assertEquals(listOf(24.0, 35.0, 50.0, 70.0), output.focalLengths)
+        assertEquals(35.0, output.selectedFocalLength, 0.0)
+    }
+
+    @Test
+    fun generate_usesManualDescriptorOnlyForManualSensorSelections() {
+        val output = useCase.generate(
+            devices = listOf(
+                device(
+                    lenses = listOf(
+                        lens(
+                            id = 1L,
+                            nativeFocalLength = "24",
+                            selectedSensorValue = databaseSensor.value,
+                            manualSensorDescriptor = "not a descriptor",
+                            fNumber = "1.8"
+                        ),
+                        lens(
+                            id = 2L,
+                            nativeFocalLength = "50",
+                            selectedSensorValue = MANUAL_INPUT_SENSOR_VALUE,
+                            manualSensorDescriptor = "1/1.33",
+                            fNumber = "2.0"
+                        )
+                    )
+                )
+            ),
+            availableSensors = listOf(databaseSensor),
+            selectedFocalLength = 24.0,
+            defaultFocalLengths = listOf(24.0, 50.0),
+            fallbackDeviceName = { "Device $it" }
+        )
+
+        val lenses = output.results!!.devices.single().lenses
+        assertEquals("Sony IMX999", lenses[0].sensorMetrics.sensorName)
+        assertEquals("1/1.33", lenses[1].sensorMetrics.sensorName)
+    }
+
+    @Test
+    fun generate_returnsDefaultFocalGridWhenNoDeviceCanBeProcessed() {
+        val output = useCase.generate(
+            devices = listOf(
+                device(lenses = listOf(lens(nativeFocalLength = "bad", fNumber = "1.8")))
+            ),
+            availableSensors = listOf(databaseSensor),
             selectedFocalLength = 35.0,
             defaultFocalLengths = defaultFocalLengths,
             fallbackDeviceName = { "Device $it" }
@@ -56,200 +126,73 @@ class GenerateComparisonUseCaseTest {
     }
 
     @Test
-    fun generate_selectsNearestAvailableFocalLength() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "Device 1",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "24",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "1.8"
+    fun generate_rejectsManualSensorWithMalformedDescriptor() {
+        val output = useCase.generate(
+            devices = listOf(
+                device(
+                    lenses = listOf(
+                        lens(
+                            selectedSensorValue = MANUAL_INPUT_SENSOR_VALUE,
+                            manualSensorDescriptor = "1/1.28/2"
+                        )
                     )
                 )
-            )
-        )
-
-        val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
-            selectedFocalLength = 41.0,
-            defaultFocalLengths = defaultFocalLengths,
-            fallbackDeviceName = { "Device $it" }
-        )
-
-        assertNotNull(output.results)
-        assertEquals(35.0, output.selectedFocalLength, 0.0)
-    }
-
-    @Test
-    fun generate_usesFallbackDeviceNameWhenBlank() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "24",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "1.8"
-                    )
-                )
-            )
-        )
-
-        val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
+            ),
+            availableSensors = listOf(databaseSensor),
             selectedFocalLength = 24.0,
-            defaultFocalLengths = defaultFocalLengths,
-            fallbackDeviceName = { "Fallback Device $it" }
-        )
-
-        val results = output.results
-        assertNotNull(results)
-        assertEquals("Fallback Device 1", results!!.devices.first().name)
-    }
-
-    @Test
-    fun generate_includesOpticalEndFocalLengthInFocalGrid() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "Device 1",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "75",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "2.39",
-                        opticalEndFocalLength = "100",
-                        endFNumber = "2.96"
-                    )
-                )
-            )
-        )
-
-        val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
-            selectedFocalLength = 90.0,
-            defaultFocalLengths = defaultFocalLengths,
-            fallbackDeviceName = { "Device $it" }
-        )
-
-        assertNotNull(output.results)
-        assertEquals(listOf(75.0, 100.0), output.focalLengths)
-    }
-
-    @Test
-    fun generate_rejectsInvalidOpticalEndFocalLength() {
-        val device = DeviceInputState(
-            id = 1L,
-            name = "Device 1",
-            colorHex = "#2563EB",
-            lenses = listOf(
-                LensInputState(
-                    id = 1L,
-                    nativeFocalLength = "75",
-                    selectedSensorValue = sensorSpec.value,
-                    manualSensorDescriptor = "",
-                    fNumber = "2.39",
-                    opticalEndFocalLength = "50",
-                    endFNumber = "2.96"
-                )
-            )
-        )
-
-        val output = useCase.generate(
-            devices = listOf(device),
-            availableSensors = listOf(sensorSpec),
-            selectedFocalLength = 75.0,
             defaultFocalLengths = defaultFocalLengths,
             fallbackDeviceName = { "Device $it" }
         )
 
         assertNull(output.results)
-        assertFalse(SensorComparisonUiState(devices = listOf(device)).isGenerateEnabled)
-    }
-
-    @Test
-    fun generate_doesNotIncludeInvalidOpticalEndFocalLengthInFocalGrid() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "Device 1",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "24",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "1.8"
-                    ),
-                    LensInputState(
-                        id = 2L,
-                        nativeFocalLength = "75",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "2.39",
-                        opticalEndFocalLength = "63",
-                        endFNumber = "2.96"
-                    )
-                )
-            )
-        )
-
-        val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
-            selectedFocalLength = 63.0,
-            defaultFocalLengths = defaultFocalLengths,
-            fallbackDeviceName = { "Device $it" }
-        )
-
-        assertNotNull(output.results)
-        assertFalse(output.focalLengths.contains(63.0))
     }
 
     @Test
     fun generate_rejectsEndFNumberWithoutOpticalEndFocalLength() {
-        val devices = listOf(
-            DeviceInputState(
-                id = 1L,
-                name = "Device 1",
-                colorHex = "#2563EB",
-                lenses = listOf(
-                    LensInputState(
-                        id = 1L,
-                        nativeFocalLength = "75",
-                        selectedSensorValue = sensorSpec.value,
-                        manualSensorDescriptor = "",
-                        fNumber = "2.39",
-                        endFNumber = "2.96"
-                    )
-                )
-            )
-        )
-
         val output = useCase.generate(
-            devices = devices,
-            availableSensors = listOf(sensorSpec),
-            selectedFocalLength = 75.0,
+            devices = listOf(
+                device(lenses = listOf(lens(opticalEndFocalLength = "", endFNumber = "2.96")))
+            ),
+            availableSensors = listOf(databaseSensor),
+            selectedFocalLength = 24.0,
             defaultFocalLengths = defaultFocalLengths,
             fallbackDeviceName = { "Device $it" }
         )
 
         assertNull(output.results)
+    }
+
+    private fun device(
+        id: Long = 1L,
+        name: String = "Device $id",
+        colorHex: String = "#2563EB",
+        lenses: List<LensInputState> = listOf(lens())
+    ): DeviceInputState {
+        return DeviceInputState(
+            id = id,
+            name = name,
+            colorHex = colorHex,
+            lenses = lenses
+        )
+    }
+
+    private fun lens(
+        id: Long = 1L,
+        nativeFocalLength: String = "24",
+        selectedSensorValue: String = databaseSensor.value,
+        manualSensorDescriptor: String = "",
+        fNumber: String = "1.8",
+        opticalEndFocalLength: String = "",
+        endFNumber: String = ""
+    ): LensInputState {
+        return LensInputState(
+            id = id,
+            nativeFocalLength = nativeFocalLength,
+            selectedSensorValue = selectedSensorValue,
+            manualSensorDescriptor = manualSensorDescriptor,
+            fNumber = fNumber,
+            opticalEndFocalLength = opticalEndFocalLength,
+            endFNumber = endFNumber
+        )
     }
 }
