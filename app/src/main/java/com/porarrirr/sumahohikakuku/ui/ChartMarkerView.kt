@@ -60,9 +60,16 @@ class ChartMarkerView @JvmOverloads constructor(
         } else {
             zoomInfoTextView.visibility = View.VISIBLE
             val baseNativeFocal = formatFocalLength(metrics.baseLens.nativeFocalLength35mm)
-            zoomInfoTextView.text = if (metrics.zoomRatio > 1.0001) {
-                val zoomLabel = String.format(Locale.US, "%.2f", metrics.zoomRatio)
-                context.getString(R.string.chart_marker_zoom_digital, zoomLabel, baseNativeFocal)
+            zoomInfoTextView.text = if (metrics.baseLens.isVariableOptical || metrics.digitalCropRatio > 1.0001) {
+                val opticalFocalLabel = formatFocalLength(metrics.opticalFocalLength35mm)
+                val opticalZoomLabel = String.format(Locale.US, "%.2f", metrics.opticalZoomRatio)
+                val cropLabel = String.format(Locale.US, "%.2f", metrics.digitalCropRatio)
+                context.getString(
+                    R.string.chart_marker_zoom_optical_crop,
+                    opticalFocalLabel,
+                    opticalZoomLabel,
+                    cropLabel
+                )
             } else {
                 context.getString(R.string.chart_marker_zoom_optical, baseNativeFocal)
             }

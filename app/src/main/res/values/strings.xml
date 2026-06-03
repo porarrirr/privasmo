@@ -54,6 +54,8 @@
     <string name="label_preset_name">プリセット名</string>
     <string name="label_focal_length">焦点距離 (35mm換算)</string>
     <string name="label_f_number">F値</string>
+    <string name="label_optical_end_focal_length">光学終端焦点距離</string>
+    <string name="label_end_f_number">終端F値</string>
     <string name="label_sensor">センサー</string>
     <string name="label_megapixels">画素数 (MP)</string>
     <string name="label_pixel_size_um">ピクセルサイズ (µm)</string>
@@ -111,6 +113,7 @@
     <string name="chart_marker_focal_length_mm">焦点距離: %1$smm</string>
     <string name="chart_marker_zoom_digital">デジタルズーム (クロップ): %1$sx (元: %2$smm)</string>
     <string name="chart_marker_zoom_optical">光学 (ネイティブレンズ: %1$smm)</string>
+    <string name="chart_marker_zoom_optical_crop">光学焦点距離: %1$smm / 光学: %2$sx / クロップ: %3$sx</string>
     <string name="chart_marker_value_format">%1$s: %2$s%3$s</string>
     <string name="chart_marker_unit_prefix"> %1$s</string>
 
@@ -175,6 +178,10 @@
     <string name="metric_effective_dimensions">有効寸法</string>
     <string name="metric_effective_aperture">有効口径</string>
     <string name="metric_digital_zoom">デジタルズーム</string>
+    <string name="label_variable_optical_range">可変光学ズーム範囲</string>
+    <string name="label_digital_crop_ratio">クロップ倍率</string>
+    <string name="label_optical_zoom_ratio">光学ズーム倍率</string>
+    <string name="label_estimated_f_number">推定F値</string>
     <string name="metric_lens_used">使用レンズ</string>
     <string name="value_lens_used_format">%1$smm (35mm換算)</string>
     <string name="metric_binning_characteristic">ビニング特性</string>
@@ -186,4 +193,3 @@
     <string name="error_activity_not_found">Activity が見つかりません</string>
     <string name="title_share_image">共有</string>
 </resources>
-

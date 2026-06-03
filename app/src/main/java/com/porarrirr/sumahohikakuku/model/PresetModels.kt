@@ -7,7 +7,9 @@ data class PresetLensSnapshot(
     val nativeFocalLength: String,
     val selectedSensorValue: String,
     val manualSensorDescriptor: String,
-    val fNumber: String
+    val fNumber: String,
+    val opticalEndFocalLength: String = "",
+    val endFNumber: String = ""
 )
 
 @Serializable

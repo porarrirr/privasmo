@@ -1,0 +1,2 @@
+CFBundleDisplayName = "スマホセンサー比較";
+NSPhotoLibraryAddUsageDescription = "比較結果の画像を写真ライブラリに保存するために使用します。";

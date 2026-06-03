@@ -1,4 +1,0 @@
-/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakuku.dir
-/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/sumahohikakukuTests.dir
-/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/ALL_BUILD.dir
-/Users/porari/kaihatu/cross/privasmo/ios/build/CMakeFiles/ZERO_CHECK.dir

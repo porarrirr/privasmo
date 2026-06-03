@@ -21,17 +21,29 @@ public struct LensInputState: Equatable, Identifiable {
     public var selectedSensorValue: String
     public var manualSensorDescriptor: String
     public var fNumber: String
+    public var opticalEndFocalLength: String
+    public var endFNumber: String
     
     public var usesManualSensor: Bool {
         return selectedSensorValue == MANUAL_INPUT_SENSOR_VALUE
     }
     
-    public init(id: Int64, nativeFocalLength: String, selectedSensorValue: String, manualSensorDescriptor: String, fNumber: String) {
+    public init(
+        id: Int64,
+        nativeFocalLength: String,
+        selectedSensorValue: String,
+        manualSensorDescriptor: String,
+        fNumber: String,
+        opticalEndFocalLength: String = "",
+        endFNumber: String = ""
+    ) {
         self.id = id
         self.nativeFocalLength = nativeFocalLength
         self.selectedSensorValue = selectedSensorValue
         self.manualSensorDescriptor = manualSensorDescriptor
         self.fNumber = fNumber
+        self.opticalEndFocalLength = opticalEndFocalLength
+        self.endFNumber = endFNumber
     }
 }
 
@@ -78,7 +90,17 @@ public struct SensorComparisonUiState: Equatable {
                 let flValid = Double(lens.nativeFocalLength).map { $0 > 0.0 } == true
                 let fNumberValid = Double(lens.fNumber).map { $0 > 0.0 } == true
                 let sensorValid = lens.usesManualSensor ? isValidManualSensorDescriptor(descriptor: lens.manualSensorDescriptor) : true
-                return flValid && fNumberValid && sensorValid
+                let opticalValid: Bool
+                if let focal = Double(lens.nativeFocalLength), let fNumber = Double(lens.fNumber) {
+                    opticalValid = parseOptionalOpticalLensInput(
+                        lens: lens,
+                        nativeFocal: focal,
+                        fNumber: fNumber
+                    ) != nil
+                } else {
+                    opticalValid = false
+                }
+                return flValid && fNumberValid && sensorValid && opticalValid
             }
         }
     }
@@ -106,7 +128,7 @@ public struct SensorComparisonUiState: Equatable {
     }
 }
 
-private let defaultComparisonFocalLengths = (14...260).map { Double($0) }
+private let defaultComparisonFocalLengths = (14...400).map { Double($0) }
 
 public class SensorComparisonViewModel: ObservableObject {
     @Published public var state = SensorComparisonUiState()
@@ -223,7 +245,9 @@ public class SensorComparisonViewModel: ObservableObject {
                     nativeFocalLength: lens.nativeFocalLength,
                     selectedSensorValue: lens.selectedSensorValue,
                     manualSensorDescriptor: manual,
-                    fNumber: lens.fNumber
+                    fNumber: lens.fNumber,
+                    opticalEndFocalLength: lens.opticalEndFocalLength,
+                    endFNumber: lens.endFNumber
                 )
             }
             return SavedDeviceInput(
@@ -488,6 +512,22 @@ public class SensorComparisonViewModel: ObservableObject {
             return updated
         }
     }
+
+    public func updateLensOpticalEndFocalLength(deviceId: Int64, lensId: Int64, value: String) {
+        updateLens(deviceId: deviceId, lensId: lensId) { lens in
+            var updated = lens
+            updated.opticalEndFocalLength = value
+            return updated
+        }
+    }
+
+    public func updateLensEndFNumber(deviceId: Int64, lensId: Int64, value: String) {
+        updateLens(deviceId: deviceId, lensId: lensId) { lens in
+            var updated = lens
+            updated.endFNumber = value
+            return updated
+        }
+    }
     
     public func updateLensSensorSelection(deviceId: Int64, lensId: Int64, newValue: String) {
         updateLens(deviceId: deviceId, lensId: lensId) { [weak self] lens in
@@ -594,7 +634,9 @@ public class SensorComparisonViewModel: ObservableObject {
                     nativeFocalLength: lens.nativeFocalLength.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "24" : lens.nativeFocalLength,
                     selectedSensorValue: selection.value,
                     manualSensorDescriptor: selection.manualDescriptor ?? "",
-                    fNumber: lens.fNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1.8" : lens.fNumber
+                    fNumber: lens.fNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1.8" : lens.fNumber,
+                    opticalEndFocalLength: lens.opticalEndFocalLength.trimmingCharacters(in: .whitespacesAndNewlines),
+                    endFNumber: lens.endFNumber.trimmingCharacters(in: .whitespacesAndNewlines)
                 )
                 nextLensId += 1
                 return lensState
@@ -645,7 +687,9 @@ public class SensorComparisonViewModel: ObservableObject {
                 nativeFocalLength: lensSnapshot.nativeFocalLength.isEmpty ? "24" : lensSnapshot.nativeFocalLength,
                 selectedSensorValue: resolved.value,
                 manualSensorDescriptor: manual,
-                fNumber: lensSnapshot.fNumber.isEmpty ? "1.8" : lensSnapshot.fNumber
+                fNumber: lensSnapshot.fNumber.isEmpty ? "1.8" : lensSnapshot.fNumber,
+                opticalEndFocalLength: lensSnapshot.opticalEndFocalLength,
+                endFNumber: lensSnapshot.endFNumber
             ))
             nextLensId += 1
         }
@@ -736,7 +780,9 @@ public class SensorComparisonViewModel: ObservableObject {
                     nativeFocalLength: String(format: "%g", lensPreset.focalLength),
                     selectedSensorValue: isManual ? MANUAL_INPUT_SENSOR_VALUE : sensor!.value,
                     manualSensorDescriptor: isManual ? lensPreset.sensorName : "",
-                    fNumber: String(format: "%g", lensPreset.fNumber)
+                    fNumber: String(format: "%g", lensPreset.fNumber),
+                    opticalEndFocalLength: lensPreset.opticalEndFocalLength.map { String(format: "%g", $0) } ?? "",
+                    endFNumber: lensPreset.endFNumber.map { String(format: "%g", $0) } ?? ""
                 )
                 nextLensId += 1
                 return lens
@@ -760,6 +806,22 @@ public class SensorComparisonViewModel: ObservableObject {
         let focalLength: Double
         let sensorName: String
         let fNumber: Double
+        let opticalEndFocalLength: Double?
+        let endFNumber: Double?
+
+        init(
+            focalLength: Double,
+            sensorName: String,
+            fNumber: Double,
+            opticalEndFocalLength: Double? = nil,
+            endFNumber: Double? = nil
+        ) {
+            self.focalLength = focalLength
+            self.sensorName = sensorName
+            self.fNumber = fNumber
+            self.opticalEndFocalLength = opticalEndFocalLength
+            self.endFNumber = endFNumber
+        }
     }
     
     private func defaultDeviceName(index: Int) -> String {
@@ -819,7 +881,9 @@ extension DeviceInputState {
                 nativeFocalLength: sanitizedFocal.isEmpty ? "24" : sanitizedFocal,
                 selectedSensorValue: lens.selectedSensorValue,
                 manualSensorDescriptor: manual.isEmpty ? "1/1.33" : manual,
-                fNumber: sanitizedFNumber.isEmpty ? "1.8" : sanitizedFNumber
+                fNumber: sanitizedFNumber.isEmpty ? "1.8" : sanitizedFNumber,
+                opticalEndFocalLength: lens.opticalEndFocalLength.trimmingCharacters(in: .whitespacesAndNewlines),
+                endFNumber: lens.endFNumber.trimmingCharacters(in: .whitespacesAndNewlines)
             )
         }
         return PresetDeviceSnapshot(

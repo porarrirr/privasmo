@@ -3,6 +3,7 @@ package com.porarrirr.sumahohikakuku.model
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SensorComputationTest {
@@ -45,6 +46,22 @@ class SensorComputationTest {
 
     private val lenses = listOf(wideLens, teleLens)
 
+    private val xiaomi17UltraTeleLens = LensProcessed(
+        nativeFocalLength35mm = 75.0,
+        fNumber = 2.39,
+        actualFocalLengthMm = 20.0,
+        sensorMetrics = wideSensorMetrics,
+        opticalEndFocalLength35mm = 100.0,
+        endFNumber = 2.96
+    )
+
+    private val xiaomi17UltraTeleLenses = listOf(xiaomi17UltraTeleLens)
+
+    private val variableWideLens = wideLens.copy(
+        opticalEndFocalLength35mm = 70.0,
+        endFNumber = 2.8
+    )
+
     @Test
     fun calculateEffectiveMetrics_returnsUnityZoomAtNativeFocal() {
         val metrics = calculateEffectiveMetrics(focalLength35mm = 24.0, lenses = lenses)
@@ -85,7 +102,11 @@ class SensorComputationTest {
             areaSqMm = 0.0
         )
         val rawLenses = listOf(
-            24.0 to (2.0 to invalidMetrics)
+            LensProcessingInput(
+                nativeFocalLength35mm = 24.0,
+                fNumber = 2.0,
+                sensorMetrics = invalidMetrics
+            )
         )
 
         val processed = computeProcessedDevice(
@@ -101,8 +122,16 @@ class SensorComputationTest {
     @Test
     fun computeProcessedDevice_generatesMetricsForReachableFocals() {
         val rawLenses = listOf(
-            24.0 to (2.0 to wideSensorMetrics),
-            70.0 to (2.8 to teleSensorMetrics)
+            LensProcessingInput(
+                nativeFocalLength35mm = 24.0,
+                fNumber = 2.0,
+                sensorMetrics = wideSensorMetrics
+            ),
+            LensProcessingInput(
+                nativeFocalLength35mm = 70.0,
+                fNumber = 2.8,
+                sensorMetrics = teleSensorMetrics
+            )
         )
 
         val processed = computeProcessedDevice(
@@ -117,5 +146,60 @@ class SensorComputationTest {
             listOf(24.0, 35.0, 70.0),
             processed!!.metricsByFocalLength.map { it.focalLength35mm }
         )
+    }
+
+    @Test
+    fun xiaomi17UltraTelephoto_keepsFullAreaWithin75To100mm() {
+        val metrics75 = calculateEffectiveMetrics(75.0, xiaomi17UltraTeleLenses)!!
+        val metrics90 = calculateEffectiveMetrics(90.0, xiaomi17UltraTeleLenses)!!
+        val metrics100 = calculateEffectiveMetrics(100.0, xiaomi17UltraTeleLenses)!!
+
+        assertEquals(metrics75.effectiveAreaSqMm, metrics90.effectiveAreaSqMm, 0.0001)
+        assertEquals(metrics75.effectiveAreaSqMm, metrics100.effectiveAreaSqMm, 0.0001)
+        assertEquals(1.0, metrics90.digitalCropRatio, 0.0001)
+        assertEquals(90.0, metrics90.opticalFocalLength35mm, 0.0001)
+    }
+
+    @Test
+    fun xiaomi17UltraTelephoto_cropsAfter100mm() {
+        val metrics100 = calculateEffectiveMetrics(100.0, xiaomi17UltraTeleLenses)!!
+        val metrics200 = calculateEffectiveMetrics(200.0, xiaomi17UltraTeleLenses)!!
+        val metrics400 = calculateEffectiveMetrics(400.0, xiaomi17UltraTeleLenses)!!
+
+        assertEquals(metrics100.effectiveAreaSqMm / 4.0, metrics200.effectiveAreaSqMm, 0.0001)
+        assertEquals(metrics100.effectiveAreaSqMm / 16.0, metrics400.effectiveAreaSqMm, 0.0001)
+        assertEquals(2.0, metrics200.digitalCropRatio, 0.0001)
+        assertEquals(4.0, metrics400.digitalCropRatio, 0.0001)
+        assertEquals(100.0, metrics200.opticalFocalLength35mm, 0.0001)
+    }
+
+    @Test
+    fun xiaomi17UltraTelephoto_interpolatesFNumberWithinRange() {
+        val metrics75 = calculateEffectiveMetrics(75.0, xiaomi17UltraTeleLenses)!!
+        val metrics100 = calculateEffectiveMetrics(100.0, xiaomi17UltraTeleLenses)!!
+        val metrics90 = calculateEffectiveMetrics(90.0, xiaomi17UltraTeleLenses)!!
+        val expected90 = 2.39 + (2.96 - 2.39) * ((90.0 - 75.0) / (100.0 - 75.0))
+
+        assertEquals(2.39, metrics75.effectiveFNumber, 0.0001)
+        assertEquals(2.96, metrics100.effectiveFNumber, 0.0001)
+        assertEquals(expected90, metrics90.effectiveFNumber, 0.0001)
+    }
+
+    @Test
+    fun xiaomi17UltraTelephoto_actualFocalChangesWithinOpticalRange() {
+        val metrics75 = calculateEffectiveMetrics(75.0, xiaomi17UltraTeleLenses)!!
+        val metrics100 = calculateEffectiveMetrics(100.0, xiaomi17UltraTeleLenses)!!
+
+        assertTrue(metrics100.opticalActualFocalLengthMm > metrics75.opticalActualFocalLengthMm)
+    }
+
+    @Test
+    fun calculateEffectiveMetrics_prefersNativeLensAtOpticalRangeBoundary() {
+        val metrics = calculateEffectiveMetrics(
+            focalLength35mm = 70.0,
+            lenses = listOf(variableWideLens, teleLens)
+        )
+
+        assertEquals(70.0, metrics!!.baseLens.nativeFocalLength35mm, 0.0001)
     }
 }

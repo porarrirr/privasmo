@@ -1,17 +1,19 @@
 import SwiftUI
 
 public struct SensorComparisonScreen: View {
+    @AppStorage("app_language_override") var appLanguage: String = ""
+
     @StateObject private var viewModel = SensorComparisonViewModel()
     @StateObject private var settingsRepository = GraphSettingsRepository()
-    
+
     @State private var selectedTab = 0
     @State private var selectedDeviceId: Int64? = nil
     @State private var isShowingSettings = false
     @State private var isShowingSavePresetSheet = false
     @State private var isShowingLoadPresetSheet = false
-    
+
     public init() {}
-    
+
     public var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -23,7 +25,7 @@ public struct SensorComparisonScreen: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                
+
                 // Tab Content
                 if selectedTab == 0 {
                     deviceInputTab
@@ -42,7 +44,7 @@ public struct SensorComparisonScreen: View {
                         }) {
                             Image(systemName: "square.and.arrow.down")
                         }
-                        
+
                         Button(action: {
                             viewModel.openPresetLibrary()
                             isShowingLoadPresetSheet = true
@@ -90,14 +92,14 @@ public struct SensorComparisonScreen: View {
             }
         }
     }
-    
+
     // TAB 1: Device Inputs
     private var deviceInputTab: some View {
         VStack {
             ScrollView {
                 VStack(spacing: 16) {
                     deviceSelector
-                    
+
                     if let device = selectedInputDevice {
                         DeviceCardView(viewModel: viewModel, device: device)
                     }
@@ -112,7 +114,7 @@ public struct SensorComparisonScreen: View {
             syncSelectedDevice()
         }
     }
-    
+
     private var selectedInputDevice: DeviceInputState? {
         if let selectedDeviceId,
            let selected = viewModel.state.devices.first(where: { $0.id == selectedDeviceId }) {
@@ -120,21 +122,21 @@ public struct SensorComparisonScreen: View {
         }
         return viewModel.state.devices.first
     }
-    
+
     private var deviceSelector: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text(LocalizedStrings.tabDeviceInput)
                     .font(.subheadline.bold())
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
-                
+
                 Text("\(viewModel.state.devices.count)/\(MAX_DEVICES)")
                     .font(.caption.bold())
                     .foregroundColor(.secondary)
             }
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(viewModel.state.devices) { device in
@@ -148,7 +150,7 @@ public struct SensorComparisonScreen: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
-                    
+
                     Button(action: {
                         viewModel.addDevice()
                         selectedDeviceId = viewModel.state.devices.last?.id
@@ -174,22 +176,22 @@ public struct SensorComparisonScreen: View {
         .background(Color(uiColor: .secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
-    
+
     private func syncSelectedDevice() {
         let devices = viewModel.state.devices
         guard !devices.isEmpty else {
             selectedDeviceId = nil
             return
         }
-        
+
         if let selectedDeviceId,
            devices.contains(where: { $0.id == selectedDeviceId }) {
             return
         }
-        
+
         selectedDeviceId = devices.first?.id
     }
-    
+
     // TAB 2: Comparison Graph
     private var comparisonGraphTab: some View {
         VStack {
@@ -202,14 +204,14 @@ public struct SensorComparisonScreen: View {
                             lineWidth: settingsRepository.settings.lineWidth
                         )
                         .padding(.horizontal)
-                        
+
                         ComparisonChart(
                             results: results,
                             metricType: .lightIntake,
                             lineWidth: settingsRepository.settings.lineWidth
                         )
                         .padding(.horizontal)
-                        
+
                         // Share & Export Actions
                         HStack(spacing: 16) {
                             Button(action: {
@@ -217,7 +219,7 @@ public struct SensorComparisonScreen: View {
                             }) {
                                 HStack {
                                     Image(systemName: "square.and.arrow.up")
-                                    Text("面積グラフ共有")
+                                    Text(LocalizedStrings.actionShareAreaChart)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -225,13 +227,13 @@ public struct SensorComparisonScreen: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                             }
-                            
+
                             Button(action: {
                                 shareChartImage(metricType: .lightIntake)
                             }) {
                                 HStack {
                                     Image(systemName: "square.and.arrow.up")
-                                    Text("集光力グラフ共有")
+                                    Text(LocalizedStrings.actionShareLightIntakeChart)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -258,30 +260,30 @@ public struct SensorComparisonScreen: View {
             }
         }
     }
-    
+
     // Share image action helper
     @MainActor
     private func shareChartImage(metricType: ChartMetricType) {
         guard let results = viewModel.state.comparisonResults else { return }
-        
+
         let exportView = ExportView(
             results: results,
             metricType: metricType,
             selectedFocalLength: viewModel.state.selectedFocalLength,
             settings: settingsRepository.settings
         )
-        
+
         // Setup Aspect Ratio Frame in rendering
         let aspect = CGFloat(settingsRepository.settings.exportAspectRatio)
         let targetWidth: CGFloat = 800.0
         let targetHeight: CGFloat = targetWidth / aspect
-        
+
         let renderer = ImageRenderer(content: exportView.frame(width: targetWidth, height: targetHeight))
         renderer.scale = 3.0 // High quality
-        
+
         if let image = renderer.uiImage {
             let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-            
+
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let rootVC = windowScene.windows.first?.rootViewController {
                 if let popover = activityVC.popoverPresentationController {
@@ -307,19 +309,19 @@ public struct SensorComparisonScreen: View {
 private struct DeviceSelectorChip: View {
     let device: DeviceInputState
     let isSelected: Bool
-    
+
     var body: some View {
         HStack(spacing: 8) {
             Circle()
                 .fill(Color(hex: device.colorHex) ?? .blue)
                 .frame(width: 12, height: 12)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(device.name.isEmpty ? LocalizedStrings.labelName : device.name)
                     .font(.subheadline.bold())
                     .lineLimit(1)
-                
-                Text("\(device.lenses.count) レンズ")
+
+                Text(String(format: LocalizedStrings.labelLensCountCompact, device.lenses.count))
                     .font(.caption2.bold())
                     .foregroundColor(isSelected ? .white.opacity(0.82) : .secondary)
             }

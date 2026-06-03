@@ -15,6 +15,8 @@ data class SensorComparisonActions(
     val updateLensSensorSelection: (Long, Long, String) -> Unit,
     val updateLensManualDescriptor: (Long, Long, String) -> Unit,
     val updateLensFNumber: (Long, Long, String) -> Unit,
+    val updateLensOpticalEndFocalLength: (Long, Long, String) -> Unit,
+    val updateLensEndFNumber: (Long, Long, String) -> Unit,
     val generateComparison: () -> Unit,
     val updateFocalLength: (Double) -> Unit,
     val updatePresetNameInput: (String) -> Unit,

@@ -1,0 +1,2 @@
+CFBundleDisplayName = "Sensor Compare";
+NSPhotoLibraryAddUsageDescription = "Used to save the comparison result image to the photo library.";

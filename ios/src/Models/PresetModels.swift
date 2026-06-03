@@ -5,12 +5,42 @@ public struct PresetLensSnapshot: Codable, Equatable {
     public let selectedSensorValue: String
     public let manualSensorDescriptor: String
     public let fNumber: String
+    public let opticalEndFocalLength: String
+    public let endFNumber: String
     
-    public init(nativeFocalLength: String, selectedSensorValue: String, manualSensorDescriptor: String, fNumber: String) {
+    public init(
+        nativeFocalLength: String,
+        selectedSensorValue: String,
+        manualSensorDescriptor: String,
+        fNumber: String,
+        opticalEndFocalLength: String = "",
+        endFNumber: String = ""
+    ) {
         self.nativeFocalLength = nativeFocalLength
         self.selectedSensorValue = selectedSensorValue
         self.manualSensorDescriptor = manualSensorDescriptor
         self.fNumber = fNumber
+        self.opticalEndFocalLength = opticalEndFocalLength
+        self.endFNumber = endFNumber
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case nativeFocalLength
+        case selectedSensorValue
+        case manualSensorDescriptor
+        case fNumber
+        case opticalEndFocalLength
+        case endFNumber
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.nativeFocalLength = try container.decodeIfPresent(String.self, forKey: .nativeFocalLength) ?? ""
+        self.selectedSensorValue = try container.decodeIfPresent(String.self, forKey: .selectedSensorValue) ?? MANUAL_INPUT_SENSOR_VALUE
+        self.manualSensorDescriptor = try container.decodeIfPresent(String.self, forKey: .manualSensorDescriptor) ?? ""
+        self.fNumber = try container.decodeIfPresent(String.self, forKey: .fNumber) ?? ""
+        self.opticalEndFocalLength = try container.decodeIfPresent(String.self, forKey: .opticalEndFocalLength) ?? ""
+        self.endFNumber = try container.decodeIfPresent(String.self, forKey: .endFNumber) ?? ""
     }
 }
 

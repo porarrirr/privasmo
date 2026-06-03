@@ -53,6 +53,8 @@
     <string name="label_preset_name">Nombre del preajuste</string>
     <string name="label_focal_length">Distancia focal (equivalente a 35 mm)</string>
     <string name="label_f_number">Numero F</string>
+    <string name="label_optical_end_focal_length">Distancia focal final optica</string>
+    <string name="label_end_f_number">Numero F final</string>
     <string name="label_sensor">Sensor</string>
     <string name="label_megapixels">Megapixeles (MP)</string>
     <string name="label_pixel_size_um">Tamano de pixel (µm)</string>
@@ -105,6 +107,7 @@
     <string name="chart_marker_focal_length_mm">Distancia focal: %1$smm</string>
     <string name="chart_marker_zoom_digital">Zoom digital (recorte): %1$sx (base: %2$smm)</string>
     <string name="chart_marker_zoom_optical">Optico (lente nativo: %1$smm)</string>
+    <string name="chart_marker_zoom_optical_crop">Focal optica: %1$smm / optico: %2$sx / recorte: %3$sx</string>
     <string name="chart_marker_value_format">%1$s: %2$s%3$s</string>
     <string name="chart_marker_unit_prefix"> %1$s</string>
 
@@ -169,6 +172,10 @@
     <string name="metric_effective_dimensions">Dimensiones efectivas</string>
     <string name="metric_effective_aperture">Apertura efectiva</string>
     <string name="metric_digital_zoom">Zoom digital</string>
+    <string name="label_variable_optical_range">Rango de zoom optico variable</string>
+    <string name="label_digital_crop_ratio">Relacion de recorte</string>
+    <string name="label_optical_zoom_ratio">Relacion de zoom optico</string>
+    <string name="label_estimated_f_number">Numero F estimado</string>
     <string name="metric_lens_used">Lente usada</string>
     <string name="value_lens_used_format">%1$smm (equivalente a 35 mm)</string>
     <string name="metric_binning_characteristic">Caracteristicas de binning</string>
@@ -180,4 +187,3 @@
     <string name="error_activity_not_found">No se encontro la Activity</string>
     <string name="title_share_image">Compartir</string>
 </resources>
-

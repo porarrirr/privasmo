@@ -117,6 +117,12 @@ public struct DeviceCardView: View {
                         onFNumberChanged: { val in
                             viewModel.updateLensFNumber(deviceId: device.id, lensId: lens.id, value: val)
                         },
+                        onOpticalEndFocalLengthChanged: { val in
+                            viewModel.updateLensOpticalEndFocalLength(deviceId: device.id, lensId: lens.id, value: val)
+                        },
+                        onEndFNumberChanged: { val in
+                            viewModel.updateLensEndFNumber(deviceId: device.id, lensId: lens.id, value: val)
+                        },
                         onSensorTap: {
                             activeLensPicker = LensPickerPresentation(lensId: lens.id)
                         },
@@ -153,6 +159,8 @@ struct LensRowView: View {
     let availableSensors: [SensorSpec]
     let onFocalLengthChanged: (String) -> Void
     let onFNumberChanged: (String) -> Void
+    let onOpticalEndFocalLengthChanged: (String) -> Void
+    let onEndFNumberChanged: (String) -> Void
     let onSensorTap: () -> Void
     let onManualDescriptorChanged: (String) -> Void
     let onDelete: () -> Void
@@ -223,6 +231,36 @@ struct LensRowView: View {
                     .buttonStyle(PlainButtonStyle())
                     .padding(.bottom, 6)
                 }
+            }
+
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(LocalizedStrings.labelOpticalEndFocalLength)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    TextField("100", text: Binding(
+                        get: { lens.opticalEndFocalLength },
+                        set: { onOpticalEndFocalLengthChanged($0) }
+                    ))
+                    .keyboardType(.decimalPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width: 110)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(LocalizedStrings.labelEndFNumber)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    TextField("2.96", text: Binding(
+                        get: { lens.endFNumber },
+                        set: { onEndFNumberChanged($0) }
+                    ))
+                    .keyboardType(.decimalPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width: 80)
+                }
+
+                Spacer()
             }
             
             // If manual input sensor, show manual field

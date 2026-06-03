@@ -89,6 +89,40 @@ public struct LensProcessed: Equatable {
     public let fNumber: Double
     public let actualFocalLengthMm: Double
     public let sensorMetrics: SensorMetrics
+    public let opticalEndFocalLength35mm: Double
+    public let endFNumber: Double
+
+    public init(
+        nativeFocalLength35mm: Double,
+        fNumber: Double,
+        actualFocalLengthMm: Double,
+        sensorMetrics: SensorMetrics,
+        opticalEndFocalLength35mm: Double? = nil,
+        endFNumber: Double? = nil
+    ) {
+        self.nativeFocalLength35mm = nativeFocalLength35mm
+        self.fNumber = fNumber
+        self.actualFocalLengthMm = actualFocalLengthMm
+        self.sensorMetrics = sensorMetrics
+        self.opticalEndFocalLength35mm = opticalEndFocalLength35mm ?? nativeFocalLength35mm
+        self.endFNumber = endFNumber ?? fNumber
+    }
+
+    public var isVariableOptical: Bool {
+        opticalEndFocalLength35mm > nativeFocalLength35mm
+    }
+
+    public func containsOptical(_ focal35mm: Double) -> Bool {
+        focal35mm >= nativeFocalLength35mm &&
+        focal35mm <= opticalEndFocalLength35mm
+    }
+
+    public func fNumberAt(_ focal35mm: Double) -> Double {
+        let span = opticalEndFocalLength35mm - nativeFocalLength35mm
+        if span <= 0.0 { return fNumber }
+        let t = min(max((focal35mm - nativeFocalLength35mm) / span, 0.0), 1.0)
+        return fNumber + (endFNumber - fNumber) * t
+    }
 }
 
 public struct FocalLengthMetrics: Equatable {
@@ -101,6 +135,65 @@ public struct FocalLengthMetrics: Equatable {
     public let apertureAreaSqMm: Double
     public let totalLightIntake: Double
     public let baseLens: LensProcessed
+    public let opticalFocalLength35mm: Double
+    public let opticalZoomRatio: Double
+    public let digitalCropRatio: Double
+    public let effectiveFNumber: Double
+    public let opticalActualFocalLengthMm: Double
+
+    public init(
+        focalLength35mm: Double,
+        effectiveWidthMm: Double,
+        effectiveHeightMm: Double,
+        effectiveAreaSqMm: Double,
+        zoomRatio: Double,
+        apertureDiameterMm: Double,
+        apertureAreaSqMm: Double,
+        totalLightIntake: Double,
+        baseLens: LensProcessed,
+        opticalFocalLength35mm: Double? = nil,
+        opticalZoomRatio: Double = 1.0,
+        digitalCropRatio: Double? = nil,
+        effectiveFNumber: Double? = nil,
+        opticalActualFocalLengthMm: Double? = nil
+    ) {
+        self.focalLength35mm = focalLength35mm
+        self.effectiveWidthMm = effectiveWidthMm
+        self.effectiveHeightMm = effectiveHeightMm
+        self.effectiveAreaSqMm = effectiveAreaSqMm
+        self.zoomRatio = zoomRatio
+        self.apertureDiameterMm = apertureDiameterMm
+        self.apertureAreaSqMm = apertureAreaSqMm
+        self.totalLightIntake = totalLightIntake
+        self.baseLens = baseLens
+        self.opticalFocalLength35mm = opticalFocalLength35mm ?? baseLens.nativeFocalLength35mm
+        self.opticalZoomRatio = opticalZoomRatio
+        self.digitalCropRatio = digitalCropRatio ?? zoomRatio
+        self.effectiveFNumber = effectiveFNumber ?? baseLens.fNumber
+        self.opticalActualFocalLengthMm = opticalActualFocalLengthMm ?? baseLens.actualFocalLengthMm
+    }
+}
+
+public struct LensProcessingInput: Equatable {
+    public let nativeFocalLength35mm: Double
+    public let fNumber: Double
+    public let sensorMetrics: SensorMetrics
+    public let opticalEndFocalLength35mm: Double
+    public let endFNumber: Double
+
+    public init(
+        nativeFocalLength35mm: Double,
+        fNumber: Double,
+        sensorMetrics: SensorMetrics,
+        opticalEndFocalLength35mm: Double? = nil,
+        endFNumber: Double? = nil
+    ) {
+        self.nativeFocalLength35mm = nativeFocalLength35mm
+        self.fNumber = fNumber
+        self.sensorMetrics = sensorMetrics
+        self.opticalEndFocalLength35mm = opticalEndFocalLength35mm ?? nativeFocalLength35mm
+        self.endFNumber = endFNumber ?? fNumber
+    }
 }
 
 public struct ProcessedDevice: Equatable, Identifiable {
@@ -175,7 +268,7 @@ public func parseSensorCsv(raw: String) -> [SensorSpec] {
     sensors.sort(by: sensorComparator())
     
     sensors.insert(SensorSpec(
-        name: "手動入力",
+        name: LocalizedStrings.labelManualInput,
         value: MANUAL_INPUT_SENSOR_VALUE,
         megapixels: 0.0,
         pixelSizeUm: 0.0,
@@ -269,26 +362,35 @@ public func calculateNativeSensorMetrics(sensorSpec: SensorSpec?, manualDescript
 public func computeProcessedDevice(
     name: String,
     colorHex: String,
-    rawLenses: [(Double, (Double, SensorMetrics))],
+    rawLenses: [LensProcessingInput],
     focalLengths: [Double]
 ) -> ProcessedDevice? {
     if rawLenses.isEmpty { return nil }
     
     var lenses: [LensProcessed] = []
-    for (focalLength35, (fNumber, metrics)) in rawLenses {
+    for lens in rawLenses {
+        let focalLength35 = lens.nativeFocalLength35mm
+        let metrics = lens.sensorMetrics
         if metrics.diagonalMm > 0.0 {
             let cropFactor = FF_DIAGONAL_MM / metrics.diagonalMm
             let actualFocal = focalLength35 / cropFactor
             lenses.append(LensProcessed(
                 nativeFocalLength35mm: focalLength35,
-                fNumber: fNumber,
+                fNumber: lens.fNumber,
                 actualFocalLengthMm: actualFocal,
-                sensorMetrics: metrics
+                sensorMetrics: metrics,
+                opticalEndFocalLength35mm: lens.opticalEndFocalLength35mm,
+                endFNumber: lens.endFNumber
             ))
         }
     }
     
-    lenses.sort(by: { $0.nativeFocalLength35mm < $1.nativeFocalLength35mm })
+    lenses.sort {
+        if $0.nativeFocalLength35mm == $1.nativeFocalLength35mm {
+            return $0.opticalEndFocalLength35mm < $1.opticalEndFocalLength35mm
+        }
+        return $0.nativeFocalLength35mm < $1.nativeFocalLength35mm
+    }
     if lenses.isEmpty { return nil }
     
     var metricsByFocalLength: [FocalLengthMetrics] = []
@@ -308,41 +410,70 @@ public func computeProcessedDevice(
 
 public func calculateEffectiveMetrics(focalLength35mm: Double, lenses: [LensProcessed]) -> FocalLengthMetrics? {
     guard !lenses.isEmpty else { return nil }
-    let minNativeFocal = lenses[0].nativeFocalLength35mm
-    if focalLength35mm < minNativeFocal {
+    let sorted = lenses.sorted {
+        if $0.nativeFocalLength35mm == $1.nativeFocalLength35mm {
+            return $0.opticalEndFocalLength35mm < $1.opticalEndFocalLength35mm
+        }
+        return $0.nativeFocalLength35mm < $1.nativeFocalLength35mm
+    }
+    let opticalLens = sorted
+        .filter { $0.containsOptical(focalLength35mm) }
+        .max {
+            if $0.nativeFocalLength35mm == $1.nativeFocalLength35mm {
+                return $0.opticalEndFocalLength35mm < $1.opticalEndFocalLength35mm
+            }
+            return $0.nativeFocalLength35mm < $1.nativeFocalLength35mm
+        }
+    let baseLens: LensProcessed
+    if let activeOpticalLens = opticalLens {
+        baseLens = activeOpticalLens
+    } else if let fallback = sorted
+        .filter({ focalLength35mm >= $0.opticalEndFocalLength35mm })
+        .max(by: {
+            if $0.opticalEndFocalLength35mm == $1.opticalEndFocalLength35mm {
+                return $0.nativeFocalLength35mm < $1.nativeFocalLength35mm
+            }
+            return $0.opticalEndFocalLength35mm < $1.opticalEndFocalLength35mm
+        }) {
+        baseLens = fallback
+    } else {
         return nil
     }
-    var baseLens = lenses[0]
-    for candidate in lenses {
-        if focalLength35mm >= candidate.nativeFocalLength35mm {
-            baseLens = candidate
-            if focalLength35mm == candidate.nativeFocalLength35mm {
-                break
-            }
-        } else {
-            break
-        }
+    
+    let opticalFocal35mm: Double
+    if opticalLens == nil {
+        opticalFocal35mm = baseLens.opticalEndFocalLength35mm
+    } else {
+        opticalFocal35mm = focalLength35mm
     }
+    let digitalCropRatio = max(1.0, focalLength35mm / opticalFocal35mm)
+    let effectiveWidthMm = baseLens.sensorMetrics.widthMm / digitalCropRatio
+    let effectiveHeightMm = baseLens.sensorMetrics.heightMm / digitalCropRatio
+    let effectiveAreaSqMm = baseLens.sensorMetrics.areaSqMm / pow(digitalCropRatio, 2)
     
-    let zoomRatio = max(1.0, focalLength35mm / baseLens.nativeFocalLength35mm)
-    let effectiveWidthMm = baseLens.sensorMetrics.widthMm / zoomRatio
-    let effectiveHeightMm = baseLens.sensorMetrics.heightMm / zoomRatio
-    let effectiveAreaSqMm = baseLens.sensorMetrics.areaSqMm / pow(zoomRatio, 2)
-    
-    let apertureDiameter = baseLens.fNumber > 0 ? baseLens.actualFocalLengthMm / baseLens.fNumber : 0.0
+    let cropFactor = FF_DIAGONAL_MM / baseLens.sensorMetrics.diagonalMm
+    let opticalActualFocalMm = opticalFocal35mm / cropFactor
+    let effectiveFNumber = baseLens.fNumberAt(opticalFocal35mm)
+    let apertureDiameter = effectiveFNumber > 0 ? opticalActualFocalMm / effectiveFNumber : 0.0
     let apertureArea = apertureDiameter > 0 ? (Double.pi / 4.0) * pow(apertureDiameter, 2) : 0.0
-    let totalLightIntake = baseLens.fNumber > 0 ? effectiveAreaSqMm / pow(baseLens.fNumber, 2) : 0.0
+    let totalLightIntake = effectiveFNumber > 0 ? effectiveAreaSqMm / pow(effectiveFNumber, 2) : 0.0
+    let opticalZoomRatio = opticalFocal35mm / baseLens.nativeFocalLength35mm
     
     return FocalLengthMetrics(
         focalLength35mm: focalLength35mm,
         effectiveWidthMm: effectiveWidthMm,
         effectiveHeightMm: effectiveHeightMm,
         effectiveAreaSqMm: effectiveAreaSqMm,
-        zoomRatio: zoomRatio,
+        zoomRatio: digitalCropRatio,
         apertureDiameterMm: apertureDiameter,
         apertureAreaSqMm: apertureArea,
         totalLightIntake: totalLightIntake,
-        baseLens: baseLens
+        baseLens: baseLens,
+        opticalFocalLength35mm: opticalFocal35mm,
+        opticalZoomRatio: opticalZoomRatio,
+        digitalCropRatio: digitalCropRatio,
+        effectiveFNumber: effectiveFNumber,
+        opticalActualFocalLengthMm: opticalActualFocalMm
     )
 }
 

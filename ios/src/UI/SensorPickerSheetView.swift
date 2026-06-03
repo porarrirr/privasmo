@@ -186,11 +186,11 @@ public struct SensorPickerSheetView: View {
     
     private func saveCustomSensor() {
         guard let megapixels = Double(customMegapixels), megapixels > 0.0 else {
-            errorText = "画素数を正しく入力してください"
+            errorText = LocalizedStrings.errorMegapixelsInvalid
             return
         }
         guard let pixelSize = Double(customPixelSize), pixelSize > 0.0 else {
-            errorText = "ピクセルサイズを正しく入力してください"
+            errorText = LocalizedStrings.errorPixelSizeInvalid
             return
         }
         

@@ -2,30 +2,43 @@ import SwiftUI
 
 public struct GraphSettingsScreen: View {
     @Environment(\.dismiss) var dismiss
-    
+
+    @AppStorage("app_language_override") var appLanguage: String = ""
+
     @StateObject private var repository = GraphSettingsRepository()
     @StateObject private var sensorRepository = CustomSensorRepository()
-    
+
     @State private var lineWidth: Float = GraphSettings.defaultLineWidth
     @State private var exportAspectWidth = "4"
     @State private var exportAspectHeight = "3"
-    
+
     @State private var isShowingAddDialog = false
     @State private var editingSensor: CustomSensorEntry? = nil
     @State private var isShowingDeleteAlert = false
     @State private var deleteTarget: CustomSensorEntry? = nil
-    
+
     public init() {}
-    
+
     public var body: some View {
         NavigationView {
             Form {
+                // Language Selection Section
+                Section(header: Text(LocalizedStrings.labelLanguage)) {
+                    Picker(LocalizedStrings.labelLanguage, selection: $appLanguage) {
+                        Text(LocalizedStrings.labelLanguageAuto).tag("")
+                        Text("日本語").tag("ja")
+                        Text("English").tag("en")
+                        Text("简体中文").tag("zh-Hans")
+                        Text("繁體中文").tag("zh-Hant")
+                    }
+                }
+
                 // Line Width Section
                 Section(header: Text(LocalizedStrings.labelChartLineWidth)) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(String(format: "%.1f", lineWidth))
                             .font(.subheadline.bold())
-                        
+
                         Slider(
                             value: $lineWidth,
                             in: GraphSettings.minLineWidth...GraphSettings.maxLineWidth,
@@ -36,17 +49,17 @@ public struct GraphSettingsScreen: View {
                     }
                     .padding(.vertical, 4)
                 }
-                
+
                 // Export Ratio Section
                 Section(header: Text(LocalizedStrings.labelExportImageAspectRatio)) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(String(format: LocalizedStrings.helperExportImageAspectRatioRange, GraphSettings.minExportAspectComponent, GraphSettings.maxExportAspectComponent))
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Text(String(format: LocalizedStrings.labelCurrentExportAspectRatio, repository.settings.exportAspectWidth, repository.settings.exportAspectHeight))
                             .font(.subheadline)
-                        
+
                         HStack(spacing: 12) {
                             Button("4:3") {
                                 exportAspectWidth = "4"
@@ -54,14 +67,14 @@ public struct GraphSettingsScreen: View {
                                 repository.setExportAspectRatio(width: 4, height: 3)
                             }
                             .buttonStyle(.bordered)
-                            
+
                             Button("1:1") {
                                 exportAspectWidth = "1"
                                 exportAspectHeight = "1"
                                 repository.setExportAspectRatio(width: 1, height: 1)
                             }
                             .buttonStyle(.bordered)
-                            
+
                             Button("16:9") {
                                 exportAspectWidth = "16"
                                 exportAspectHeight = "9"
@@ -70,22 +83,22 @@ public struct GraphSettingsScreen: View {
                             .buttonStyle(.bordered)
                         }
                         .padding(.vertical, 4)
-                        
+
                         HStack {
                             TextField(LocalizedStrings.labelAspectRatioWidth, text: $exportAspectWidth)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .frame(width: 80)
-                            
+
                             Text(":")
-                            
+
                             TextField(LocalizedStrings.labelAspectRatioHeight, text: $exportAspectHeight)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .frame(width: 80)
-                            
+
                             Spacer()
-                            
+
                             Button(LocalizedStrings.actionApplyExportImageAspectRatio) {
                                 if let w = Int(exportAspectWidth), let h = Int(exportAspectHeight) {
                                     repository.setExportAspectRatio(width: w, height: h)
@@ -96,7 +109,7 @@ public struct GraphSettingsScreen: View {
                         }
                     }
                 }
-                
+
                 // Custom Sensors Section
                 Section(header: Text(LocalizedStrings.labelCustomSensorList)) {
                     Button(action: {
@@ -108,7 +121,7 @@ public struct GraphSettingsScreen: View {
                             Text(LocalizedStrings.actionAdd)
                         }
                     }
-                    
+
                     if sensorRepository.sensors.isEmpty {
                         Text(LocalizedStrings.textNoCustomSensors)
                             .foregroundColor(.secondary)
@@ -118,14 +131,14 @@ public struct GraphSettingsScreen: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(entry.name)
                                     .fontWeight(.bold)
-                                
+
                                 HStack {
                                     Text(String(format: "%.2f MP / %.2f µm / %@", entry.megapixels, entry.pixelSizeUm, entry.binningType))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
-                                    
+
                                     Spacer()
-                                    
+
                                     HStack(spacing: 16) {
                                         Button(action: {
                                             editingSensor = entry
@@ -135,7 +148,7 @@ public struct GraphSettingsScreen: View {
                                                 .foregroundColor(.accentColor)
                                         }
                                         .buttonStyle(PlainButtonStyle())
-                                        
+
                                         Button(action: {
                                             deleteTarget = entry
                                             isShowingDeleteAlert = true
@@ -151,7 +164,7 @@ public struct GraphSettingsScreen: View {
                         }
                     }
                 }
-                
+
                 // Reset Button
                 Section {
                     Button(LocalizedStrings.actionResetDefault) {
@@ -202,13 +215,13 @@ struct CustomSensorEditorDialog: View {
     let initial: CustomSensorEntry?
     @ObservedObject var sensorRepository: CustomSensorRepository
     let onDismiss: () -> Void
-    
+
     @State private var name = ""
     @State private var megapixels = "50"
     @State private var pixelSize = "1.0"
     @State private var binning = "None"
     @State private var errorText: String? = nil
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -218,14 +231,14 @@ struct CustomSensorEditorDialog: View {
                         .keyboardType(.decimalPad)
                     TextField(LocalizedStrings.labelPixelSizeUm, text: $pixelSize)
                         .keyboardType(.decimalPad)
-                    
+
                     Picker(LocalizedStrings.metricBinningCharacteristic, selection: $binning) {
                         ForEach(["None", "Quad Bayer (2x2)", "Nona (3x3)", "16-cell (4x4)", "Unknown"], id: \.self) { bin in
                             Text(bin).tag(bin)
                         }
                     }
                 }
-                
+
                 if let errorText = errorText {
                     Section {
                         Text(errorText)
@@ -258,14 +271,14 @@ struct CustomSensorEditorDialog: View {
             }
         }
     }
-    
+
     private func save() {
         let nameTrimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if nameTrimmed.isEmpty {
-            errorText = "名前を入力してください"
+            errorText = LocalizedStrings.errorNameRequired
             return
         }
-        
+
         let dup = sensorRepository.sensors.contains {
             $0.name.lowercased() == nameTrimmed.lowercased() && $0.id != (initial?.id ?? "")
         }
@@ -273,17 +286,17 @@ struct CustomSensorEditorDialog: View {
             errorText = LocalizedStrings.errorDuplicateSensorName
             return
         }
-        
+
         guard let mp = Double(megapixels), mp > 0.0 else {
-            errorText = "画素数を正しく入力してください"
+            errorText = LocalizedStrings.errorMegapixelsInvalid
             return
         }
-        
+
         guard let ps = Double(pixelSize), ps > 0.0 else {
-            errorText = "ピクセルサイズを正しく入力してください"
+            errorText = LocalizedStrings.errorPixelSizeInvalid
             return
         }
-        
+
         // Map option to internal type
         let bType: String
         switch binning {
@@ -293,7 +306,7 @@ struct CustomSensorEditorDialog: View {
         case "Unknown": bType = "UNKNOWN"
         default: bType = "NONE"
         }
-        
+
         let newEntry = CustomSensorEntry(
             id: initial?.id ?? UUID().uuidString,
             name: nameTrimmed,
@@ -301,7 +314,7 @@ struct CustomSensorEditorDialog: View {
             pixelSizeUm: ps,
             binningType: bType
         )
-        
+
         sensorRepository.upsertSensor(newEntry)
         onDismiss()
     }

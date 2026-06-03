@@ -6,6 +6,39 @@ public struct GeneratedComparison: Equatable {
     public let selectedFocalLength: Double
 }
 
+struct ParsedOpticalLensInput {
+    let endFocal: Double
+    let endFNumber: Double
+}
+
+func parseOptionalOpticalLensInput(
+    lens: LensInputState,
+    nativeFocal: Double,
+    fNumber: Double
+) -> ParsedOpticalLensInput? {
+    let endFocalText = lens.opticalEndFocalLength.trimmingCharacters(in: .whitespacesAndNewlines)
+    let endFNumberText = lens.endFNumber.trimmingCharacters(in: .whitespacesAndNewlines)
+    if endFocalText.isEmpty {
+        return endFNumberText.isEmpty
+            ? ParsedOpticalLensInput(endFocal: nativeFocal, endFNumber: fNumber)
+            : nil
+    }
+
+    guard let endFocal = Double(endFocalText), endFocal >= nativeFocal else {
+        return nil
+    }
+    let endFNumber: Double
+    if endFNumberText.isEmpty {
+        endFNumber = fNumber
+    } else {
+        guard let parsedEndFNumber = Double(endFNumberText), parsedEndFNumber > 0.0 else {
+            return nil
+        }
+        endFNumber = parsedEndFNumber
+    }
+    return ParsedOpticalLensInput(endFocal: endFocal, endFNumber: endFNumber)
+}
+
 public class GenerateComparisonUseCase {
     public init() {}
     
@@ -22,8 +55,22 @@ public class GenerateComparisonUseCase {
         }
         
         let nativeFocals = devices.flatMap { device in
-            device.lenses.compactMap { lens in
-                Double(lens.nativeFocalLength).flatMap { $0 > 0.0 ? $0 : nil }
+            device.lenses.flatMap { lens -> [Double] in
+                guard let focal = Double(lens.nativeFocalLength), focal > 0.0 else {
+                    return []
+                }
+                guard let fNumber = Double(lens.fNumber), fNumber > 0.0 else {
+                    return [focal]
+                }
+                let opticalEnd = parseOptionalOpticalLensInput(
+                    lens: lens,
+                    nativeFocal: focal,
+                    fNumber: fNumber
+                )?.endFocal
+                return [
+                    focal,
+                    opticalEnd.flatMap { $0 == focal ? nil : $0 }
+                ].compactMap { $0 }
             }
         }
         
@@ -41,7 +88,7 @@ public class GenerateComparisonUseCase {
             let name = device.name.trimmingCharacters(in: .whitespacesAndNewlines)
             let sanitizedName = name.isEmpty ? fallbackDeviceName(index + 1) : name
             
-            var rawLenses: [(Double, (Double, SensorMetrics))] = []
+            var rawLenses: [LensProcessingInput] = []
             for lens in device.lenses {
                 guard let focal = Double(lens.nativeFocalLength), focal > 0.0,
                       let fNumber = Double(lens.fNumber), fNumber > 0.0 else {
@@ -53,7 +100,16 @@ public class GenerateComparisonUseCase {
                 if metrics.areaSqMm <= 0.0 || metrics.diagonalMm <= 0.0 {
                     continue
                 }
-                rawLenses.append((focal, (fNumber, metrics)))
+                guard let optical = parseOptionalOpticalLensInput(lens: lens, nativeFocal: focal, fNumber: fNumber) else {
+                    continue
+                }
+                rawLenses.append(LensProcessingInput(
+                    nativeFocalLength35mm: focal,
+                    fNumber: fNumber,
+                    sensorMetrics: metrics,
+                    opticalEndFocalLength35mm: optical.endFocal,
+                    endFNumber: optical.endFNumber
+                ))
             }
             
             if let processed = computeProcessedDevice(name: sanitizedName, colorHex: device.colorHex, rawLenses: rawLenses, focalLengths: focalGrid) {

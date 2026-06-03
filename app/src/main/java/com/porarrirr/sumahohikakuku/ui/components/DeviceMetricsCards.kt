@@ -66,6 +66,11 @@ internal fun DeviceMetricsCard(
     }
     val pixelPitchValue = binnedPixelPitch ?: nativePixelPitch
         ?: stringResource(R.string.label_not_available)
+    val opticalRangeValue = if (metrics.baseLens.isVariableOptical) {
+        "${formatFocalLength(metrics.baseLens.nativeFocalLength35mm)}-${formatFocalLength(metrics.baseLens.opticalEndFocalLength35mm)} mm"
+    } else {
+        "${formatFocalLength(metrics.baseLens.nativeFocalLength35mm)} mm"
+    }
 
     Card(
         modifier = modifier,
@@ -105,14 +110,17 @@ internal fun DeviceMetricsCard(
                     items = listOf(
                         stringResource(R.string.metric_effective_dimensions) to
                                 "${metrics.effectiveWidthMm.format(2)} \u00D7 ${metrics.effectiveHeightMm.format(2)} mm",
+                        stringResource(R.string.label_variable_optical_range) to opticalRangeValue,
                         stringResource(R.string.metric_actual_focal_length) to
-                                "${metrics.baseLens.actualFocalLengthMm.format(2)} mm",
-                        stringResource(R.string.metric_f_number) to
-                                "F${metrics.baseLens.fNumber.format(2)}",
+                                "${metrics.opticalActualFocalLengthMm.format(2)} mm",
+                        stringResource(R.string.label_estimated_f_number) to
+                                "f/${metrics.effectiveFNumber.format(2)}",
                         stringResource(R.string.metric_effective_aperture) to
                                 "${metrics.apertureDiameterMm.format(2)} mm",
-                        stringResource(R.string.metric_digital_zoom) to
-                                "${metrics.zoomRatio.format(2)}x",
+                        stringResource(R.string.label_optical_zoom_ratio) to
+                                "${metrics.opticalZoomRatio.format(2)}x",
+                        stringResource(R.string.label_digital_crop_ratio) to
+                                "${metrics.digitalCropRatio.format(2)}x",
                         stringResource(R.string.metric_sensor_used) to
                                 sensorMetrics.sensorName,
                         stringResource(R.string.metric_lens_used) to stringResource(

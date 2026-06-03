@@ -26,14 +26,26 @@ set(RESOURCES
     "resources/Assets.xcassets"
 )
 
+set(LOCALIZED_RESOURCES
+    "resources/en.lproj/Localizable.strings"
+    "resources/en.lproj/InfoPlist.strings"
+    "resources/ja.lproj/Localizable.strings"
+    "resources/ja.lproj/InfoPlist.strings"
+    "resources/zh-Hans.lproj/Localizable.strings"
+    "resources/zh-Hans.lproj/InfoPlist.strings"
+    "resources/zh-Hant.lproj/Localizable.strings"
+    "resources/zh-Hant.lproj/InfoPlist.strings"
+)
+
 # App target
 add_executable(sumahohikakuku MACOSX_BUNDLE
     ${SOURCES}
     ${RESOURCES}
+    ${LOCALIZED_RESOURCES}
 )
 
 # Copy resource files to app bundle
-set_source_files_properties(${RESOURCES} PROPERTIES
+set_source_files_properties(${RESOURCES} ${LOCALIZED_RESOURCES} PROPERTIES
     MACOSX_PACKAGE_LOCATION Resources
 )
 
@@ -53,6 +65,9 @@ set_target_properties(sumahohikakuku PROPERTIES
     XCODE_ATTRIBUTE_INFOPLIST_KEY_ITSAppUsesNonExemptEncryption "NO"
     XCODE_ATTRIBUTE_INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription "比較結果の画像を写真ライブラリに保存するために使用します。"
     XCODE_ATTRIBUTE_INFOPLIST_KEY_UISupportedInterfaceOrientations "UIInterfaceOrientationPortrait"
+    XCODE_ATTRIBUTE_ENABLE_TESTABILITY "YES"
+    XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS "YES"
+    XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
 )
 
 if (IOS_DEVELOPMENT_TEAM)

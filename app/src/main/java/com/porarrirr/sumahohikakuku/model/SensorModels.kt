@@ -83,8 +83,26 @@ data class LensProcessed(
     val nativeFocalLength35mm: Double,
     val fNumber: Double,
     val actualFocalLengthMm: Double,
-    val sensorMetrics: SensorMetrics
-)
+    val sensorMetrics: SensorMetrics,
+    val opticalEndFocalLength35mm: Double = nativeFocalLength35mm,
+    val endFNumber: Double = fNumber
+) {
+    val isVariableOptical: Boolean
+        get() = opticalEndFocalLength35mm > nativeFocalLength35mm
+
+    fun containsOptical(focal35mm: Double): Boolean {
+        return focal35mm >= nativeFocalLength35mm &&
+                focal35mm <= opticalEndFocalLength35mm
+    }
+
+    fun fNumberAt(focal35mm: Double): Double {
+        val span = opticalEndFocalLength35mm - nativeFocalLength35mm
+        if (span <= 0.0) return fNumber
+        val t = ((focal35mm - nativeFocalLength35mm) / span)
+            .coerceIn(0.0, 1.0)
+        return fNumber + (endFNumber - fNumber) * t
+    }
+}
 
 data class FocalLengthMetrics(
     val focalLength35mm: Double,
@@ -95,7 +113,20 @@ data class FocalLengthMetrics(
     val apertureDiameterMm: Double,
     val apertureAreaSqMm: Double,
     val totalLightIntake: Double,
-    val baseLens: LensProcessed
+    val baseLens: LensProcessed,
+    val opticalFocalLength35mm: Double = baseLens.nativeFocalLength35mm,
+    val opticalZoomRatio: Double = 1.0,
+    val digitalCropRatio: Double = zoomRatio,
+    val effectiveFNumber: Double = baseLens.fNumber,
+    val opticalActualFocalLengthMm: Double = baseLens.actualFocalLengthMm
+)
+
+data class LensProcessingInput(
+    val nativeFocalLength35mm: Double,
+    val fNumber: Double,
+    val sensorMetrics: SensorMetrics,
+    val opticalEndFocalLength35mm: Double = nativeFocalLength35mm,
+    val endFNumber: Double = fNumber
 )
 
 data class ProcessedDevice(
@@ -236,22 +267,28 @@ fun calculateNativeSensorMetrics(sensorSpec: SensorSpec?, manualDescriptor: Stri
 fun computeProcessedDevice(
     name: String,
     colorHex: String,
-    rawLenses: List<Pair<Double, Pair<Double, SensorMetrics>>>,
+    rawLenses: List<LensProcessingInput>,
     focalLengths: List<Double>
 ): ProcessedDevice? {
     if (rawLenses.isEmpty()) return null
-    val lenses = rawLenses.map { (focalLength35, pair) ->
-        val (fNumber, metrics) = pair
+    val lenses = rawLenses.map { lens ->
+        val focalLength35 = lens.nativeFocalLength35mm
+        val metrics = lens.sensorMetrics
         val cropFactor = if (metrics.diagonalMm > 0.0) FF_DIAGONAL_MM / metrics.diagonalMm else return@map null
         val actualFocal = focalLength35 / cropFactor
         LensProcessed(
             nativeFocalLength35mm = focalLength35,
-            fNumber = fNumber,
+            fNumber = lens.fNumber,
             actualFocalLengthMm = actualFocal,
-            sensorMetrics = metrics
+            sensorMetrics = metrics,
+            opticalEndFocalLength35mm = lens.opticalEndFocalLength35mm,
+            endFNumber = lens.endFNumber
         )
     }.filterNotNull()
-        .sortedBy { it.nativeFocalLength35mm }
+        .sortedWith(
+            compareBy<LensProcessed> { it.nativeFocalLength35mm }
+                .thenBy { it.opticalEndFocalLength35mm }
+        )
 
     if (lenses.isEmpty()) return null
 
@@ -269,41 +306,58 @@ fun computeProcessedDevice(
 
 fun calculateEffectiveMetrics(focalLength35mm: Double, lenses: List<LensProcessed>): FocalLengthMetrics? {
     require(lenses.isNotEmpty())
-    val minNativeFocal = lenses.first().nativeFocalLength35mm
-    if (focalLength35mm < minNativeFocal) {
-        return null
-    }
-    var baseLens = lenses.first()
-    for (candidate in lenses) {
-        if (focalLength35mm >= candidate.nativeFocalLength35mm) {
-            baseLens = candidate
-            if (focalLength35mm == candidate.nativeFocalLength35mm) {
-                break
-            }
-        } else {
-            break
-        }
-    }
+    val sorted = lenses.sortedWith(
+        compareBy<LensProcessed> { it.nativeFocalLength35mm }
+            .thenBy { it.opticalEndFocalLength35mm }
+    )
+    val opticalLens = sorted
+        .filter { it.containsOptical(focalLength35mm) }
+        .maxWithOrNull(
+            compareBy<LensProcessed> { it.nativeFocalLength35mm }
+                .thenBy { it.opticalEndFocalLength35mm }
+        )
+    val baseLens = opticalLens
+        ?: sorted
+            .filter { focalLength35mm >= it.opticalEndFocalLength35mm }
+            .maxWithOrNull(
+                compareBy<LensProcessed> { it.opticalEndFocalLength35mm }
+                    .thenBy { it.nativeFocalLength35mm }
+            )
+        ?: return null
 
-    val zoomRatio = max(1.0, focalLength35mm / baseLens.nativeFocalLength35mm)
-    val effectiveWidthMm = baseLens.sensorMetrics.widthMm / zoomRatio
-    val effectiveHeightMm = baseLens.sensorMetrics.heightMm / zoomRatio
-    val effectiveAreaSqMm = baseLens.sensorMetrics.areaSqMm / zoomRatio.pow(2)
+    val opticalFocal35mm = if (opticalLens != null) {
+        focalLength35mm
+    } else {
+        baseLens.opticalEndFocalLength35mm
+    }
+    val digitalCropRatio = max(1.0, focalLength35mm / opticalFocal35mm)
+    val effectiveWidthMm = baseLens.sensorMetrics.widthMm / digitalCropRatio
+    val effectiveHeightMm = baseLens.sensorMetrics.heightMm / digitalCropRatio
+    val effectiveAreaSqMm = baseLens.sensorMetrics.areaSqMm / digitalCropRatio.pow(2)
 
-    val apertureDiameter = if (baseLens.fNumber > 0) baseLens.actualFocalLengthMm / baseLens.fNumber else 0.0
+    val cropFactor = FF_DIAGONAL_MM / baseLens.sensorMetrics.diagonalMm
+    val opticalActualFocalMm = opticalFocal35mm / cropFactor
+    val effectiveFNumber = baseLens.fNumberAt(opticalFocal35mm)
+    val apertureDiameter = if (effectiveFNumber > 0.0) opticalActualFocalMm / effectiveFNumber else 0.0
     val apertureArea = if (apertureDiameter > 0) (PI / 4.0) * apertureDiameter.pow(2) else 0.0
-    val totalLightIntake = if (baseLens.fNumber > 0) effectiveAreaSqMm / baseLens.fNumber.pow(2) else 0.0
+    val totalLightIntake = if (effectiveFNumber > 0.0) effectiveAreaSqMm / effectiveFNumber.pow(2) else 0.0
+    val opticalZoomRatio = opticalFocal35mm / baseLens.nativeFocalLength35mm
 
     return FocalLengthMetrics(
         focalLength35mm = focalLength35mm,
         effectiveWidthMm = effectiveWidthMm,
         effectiveHeightMm = effectiveHeightMm,
         effectiveAreaSqMm = effectiveAreaSqMm,
-        zoomRatio = zoomRatio,
+        zoomRatio = digitalCropRatio,
         apertureDiameterMm = apertureDiameter,
         apertureAreaSqMm = apertureArea,
         totalLightIntake = totalLightIntake,
-        baseLens = baseLens
+        baseLens = baseLens,
+        opticalFocalLength35mm = opticalFocal35mm,
+        opticalZoomRatio = opticalZoomRatio,
+        digitalCropRatio = digitalCropRatio,
+        effectiveFNumber = effectiveFNumber,
+        opticalActualFocalLengthMm = opticalActualFocalMm
     )
 }
 

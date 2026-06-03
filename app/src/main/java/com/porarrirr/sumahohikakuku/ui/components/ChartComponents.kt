@@ -179,7 +179,9 @@ internal fun ChartCard(
                         val parsedColor = runCatching { AndroidColor.parseColor(device.colorHex) }
                             .getOrDefault(AndroidColor.DKGRAY)
                         val nativeFocals = device.lenses
-                            .map { lens -> lens.nativeFocalLength35mm }
+                            .flatMap { lens ->
+                                listOf(lens.nativeFocalLength35mm, lens.opticalEndFocalLength35mm)
+                            }
                             .distinct()
 
                         val markerDrawable = createLensMarkerDrawable(

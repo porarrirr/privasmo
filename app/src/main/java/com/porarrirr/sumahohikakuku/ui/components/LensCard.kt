@@ -106,6 +106,36 @@ internal fun LensCard(
                 )
             }
 
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = lens.opticalEndFocalLength,
+                    onValueChange = {
+                        actions.updateLensOpticalEndFocalLength(deviceId, lens.id, sanitizeDecimalInput(it))
+                    },
+                    label = { Text(stringResource(R.string.label_optical_end_focal_length)) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .bringIntoViewOnFocus(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                )
+                OutlinedTextField(
+                    value = lens.endFNumber,
+                    onValueChange = {
+                        actions.updateLensEndFNumber(deviceId, lens.id, sanitizeDecimalInput(it))
+                    },
+                    label = { Text(stringResource(R.string.label_end_f_number)) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .bringIntoViewOnFocus(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                )
+            }
+
             val selectedSensor = availableSensors.firstOrNull { it.value == lens.selectedSensorValue }
             var isSensorPickerOpen by remember { mutableStateOf(false) }
             ExposedDropdownMenuBox(

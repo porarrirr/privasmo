@@ -21,7 +21,7 @@ public struct ExportView: View {
         let exportedAtLabel = formatter.string(from: exportedAt)
         
         let startFocal = results.focalLengths.first ?? 14.0
-        let endFocal = results.focalLengths.last ?? 260.0
+        let endFocal = results.focalLengths.last ?? 400.0
         
         return VStack(alignment: .leading, spacing: 16) {
             Text(LocalizedStrings.exportTitle)

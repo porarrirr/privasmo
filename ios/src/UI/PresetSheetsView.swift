@@ -137,14 +137,14 @@ public struct PresetLibrarySheet: View {
                     }
                 }
             }
-            .alert("プリネット名変更", isPresented: $isShowingRenameAlert) {
-                TextField("名前", text: $renameText)
-                Button("保存") {
+            .alert(LocalizedStrings.dialogRenamePresetTitle, isPresented: $isShowingRenameAlert) {
+                TextField(LocalizedStrings.labelName, text: $renameText)
+                Button(LocalizedStrings.actionSave) {
                     if let pid = renameTargetId {
                         viewModel.renamePreset(pid, newName: renameText)
                     }
                 }
-                Button("キャンセル", role: .cancel) {}
+                Button(LocalizedStrings.actionCancel, role: .cancel) {}
             }
             .alert(LocalizedStrings.dialogTitleOverwrite, isPresented: $isShowingOverwriteAlert) {
                 Button(LocalizedStrings.dialogConfirmOverwrite, role: .destructive) {

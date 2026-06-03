@@ -92,7 +92,10 @@ struct DeviceChartContent: ChartContent {
     let lineWidth: Float
 
     private var chartMetrics: [FocalLengthMetrics] {
-        downsampleChartMetrics(device.metricsByFocalLength, nativeFocals: device.lenses.map(\.nativeFocalLength35mm))
+        let opticalFocals = device.lenses.flatMap { lens in
+            [lens.nativeFocalLength35mm, lens.opticalEndFocalLength35mm]
+        }
+        return downsampleChartMetrics(device.metricsByFocalLength, nativeFocals: opticalFocals)
     }
     
     var body: some ChartContent {
@@ -100,7 +103,10 @@ struct DeviceChartContent: ChartContent {
         let lenses = device.lenses
         ForEach(chartMetrics, id: \.focalLength35mm) { metric in
             let yValue = (metricType == .effectiveArea) ? metric.effectiveAreaSqMm : metric.totalLightIntake
-            let isNative = lenses.contains(where: { abs($0.nativeFocalLength35mm - metric.focalLength35mm) < 0.01 })
+            let isNative = lenses.contains(where: { lens in
+                abs(lens.nativeFocalLength35mm - metric.focalLength35mm) < 0.01 ||
+                abs(lens.opticalEndFocalLength35mm - metric.focalLength35mm) < 0.01
+            })
             
             LineMark(
                 x: .value(LocalizedStrings.labelFocalLength, metric.focalLength35mm),
@@ -207,7 +213,7 @@ struct ChartContainerView: View {
         }
         .chartForegroundStyleScale(domain: deviceColorDomain, range: deviceColorRange)
         .chartLegend(.hidden)
-        .chartXScale(domain: (results.focalLengths.first ?? 14.0)...(results.focalLengths.last ?? 260.0))
+        .chartXScale(domain: (results.focalLengths.first ?? 14.0)...(results.focalLengths.last ?? 400.0))
         .frame(height: 220)
         .padding(.top, 10)
     }

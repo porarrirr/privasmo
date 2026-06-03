@@ -32,7 +32,9 @@ data class SavedLensInput(
     val nativeFocalLength: String = "",
     val selectedSensorValue: String = MANUAL_INPUT_SENSOR_VALUE,
     val manualSensorDescriptor: String = "",
-    val fNumber: String = ""
+    val fNumber: String = "",
+    val opticalEndFocalLength: String = "",
+    val endFNumber: String = ""
 )
 
 class DeviceInputRepository(
@@ -103,7 +105,9 @@ class DeviceInputRepository(
                                         selectedSensorValue = lensObject.optString("selectedSensorValue")
                                             .ifBlank { MANUAL_INPUT_SENSOR_VALUE },
                                         manualSensorDescriptor = lensObject.optString("manualSensorDescriptor").orEmpty(),
-                                        fNumber = lensObject.optString("fNumber").orEmpty()
+                                        fNumber = lensObject.optString("fNumber").orEmpty(),
+                                        opticalEndFocalLength = lensObject.optString("opticalEndFocalLength").orEmpty(),
+                                        endFNumber = lensObject.optString("endFNumber").orEmpty()
                                     )
                                 )
                             }

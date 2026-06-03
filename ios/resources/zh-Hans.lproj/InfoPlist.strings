@@ -1,0 +1,2 @@
+CFBundleDisplayName = "手机传感器对比";
+NSPhotoLibraryAddUsageDescription = "用于将对比结果图像保存到照片库。";

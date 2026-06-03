@@ -64,8 +64,9 @@ public struct ResultsSectionView: View {
             VStack(alignment: .leading, spacing: 8) {
                 specRow(label: LocalizedStrings.metricTotalLightIntake, value: String(format: "%.2f", metric.totalLightIntake), highlight: true)
                 specRow(label: LocalizedStrings.metricEffectiveArea, value: String(format: "%.2f mm²", metric.effectiveAreaSqMm))
-                specRow(label: LocalizedStrings.metricFNumber, value: String(format: "f/%.2f", metric.baseLens.fNumber))
-                specRow(label: LocalizedStrings.metricDigitalZoom, value: metric.zoomRatio > 1.001 ? String(format: "%.2fx", metric.zoomRatio) : "1.0x (Native)")
+                specRow(label: LocalizedStrings.labelEstimatedFNumber, value: String(format: "f/%.2f", metric.effectiveFNumber))
+                specRow(label: LocalizedStrings.labelOpticalZoomRatio, value: String(format: "%.2fx", metric.opticalZoomRatio))
+                specRow(label: LocalizedStrings.labelDigitalCropRatio, value: String(format: "%.2fx", metric.digitalCropRatio))
             }
             
             // Collapsible extra details
@@ -74,7 +75,8 @@ public struct ResultsSectionView: View {
                     Divider()
                         .padding(.vertical, 4)
                     
-                    specRow(label: LocalizedStrings.metricActualFocalLength, value: String(format: "%.1f mm", metric.baseLens.actualFocalLengthMm))
+                    specRow(label: LocalizedStrings.labelVariableOpticalRange, value: opticalRangeValue(for: metric))
+                    specRow(label: LocalizedStrings.metricActualFocalLength, value: String(format: "%.1f mm", metric.opticalActualFocalLengthMm))
                     specRow(label: LocalizedStrings.metricEffectiveAperture, value: String(format: "%.2f mm", metric.apertureDiameterMm))
                     specRow(label: LocalizedStrings.metricApertureArea, value: String(format: "%.2f mm²", metric.apertureAreaSqMm))
                 }
@@ -98,5 +100,16 @@ public struct ResultsSectionView: View {
                 .font(.caption.bold())
                 .foregroundColor(highlight ? .accentColor : .primary)
         }
+    }
+
+    private func opticalRangeValue(for metric: FocalLengthMetrics) -> String {
+        if metric.baseLens.isVariableOptical {
+            return String(
+                format: "%.0f-%.0f mm",
+                metric.baseLens.nativeFocalLength35mm,
+                metric.baseLens.opticalEndFocalLength35mm
+            )
+        }
+        return String(format: "%.0f mm", metric.baseLens.nativeFocalLength35mm)
     }
 }

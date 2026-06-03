@@ -53,6 +53,8 @@
     <string name="label_preset_name">预设名称</string>
     <string name="label_focal_length">焦距（35mm 等效）</string>
     <string name="label_f_number">F 值</string>
+    <string name="label_optical_end_focal_length">光学终端焦距</string>
+    <string name="label_end_f_number">终端 F 值</string>
     <string name="label_sensor">传感器</string>
     <string name="label_megapixels">像素数 (MP)</string>
     <string name="label_pixel_size_um">像素尺寸 (µm)</string>
@@ -106,6 +108,7 @@
     <string name="chart_marker_focal_length_mm">焦距：%1$smm</string>
     <string name="chart_marker_zoom_digital">数字变焦（裁切）：%1$sx（基准：%2$smm）</string>
     <string name="chart_marker_zoom_optical">光学（原生镜头：%1$smm）</string>
+    <string name="chart_marker_zoom_optical_crop">光学焦距：%1$smm / 光学：%2$sx / 裁切：%3$sx</string>
     <string name="chart_marker_value_format">%1$s：%2$s%3$s</string>
     <string name="chart_marker_unit_prefix"> %1$s</string>
 
@@ -170,6 +173,10 @@
     <string name="metric_effective_dimensions">有效尺寸</string>
     <string name="metric_effective_aperture">有效口径</string>
     <string name="metric_digital_zoom">数字变焦</string>
+    <string name="label_variable_optical_range">可变光学变焦范围</string>
+    <string name="label_digital_crop_ratio">裁切倍率</string>
+    <string name="label_optical_zoom_ratio">光学变焦倍率</string>
+    <string name="label_estimated_f_number">估算 F 值</string>
     <string name="metric_lens_used">使用镜头</string>
     <string name="value_lens_used_format">%1$smm（35mm 等效）</string>
     <string name="metric_binning_characteristic">像素合并特性</string>
@@ -181,4 +188,3 @@
     <string name="error_activity_not_found">未找到 Activity</string>
     <string name="title_share_image">分享</string>
 </resources>
-

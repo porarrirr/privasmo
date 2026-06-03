@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 private const val DEFAULT_MANUAL_SENSOR_VALUE = "1/1.33"
 private const val TAG = "SensorComparisonViewModel"
 
-private val DEFAULT_FOCAL_LENGTHS = (14..260).map { it.toDouble() }
+private val DEFAULT_FOCAL_LENGTHS = (14..400).map { it.toDouble() }
 private val HEX_REGEX = Regex("^#[0-9A-F]{6}$")
 
 sealed interface SensorComparisonEvent {
@@ -57,7 +57,9 @@ data class LensInputState(
     val nativeFocalLength: String,
     val selectedSensorValue: String,
     val manualSensorDescriptor: String,
-    val fNumber: String
+    val fNumber: String,
+    val opticalEndFocalLength: String = "",
+    val endFNumber: String = ""
 ) {
     val usesManualSensor: Boolean get() = selectedSensorValue == MANUAL_INPUT_SENSOR_VALUE
 }
@@ -107,7 +109,14 @@ data class SensorComparisonUiState(
             val flValid = lens.nativeFocalLength.toDoubleOrNull()?.let { it > 0.0 } == true
             val fNumberValid = lens.fNumber.toDoubleOrNull()?.let { it > 0.0 } == true
             val sensorValid = if (lens.usesManualSensor) isValidManualSensorDescriptor(lens.manualSensorDescriptor) else true
-            flValid && fNumberValid && sensorValid
+            val focal = lens.nativeFocalLength.toDoubleOrNull()
+            val fNumber = lens.fNumber.toDoubleOrNull()
+            val opticalValid = if (focal != null && fNumber != null) {
+                parseOptionalOpticalLensInput(lens, focal, fNumber) != null
+            } else {
+                false
+            }
+            flValid && fNumberValid && sensorValid && opticalValid
         }
     }
 
@@ -554,6 +563,14 @@ class SensorComparisonViewModel @JvmOverloads constructor(
         updateLens(deviceId, lensId) { it.copy(fNumber = value) }
     }
 
+    fun updateLensOpticalEndFocalLength(deviceId: Long, lensId: Long, value: String) {
+        updateLens(deviceId, lensId) { it.copy(opticalEndFocalLength = value) }
+    }
+
+    fun updateLensEndFNumber(deviceId: Long, lensId: Long, value: String) {
+        updateLens(deviceId, lensId) { it.copy(endFNumber = value) }
+    }
+
     fun updateLensSensorSelection(deviceId: Long, lensId: Long, newValue: String) {
         updateLens(deviceId, lensId) { lens ->
             if (newValue == MANUAL_INPUT_SENSOR_VALUE) {
@@ -670,7 +687,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                     nativeFocalLength = lensSnapshot.nativeFocalLength.ifBlank { "24" },
                     selectedSensorValue = resolved.value,
                     manualSensorDescriptor = manualDescriptor,
-                    fNumber = lensSnapshot.fNumber.ifBlank { "1.8" }
+                    fNumber = lensSnapshot.fNumber.ifBlank { "1.8" },
+                    opticalEndFocalLength = lensSnapshot.opticalEndFocalLength,
+                    endFNumber = lensSnapshot.endFNumber
                 )
             }
         val sanitizedName = deviceSnapshot.name.ifBlank {
@@ -701,7 +720,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
             nativeFocalLength = sanitizedFocal,
             selectedSensorValue = selectedSensorValue,
             manualSensorDescriptor = manual,
-            fNumber = sanitizedFNumber
+            fNumber = sanitizedFNumber,
+            opticalEndFocalLength = opticalEndFocalLength.trim(),
+            endFNumber = endFNumber.trim()
         )
     }
 
@@ -725,7 +746,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                         nativeFocalLength = lens.nativeFocalLength,
                         selectedSensorValue = lens.selectedSensorValue,
                         manualSensorDescriptor = manualDescriptor,
-                        fNumber = lens.fNumber
+                        fNumber = lens.fNumber,
+                        opticalEndFocalLength = lens.opticalEndFocalLength,
+                        endFNumber = lens.endFNumber
                     )
                 }
             )
@@ -770,7 +793,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                             nativeFocalLength = lens.nativeFocalLength.trim().ifBlank { "24" },
                             selectedSensorValue = selection.value,
                             manualSensorDescriptor = selection.manualDescriptor ?: "",
-                            fNumber = lens.fNumber.trim().ifBlank { "1.8" }
+                            fNumber = lens.fNumber.trim().ifBlank { "1.8" },
+                            opticalEndFocalLength = lens.opticalEndFocalLength.trim(),
+                            endFNumber = lens.endFNumber.trim()
                         )
                     }
                 DeviceInputState(
@@ -844,7 +869,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
                     nativeFocalLength = lensPreset.focalLength.toString(),
                     selectedSensorValue = if (isManual) MANUAL_INPUT_SENSOR_VALUE else sensor!!.value,
                     manualSensorDescriptor = if (isManual) lensPreset.sensorName else "",
-                    fNumber = lensPreset.fNumber.toString()
+                    fNumber = lensPreset.fNumber.toString(),
+                    opticalEndFocalLength = lensPreset.opticalEndFocalLength?.toString().orEmpty(),
+                    endFNumber = lensPreset.endFNumber?.toString().orEmpty()
                 )
             }
             DeviceInputState(
@@ -864,7 +891,9 @@ class SensorComparisonViewModel @JvmOverloads constructor(
     private data class LensPreset(
         val focalLength: Double,
         val sensorName: String,
-        val fNumber: Double
+        val fNumber: Double,
+        val opticalEndFocalLength: Double? = null,
+        val endFNumber: Double? = null
     )
 
     private fun defaultDeviceName(index: Int): String {

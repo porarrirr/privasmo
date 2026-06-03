@@ -54,6 +54,8 @@
     <string name="label_preset_name">Preset Name</string>
     <string name="label_focal_length">Focal length (35mm equivalent)</string>
     <string name="label_f_number">F-number</string>
+    <string name="label_optical_end_focal_length">Optical end focal length</string>
+    <string name="label_end_f_number">End F-number</string>
     <string name="label_sensor">Sensor</string>
     <string name="label_megapixels">Megapixels (MP)</string>
     <string name="label_pixel_size_um">Pixel size (µm)</string>
@@ -111,6 +113,7 @@
     <string name="chart_marker_focal_length_mm">Focal length: %1$smm</string>
     <string name="chart_marker_zoom_digital">Digital zoom (crop): %1$sx (base: %2$smm)</string>
     <string name="chart_marker_zoom_optical">Optical (native lens: %1$smm)</string>
+    <string name="chart_marker_zoom_optical_crop">Optical focal: %1$smm / optical: %2$sx / crop: %3$sx</string>
     <string name="chart_marker_value_format">%1$s: %2$s%3$s</string>
     <string name="chart_marker_unit_prefix"> %1$s</string>
 
@@ -175,6 +178,10 @@
     <string name="metric_effective_dimensions">Effective dimensions</string>
     <string name="metric_effective_aperture">Effective aperture</string>
     <string name="metric_digital_zoom">Digital zoom</string>
+    <string name="label_variable_optical_range">Variable optical zoom range</string>
+    <string name="label_digital_crop_ratio">Crop ratio</string>
+    <string name="label_optical_zoom_ratio">Optical zoom ratio</string>
+    <string name="label_estimated_f_number">Estimated F-number</string>
     <string name="metric_lens_used">Lens used</string>
     <string name="value_lens_used_format">%1$smm (35mm equivalent)</string>
     <string name="metric_binning_characteristic">Binning characteristics</string>
@@ -186,4 +193,3 @@
     <string name="error_activity_not_found">Activity not found</string>
     <string name="title_share_image">Share</string>
 </resources>
-

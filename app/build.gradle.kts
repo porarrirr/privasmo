@@ -12,6 +12,17 @@ val keystoreProperties = Properties().apply {
         keystorePropertiesFile.inputStream().use(::load)
     }
 }
+val hasReleaseKeystore = keystorePropertiesFile.exists()
+val isReleaseBuildRequested = gradle.startParameter.taskNames.any { taskName ->
+    val normalized = taskName.substringAfterLast(':')
+    normalized.equals("assemble", ignoreCase = true) ||
+        normalized.equals("bundle", ignoreCase = true) ||
+        normalized.contains("Release", ignoreCase = true)
+}
+
+if (!hasReleaseKeystore && isReleaseBuildRequested) {
+    error("keystore.properties not found. Create it to sign release builds.")
+}
 
 fun Properties.requireString(key: String): String =
     getProperty(key) ?: error("Missing $key in keystore.properties")
@@ -31,20 +42,21 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            require(keystorePropertiesFile.exists()) {
-                "keystore.properties not found. Create it to sign release builds."
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(keystoreProperties.requireString("storeFile"))
+                storePassword = keystoreProperties.requireString("storePassword")
+                keyAlias = keystoreProperties.requireString("keyAlias")
+                keyPassword = keystoreProperties.requireString("keyPassword")
             }
-            storeFile = file(keystoreProperties.requireString("storeFile"))
-            storePassword = keystoreProperties.requireString("storePassword")
-            keyAlias = keystoreProperties.requireString("keyAlias")
-            keyPassword = keystoreProperties.requireString("keyPassword")
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            if (hasReleaseKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

@@ -1,187 +1,213 @@
 import Foundation
 
+private func NSLocalizedString(_ key: String, comment: String) -> String {
+    if let languageOverride = UserDefaults.standard.string(forKey: "app_language_override"),
+       let path = Bundle.main.path(forResource: languageOverride, ofType: "lproj"),
+       let bundle = Bundle(path: path) {
+        return bundle.localizedString(forKey: key, value: nil, table: nil)
+    }
+    return Foundation.NSLocalizedString(key, comment: comment)
+}
+
 public struct LocalizedStrings {
-    public static let appName = "スマートフォンセンサー比較ツール"
-    public static let errorFailedToLoadSensorDatabase = "センサーデータベースの読み込みに失敗しました"
-    public static let errorFailedToRestoreDeviceInputs = "入力内容の復元に失敗しました"
-    public static let errorFailedToSaveDeviceInputs = "入力内容の保存に失敗しました"
-    public static let errorFailedToLoadCustomSensors = "カスタムセンサーの読み込みに失敗しました"
-    public static let errorFailedToSaveCustomSensors = "カスタムセンサーの保存に失敗しました"
-    public static let errorFailedToLoadPresets = "プリセットの読み込みに失敗しました"
-    public static let errorPresetNameRequired = "プリセット名を入力してください"
-    public static let errorPresetTargetRequired = "保存対象のデバイスを選択してください"
-    public static let errorPresetNoLenses = "保存するレンズ設定がありません"
-    public static let errorMaxDevicesReached = "これ以上端末を追加できません (最大%d台)"
-    public static let errorOverwriteTargetRequired = "上書きするデバイスを選択してください"
-    public static let errorOverwriteTargetNotFound = "上書きするデバイスが見つかりません"
-    public static let errorNewPresetNameRequired = "新しいプリセット名を入力してください"
-    public static let errorPresetOperationFailed = "プリセット処理に失敗しました"
+    public static var appName: String { NSLocalizedString("appName", comment: "") }
+    public static var errorFailedToLoadSensorDatabase: String { NSLocalizedString("errorFailedToLoadSensorDatabase", comment: "") }
+    public static var errorFailedToRestoreDeviceInputs: String { NSLocalizedString("errorFailedToRestoreDeviceInputs", comment: "") }
+    public static var errorFailedToSaveDeviceInputs: String { NSLocalizedString("errorFailedToSaveDeviceInputs", comment: "") }
+    public static var errorFailedToLoadCustomSensors: String { NSLocalizedString("errorFailedToLoadCustomSensors", comment: "") }
+    public static var errorFailedToSaveCustomSensors: String { NSLocalizedString("errorFailedToSaveCustomSensors", comment: "") }
+    public static var errorFailedToLoadPresets: String { NSLocalizedString("errorFailedToLoadPresets", comment: "") }
+    public static var errorPresetNameRequired: String { NSLocalizedString("errorPresetNameRequired", comment: "") }
+    public static var errorPresetTargetRequired: String { NSLocalizedString("errorPresetTargetRequired", comment: "") }
+    public static var errorPresetNoLenses: String { NSLocalizedString("errorPresetNoLenses", comment: "") }
+    public static var errorMaxDevicesReached: String { NSLocalizedString("errorMaxDevicesReached", comment: "") }
+    public static var errorOverwriteTargetRequired: String { NSLocalizedString("errorOverwriteTargetRequired", comment: "") }
+    public static var errorOverwriteTargetNotFound: String { NSLocalizedString("errorOverwriteTargetNotFound", comment: "") }
+    public static var errorNewPresetNameRequired: String { NSLocalizedString("errorNewPresetNameRequired", comment: "") }
+    public static var errorPresetOperationFailed: String { NSLocalizedString("errorPresetOperationFailed", comment: "") }
 
-    public static let sensorComparisonTitle = "センサー比較"
-    public static let actionSave = "保存"
-    public static let actionLoad = "呼び出し"
-    public static let actionList = "一覧"
-    public static let actionClose = "閉じる"
-    public static let actionClear = "クリア"
-    public static let actionCancel = "キャンセル"
-    public static let actionRename = "名前変更"
-    public static let actionAddDevice = "デバイスを追加"
-    public static let actionAddDeviceAsDevice = "デバイスとして追加"
-    public static let actionOverwrite = "上書き"
-    public static let actionOpenColorPalette = "カラーパレットを開く"
-    public static let actionSaveResultsImage = "結果を画像で保存"
-    public static let actionShareResultsImage = "結果を共有"
-    public static let actionBack = "戻る"
-    public static let actionAdd = "追加"
-    public static let actionEdit = "編集"
-    public static let actionDelete = "削除"
-    public static let actionResetDefault = "デフォルトに戻す"
-    public static let actionRegenerate = "再生成"
+    public static var sensorComparisonTitle: String { NSLocalizedString("sensorComparisonTitle", comment: "") }
+    public static var actionSave: String { NSLocalizedString("actionSave", comment: "") }
+    public static var actionLoad: String { NSLocalizedString("actionLoad", comment: "") }
+    public static var actionList: String { NSLocalizedString("actionList", comment: "") }
+    public static var actionClose: String { NSLocalizedString("actionClose", comment: "") }
+    public static var actionClear: String { NSLocalizedString("actionClear", comment: "") }
+    public static var actionCancel: String { NSLocalizedString("actionCancel", comment: "") }
+    public static var actionRename: String { NSLocalizedString("actionRename", comment: "") }
+    public static var actionAddDevice: String { NSLocalizedString("actionAddDevice", comment: "") }
+    public static var actionAddDeviceAsDevice: String { NSLocalizedString("actionAddDeviceAsDevice", comment: "") }
+    public static var actionOverwrite: String { NSLocalizedString("actionOverwrite", comment: "") }
+    public static var actionOpenColorPalette: String { NSLocalizedString("actionOpenColorPalette", comment: "") }
+    public static var actionSaveResultsImage: String { NSLocalizedString("actionSaveResultsImage", comment: "") }
+    public static var actionShareResultsImage: String { NSLocalizedString("actionShareResultsImage", comment: "") }
+    public static var actionBack: String { NSLocalizedString("actionBack", comment: "") }
+    public static var actionAdd: String { NSLocalizedString("actionAdd", comment: "") }
+    public static var actionEdit: String { NSLocalizedString("actionEdit", comment: "") }
+    public static var actionDelete: String { NSLocalizedString("actionDelete", comment: "") }
+    public static var actionResetDefault: String { NSLocalizedString("actionResetDefault", comment: "") }
+    public static var actionRegenerate: String { NSLocalizedString("actionRegenerate", comment: "") }
 
-    public static let menuSettings = "設定"
-    public static let settingsTitle = "設定"
+    public static var menuSettings: String { NSLocalizedString("menuSettings", comment: "") }
+    public static var settingsTitle: String { NSLocalizedString("settingsTitle", comment: "") }
 
-    public static let buttonGenerateGraph = "グラフ生成 / 更新"
-    public static let buttonAddLensWithMax = "レンズ追加 (最大%d個)"
-    public static let buttonSaveAsPreset = "プリセットとして保存"
+    public static var buttonGenerateGraph: String { NSLocalizedString("buttonGenerateGraph", comment: "") }
+    public static var buttonAddLensWithMax: String { NSLocalizedString("buttonAddLensWithMax", comment: "") }
+    public static var buttonSaveAsPreset: String { NSLocalizedString("buttonSaveAsPreset", comment: "") }
 
-    public static let labelName = "名前"
-    public static let labelSensorName = "センサー名"
-    public static let labelTargetDevice = "対象デバイス"
-    public static let labelPresetSaveTitle = "プリセット保存"
-    public static let labelPresetSaveTargetDevice = "保存対象のデバイス"
-    public static let labelPresetSaveTargetDeviceField = "保存対象デバイス"
-    public static let labelPresetNewName = "新しいプリセット名"
-    public static let labelPresetOverwriteTargetDevice = "上書き先デバイス"
-    public static let labelPresetName = "プリセット名"
-    public static let labelFocalLength = "焦点距離 (35mm換算)"
-    public static let labelFNumber = "F値"
-    public static let labelSensor = "センサー"
-    public static let labelMegapixels = "画素数 (MP)"
-    public static let labelPixelSizeUm = "ピクセルサイズ (µm)"
-    public static let labelBinning = "ビニング"
-    public static let labelChartLineWidth = "グラフ線の太さ"
-    public static let labelExportImageAspectRatio = "共有画像のアスペクト比"
-    public static let helperExportImageAspectRatioRange = "幅と高さは %d 〜 %d の範囲で入力してください。"
-    public static let labelCurrentExportAspectRatio = "現在の比率: %d:%d"
-    public static let labelAspectRatioWidth = "幅"
-    public static let labelAspectRatioHeight = "高さ"
-    public static let actionApplyExportImageAspectRatio = "この比率を適用"
-    public static let labelCustomSensorList = "センサー一覧（カスタム）"
-    public static let labelManualInputExample = "手動入力 (例: 1/1.28)"
-    public static let helperInvalidFractionFormat = "有効な分数形式で入力してください (例: 1/1.28)"
-    public static let labelSearch = "検索"
-    public static let placeholderSearchSensor = "IMX989 / Samsung など"
-    public static let labelAll = "すべて"
-    public static let labelCustomColor = "カスタム色 (#RRGGBB)"
-    public static let helperHexSixDigits = "6桁の16進数で入力してください"
-    public static let titleColorPalette = "カラーパレット"
+    public static var labelName: String { NSLocalizedString("labelName", comment: "") }
+    public static var labelSensorName: String { NSLocalizedString("labelSensorName", comment: "") }
+    public static var labelTargetDevice: String { NSLocalizedString("labelTargetDevice", comment: "") }
+    public static var labelPresetSaveTitle: String { NSLocalizedString("labelPresetSaveTitle", comment: "") }
+    public static var labelPresetSaveTargetDevice: String { NSLocalizedString("labelPresetSaveTargetDevice", comment: "") }
+    public static var labelPresetSaveTargetDeviceField: String { NSLocalizedString("labelPresetSaveTargetDeviceField", comment: "") }
+    public static var labelPresetNewName: String { NSLocalizedString("labelPresetNewName", comment: "") }
+    public static var labelPresetOverwriteTargetDevice: String { NSLocalizedString("labelPresetOverwriteTargetDevice", comment: "") }
+    public static var labelPresetName: String { NSLocalizedString("labelPresetName", comment: "") }
+    public static var labelFocalLength: String { NSLocalizedString("labelFocalLength", comment: "") }
+    public static var labelFNumber: String { NSLocalizedString("labelFNumber", comment: "") }
+    public static var labelOpticalEndFocalLength: String { NSLocalizedString("labelOpticalEndFocalLength", comment: "") }
+    public static var labelEndFNumber: String { NSLocalizedString("labelEndFNumber", comment: "") }
+    public static var labelSensor: String { NSLocalizedString("labelSensor", comment: "") }
+    public static var labelMegapixels: String { NSLocalizedString("labelMegapixels", comment: "") }
+    public static var labelPixelSizeUm: String { NSLocalizedString("labelPixelSizeUm", comment: "") }
+    public static var labelBinning: String { NSLocalizedString("labelBinning", comment: "") }
+    public static var labelChartLineWidth: String { NSLocalizedString("labelChartLineWidth", comment: "") }
+    public static var labelExportImageAspectRatio: String { NSLocalizedString("labelExportImageAspectRatio", comment: "") }
+    public static var helperExportImageAspectRatioRange: String { NSLocalizedString("helperExportImageAspectRatioRange", comment: "") }
+    public static var labelCurrentExportAspectRatio: String { NSLocalizedString("labelCurrentExportAspectRatio", comment: "") }
+    public static var labelAspectRatioWidth: String { NSLocalizedString("labelAspectRatioWidth", comment: "") }
+    public static var labelAspectRatioHeight: String { NSLocalizedString("labelAspectRatioHeight", comment: "") }
+    public static var actionApplyExportImageAspectRatio: String { NSLocalizedString("actionApplyExportImageAspectRatio", comment: "") }
+    public static var labelCustomSensorList: String { NSLocalizedString("labelCustomSensorList", comment: "") }
+    public static var labelManualInputExample: String { NSLocalizedString("labelManualInputExample", comment: "") }
+    public static var helperInvalidFractionFormat: String { NSLocalizedString("helperInvalidFractionFormat", comment: "") }
+    public static var labelSearch: String { NSLocalizedString("labelSearch", comment: "") }
+    public static var placeholderSearchSensor: String { NSLocalizedString("placeholderSearchSensor", comment: "") }
+    public static var labelAll: String { NSLocalizedString("labelAll", comment: "") }
+    public static var labelCustomColor: String { NSLocalizedString("labelCustomColor", comment: "") }
+    public static var helperHexSixDigits: String { NSLocalizedString("helperHexSixDigits", comment: "") }
+    public static var titleColorPalette: String { NSLocalizedString("titleColorPalette", comment: "") }
 
-    public static let dialogTitleOverwrite = "上書きしますか？"
-    public static let dialogConfirmOverwrite = "上書きする"
-    public static let dialogDeleteSensorTitle = "センサーを削除"
-    public static let dialogDeleteSensorMessage = "「%@」を削除しますか？"
-    public static let dialogDeleteDeviceTitle = "デバイスを削除"
-    public static let dialogDeleteDeviceMessage = "「%@」を削除しますか？\nすべてのレンズ設定が失われます。"
+    public static var dialogTitleOverwrite: String { NSLocalizedString("dialogTitleOverwrite", comment: "") }
+    public static var dialogConfirmOverwrite: String { NSLocalizedString("dialogConfirmOverwrite", comment: "") }
+    public static var dialogDeleteSensorTitle: String { NSLocalizedString("dialogDeleteSensorTitle", comment: "") }
+    public static var dialogDeleteSensorMessage: String { NSLocalizedString("dialogDeleteSensorMessage", comment: "") }
+    public static var dialogDeleteDeviceTitle: String { NSLocalizedString("dialogDeleteDeviceTitle", comment: "") }
+    public static var dialogDeleteDeviceMessage: String { NSLocalizedString("dialogDeleteDeviceMessage", comment: "") }
 
-    public static let toastImageSaved = "画像を保存しました"
-    public static let errorFailedToSaveImage = "画像の保存に失敗しました"
-    public static let errorFailedToCreateShareImage = "共有用画像の生成に失敗しました"
-    public static let messagePresetSaved = "プリセットを保存しました: %@"
-    public static let messageDeviceAdded = "デバイスを追加しました: %@"
-    public static let messageDeviceOverwritten = "デバイスを上書きしました: %@"
-    public static let messagePresetDeleted = "プリセットを削除しました"
-    public static let messagePresetRenamed = "プリセット名を変更しました"
-    public static let titleAddSensor = "センサー追加"
-    public static let titleEditSensor = "センサー編集"
-    public static let errorDuplicateSensorName = "同名のセンサーが既に存在します。"
-    public static let helperCustomSensorEditor = "MP・ピクセルサイズを入力し、ビニングを選択して追加できます。"
-    public static let textNoCustomSensors = "まだ登録されていません。"
+    public static var toastImageSaved: String { NSLocalizedString("toastImageSaved", comment: "") }
+    public static var errorFailedToSaveImage: String { NSLocalizedString("errorFailedToSaveImage", comment: "") }
+    public static var errorFailedToCreateShareImage: String { NSLocalizedString("errorFailedToCreateShareImage", comment: "") }
+    public static var messagePresetSaved: String { NSLocalizedString("messagePresetSaved", comment: "") }
+    public static var messageDeviceAdded: String { NSLocalizedString("messageDeviceAdded", comment: "") }
+    public static var messageDeviceOverwritten: String { NSLocalizedString("messageDeviceOverwritten", comment: "") }
+    public static var messagePresetDeleted: String { NSLocalizedString("messagePresetDeleted", comment: "") }
+    public static var messagePresetRenamed: String { NSLocalizedString("messagePresetRenamed", comment: "") }
+    public static var titleAddSensor: String { NSLocalizedString("titleAddSensor", comment: "") }
+    public static var titleEditSensor: String { NSLocalizedString("titleEditSensor", comment: "") }
+    public static var errorDuplicateSensorName: String { NSLocalizedString("errorDuplicateSensorName", comment: "") }
+    public static var helperCustomSensorEditor: String { NSLocalizedString("helperCustomSensorEditor", comment: "") }
+    public static var textNoCustomSensors: String { NSLocalizedString("textNoCustomSensors", comment: "") }
 
-    public static let labelLens = "レンズ"
-    public static let labelColor = "色"
-    public static let tabDeviceInput = "デバイス入力"
-    public static let tabComparisonGraph = "比較グラフ"
-    public static let messageGenerateGraphFirst = "比較グラフを表示するには、デバイス入力で「グラフ生成 / 更新」を実行してください。"
-    public static let sectionComparisonGraph = "2. 比較グラフ"
-    public static let sectionInteractive = "3. インタラクティブ操作"
-    public static let labelDimensionsWidthHeight = "幅: %.1f mm | 高さ: %.1f mm"
-    public static let chartMarkerDefaultLabel = "値"
-    public static let chartMarkerFocalLengthMm = "焦点距離: %@mm"
-    public static let chartMarkerZoomDigital = "デジタルズーム (クロップ): %@x (元: %@mm)"
-    public static let chartMarkerZoomOptical = "光学 (ネイティブレンズ: %@mm)"
-    public static let chartMarkerValueFormat = "%@: %@%@"
-    public static let chartMarkerUnitPrefix = " %@"
+    public static var labelLens: String { NSLocalizedString("labelLens", comment: "") }
+    public static var labelColor: String { NSLocalizedString("labelColor", comment: "") }
+    public static var tabDeviceInput: String { NSLocalizedString("tabDeviceInput", comment: "") }
+    public static var tabComparisonGraph: String { NSLocalizedString("tabComparisonGraph", comment: "") }
+    public static var messageGenerateGraphFirst: String { NSLocalizedString("messageGenerateGraphFirst", comment: "") }
+    public static var sectionComparisonGraph: String { NSLocalizedString("sectionComparisonGraph", comment: "") }
+    public static var sectionInteractive: String { NSLocalizedString("sectionInteractive", comment: "") }
+    public static var labelDimensionsWidthHeight: String { NSLocalizedString("labelDimensionsWidthHeight", comment: "") }
+    public static var chartMarkerDefaultLabel: String { NSLocalizedString("chartMarkerDefaultLabel", comment: "") }
+    public static var chartMarkerFocalLengthMm: String { NSLocalizedString("chartMarkerFocalLengthMm", comment: "") }
+    public static var chartMarkerZoomDigital: String { NSLocalizedString("chartMarkerZoomDigital", comment: "") }
+    public static var chartMarkerZoomOptical: String { NSLocalizedString("chartMarkerZoomOptical", comment: "") }
+    public static var chartMarkerValueFormat: String { NSLocalizedString("chartMarkerValueFormat", comment: "") }
+    public static var chartMarkerUnitPrefix: String { NSLocalizedString("chartMarkerUnitPrefix", comment: "") }
 
-    public static let appTitleAdvanced = "高度なスマートフォンセンサー比較ツール (総光量対応)"
-    public static let descriptionManualInputGuidance = "センサーリストから選択するか、『手動入力』を選んで 1/1.28 のような分数表記で入力してください。(センサー比率は 4:3 を前提)"
-    public static let sectionDevices = "デバイス"
-    public static let descriptionDevices = "比較対象に追加したいスマホを登録します。"
-    public static let titlePresets = "プリセット"
-    public static let descriptionPresetSummary = "対象デバイス1台分の構成を保存 / 呼び出しできます。"
-    public static let labelDeviceDefaultName = "デバイス"
-    public static let labelDeviceNumberedName = "デバイス %d"
-    public static let labelPresetDeviceDefaultName = "プリセットデバイス"
-    public static let labelUntitledDevice = "無題のデバイス"
-    public static let labelUnselected = "未選択"
-    public static let labelNone = "なし"
-    public static let textSourcePresetForDevice = "このデバイスの元プリセット: %@"
-    public static let textSavedCount = "保存済み: %d 件"
-    public static let textNoOperableDevices = "操作できるデバイスがありません。先にデバイスを追加してください。"
-    public static let descriptionSelectedDeviceSaved = "選択したデバイスの構成を保存します。"
-    public static let titlePresetLibrary = "プリセット一覧"
-    public static let textNoOverwriteTargetDevices = "上書きできるデバイスがありません。先にデバイスを追加してください。"
-    public static let descriptionPresetAddOrOverwrite = "「追加」は比較対象に新しいデバイスとして追加します。\n「上書き」は上書き先デバイスの設定を置き換えます。"
-    public static let textMaxDevicesReachedHint = "端末数が上限です (最大%d台)。削除してから読み込んでください。"
-    public static let titleSavedPresetsWithCount = "保存済みプリセット (%d)"
-    public static let textNoPresetsRegistered = "まだプリセットは登録されていません。"
-    public static let labelLastUpdatedUnknown = "最終更新: -"
-    public static let labelLastUpdated = "最終更新: %@"
-    public static let labelDeviceNameWithValue = "端末名: %@"
-    public static let labelLensCountWithValue = "レンズ数: %d"
-    public static let labelSourceForTarget = "対象の元"
-    public static let dialogOverwriteTargetMessage = "上書き先: %@\n端末名・色・レンズ設定が置き換わります。"
-    public static let contentDescDeletePreset = "プリセットを削除"
-    public static let contentDescDeleteDevice = "デバイスを削除"
-    public static let contentDescDeleteLens = "レンズを削除"
-    public static let hintSwipeDevices = "左右にスワイプしてデバイスを切り替えられます"
-    public static let labelManualInput = "手動入力"
-    public static let titleSensorPicker = "センサー選択"
-    public static let textNoMatchingSensors = "該当するセンサーがありません"
-    public static let labelSelectedShort = "選択中"
-    public static let labelGraphDisplayRange = "グラフ表示範囲 (35mm換算)"
-    public static let labelGraphRangeCompact = "%@mm 〜 %@mm"
-    public static let labelLeftEdge = "左端: %@mm"
-    public static let labelRightEdge = "右端: %@mm"
-    public static let labelSelectedFocalLength = "焦点距離 (35mm換算): %@mm"
-    public static let chartTitleEffectiveArea = "有効センサー面積の比較"
-    public static let chartYLabelEffectiveArea = "有効センサー面積"
-    public static let chartTitleLightIntake = "集光力 (有効面積 / F値²) の比較"
-    public static let chartYLabelLightIntake = "集光力"
-    public static let exportTitle = "スマートフォンセンサー比較"
-    public static let exportLabelCreatedAt = "作成: %@"
-    public static let exportLabelRange = "表示範囲: %@mm 〜 %@mm"
-    public static let exportSectionChart = "比較グラフ"
-    public static let exportSectionSpecsAt = "スペック表 (%@mm)"
-    public static let labelPixelPitch = "画素ピッチ"
-    public static let labelPixelPitchBinned = "画素ピッチ (ビニング後)"
-    public static let labelNotAvailable = "N/A"
-    public static let metricEffectiveArea = "有効面積"
-    public static let metricTotalLightIntake = "集光力"
-    public static let metricActualFocalLength = "実焦点距離"
-    public static let metricFNumber = "F値"
-    public static let metricSensorUsed = "使用センサー"
-    public static let metricEffectiveDimensions = "有効寸法"
-    public static let metricEffectiveAperture = "有効口径"
-    public static let metricDigitalZoom = "デジタルズーム"
-    public static let metricLensUsed = "使用レンズ"
-    public static let valueLensUsedFormat = "%@mm (35mm換算)"
-    public static let metricBinningCharacteristic = "ビニング特性"
-    public static let metricNativePixelPitch = "ネイティブ画素ピッチ"
-    public static let metricEffectivePixelPitch = "実効画素ピッチ"
-    public static let metricApertureArea = "開口面積"
-    public static let actionHideDetails = "詳細を隠す ▲"
-    public static let actionShowDetails = "詳細を表示 ▼"
-    public static let errorActivityNotFound = "Activity が見つかりません"
-    public static let titleShareImage = "共有"
+    public static var appTitleAdvanced: String { NSLocalizedString("appTitleAdvanced", comment: "") }
+    public static var descriptionManualInputGuidance: String { NSLocalizedString("descriptionManualInputGuidance", comment: "") }
+    public static var sectionDevices: String { NSLocalizedString("sectionDevices", comment: "") }
+    public static var descriptionDevices: String { NSLocalizedString("descriptionDevices", comment: "") }
+    public static var titlePresets: String { NSLocalizedString("titlePresets", comment: "") }
+    public static var descriptionPresetSummary: String { NSLocalizedString("descriptionPresetSummary", comment: "") }
+    public static var labelDeviceDefaultName: String { NSLocalizedString("labelDeviceDefaultName", comment: "") }
+    public static var labelDeviceNumberedName: String { NSLocalizedString("labelDeviceNumberedName", comment: "") }
+    public static var labelPresetDeviceDefaultName: String { NSLocalizedString("labelPresetDeviceDefaultName", comment: "") }
+    public static var labelUntitledDevice: String { NSLocalizedString("labelUntitledDevice", comment: "") }
+    public static var labelUnselected: String { NSLocalizedString("labelUnselected", comment: "") }
+    public static var labelNone: String { NSLocalizedString("labelNone", comment: "") }
+    public static var textSourcePresetForDevice: String { NSLocalizedString("textSourcePresetForDevice", comment: "") }
+    public static var textSavedCount: String { NSLocalizedString("textSavedCount", comment: "") }
+    public static var textNoOperableDevices: String { NSLocalizedString("textNoOperableDevices", comment: "") }
+    public static var descriptionSelectedDeviceSaved: String { NSLocalizedString("descriptionSelectedDeviceSaved", comment: "") }
+    public static var titlePresetLibrary: String { NSLocalizedString("titlePresetLibrary", comment: "") }
+    public static var textNoOverwriteTargetDevices: String { NSLocalizedString("textNoOverwriteTargetDevices", comment: "") }
+    public static var descriptionPresetAddOrOverwrite: String { NSLocalizedString("descriptionPresetAddOrOverwrite", comment: "") }
+    public static var textMaxDevicesReachedHint: String { NSLocalizedString("textMaxDevicesReachedHint", comment: "") }
+    public static var titleSavedPresetsWithCount: String { NSLocalizedString("titleSavedPresetsWithCount", comment: "") }
+    public static var textNoPresetsRegistered: String { NSLocalizedString("textNoPresetsRegistered", comment: "") }
+    public static var labelLastUpdatedUnknown: String { NSLocalizedString("labelLastUpdatedUnknown", comment: "") }
+    public static var labelLastUpdated: String { NSLocalizedString("labelLastUpdated", comment: "") }
+    public static var labelDeviceNameWithValue: String { NSLocalizedString("labelDeviceNameWithValue", comment: "") }
+    public static var labelLensCountWithValue: String { NSLocalizedString("labelLensCountWithValue", comment: "") }
+    public static var labelSourceForTarget: String { NSLocalizedString("labelSourceForTarget", comment: "") }
+    public static var dialogOverwriteTargetMessage: String { NSLocalizedString("dialogOverwriteTargetMessage", comment: "") }
+    public static var contentDescDeletePreset: String { NSLocalizedString("contentDescDeletePreset", comment: "") }
+    public static var contentDescDeleteDevice: String { NSLocalizedString("contentDescDeleteDevice", comment: "") }
+    public static var contentDescDeleteLens: String { NSLocalizedString("contentDescDeleteLens", comment: "") }
+    public static var hintSwipeDevices: String { NSLocalizedString("hintSwipeDevices", comment: "") }
+    public static var labelManualInput: String { NSLocalizedString("labelManualInput", comment: "") }
+    public static var titleSensorPicker: String { NSLocalizedString("titleSensorPicker", comment: "") }
+    public static var textNoMatchingSensors: String { NSLocalizedString("textNoMatchingSensors", comment: "") }
+    public static var labelSelectedShort: String { NSLocalizedString("labelSelectedShort", comment: "") }
+    public static var labelGraphDisplayRange: String { NSLocalizedString("labelGraphDisplayRange", comment: "") }
+    public static var labelGraphRangeCompact: String { NSLocalizedString("labelGraphRangeCompact", comment: "") }
+    public static var labelLeftEdge: String { NSLocalizedString("labelLeftEdge", comment: "") }
+    public static var labelRightEdge: String { NSLocalizedString("labelRightEdge", comment: "") }
+    public static var labelSelectedFocalLength: String { NSLocalizedString("labelSelectedFocalLength", comment: "") }
+    public static var chartTitleEffectiveArea: String { NSLocalizedString("chartTitleEffectiveArea", comment: "") }
+    public static var chartYLabelEffectiveArea: String { NSLocalizedString("chartYLabelEffectiveArea", comment: "") }
+    public static var chartTitleLightIntake: String { NSLocalizedString("chartTitleLightIntake", comment: "") }
+    public static var chartYLabelLightIntake: String { NSLocalizedString("chartYLabelLightIntake", comment: "") }
+    public static var exportTitle: String { NSLocalizedString("exportTitle", comment: "") }
+    public static var exportLabelCreatedAt: String { NSLocalizedString("exportLabelCreatedAt", comment: "") }
+    public static var exportLabelRange: String { NSLocalizedString("exportLabelRange", comment: "") }
+    public static var exportSectionChart: String { NSLocalizedString("exportSectionChart", comment: "") }
+    public static var exportSectionSpecsAt: String { NSLocalizedString("exportSectionSpecsAt", comment: "") }
+    public static var labelPixelPitch: String { NSLocalizedString("labelPixelPitch", comment: "") }
+    public static var labelPixelPitchBinned: String { NSLocalizedString("labelPixelPitchBinned", comment: "") }
+    public static var labelNotAvailable: String { NSLocalizedString("labelNotAvailable", comment: "") }
+    public static var metricEffectiveArea: String { NSLocalizedString("metricEffectiveArea", comment: "") }
+    public static var metricTotalLightIntake: String { NSLocalizedString("metricTotalLightIntake", comment: "") }
+    public static var metricActualFocalLength: String { NSLocalizedString("metricActualFocalLength", comment: "") }
+    public static var metricFNumber: String { NSLocalizedString("metricFNumber", comment: "") }
+    public static var metricSensorUsed: String { NSLocalizedString("metricSensorUsed", comment: "") }
+    public static var metricEffectiveDimensions: String { NSLocalizedString("metricEffectiveDimensions", comment: "") }
+    public static var metricEffectiveAperture: String { NSLocalizedString("metricEffectiveAperture", comment: "") }
+    public static var metricDigitalZoom: String { NSLocalizedString("metricDigitalZoom", comment: "") }
+    public static var labelVariableOpticalRange: String { NSLocalizedString("labelVariableOpticalRange", comment: "") }
+    public static var labelDigitalCropRatio: String { NSLocalizedString("labelDigitalCropRatio", comment: "") }
+    public static var labelOpticalZoomRatio: String { NSLocalizedString("labelOpticalZoomRatio", comment: "") }
+    public static var labelEstimatedFNumber: String { NSLocalizedString("labelEstimatedFNumber", comment: "") }
+    public static var metricLensUsed: String { NSLocalizedString("metricLensUsed", comment: "") }
+    public static var valueLensUsedFormat: String { NSLocalizedString("valueLensUsedFormat", comment: "") }
+    public static var metricBinningCharacteristic: String { NSLocalizedString("metricBinningCharacteristic", comment: "") }
+    public static var metricNativePixelPitch: String { NSLocalizedString("metricNativePixelPitch", comment: "") }
+    public static var metricEffectivePixelPitch: String { NSLocalizedString("metricEffectivePixelPitch", comment: "") }
+    public static var metricApertureArea: String { NSLocalizedString("metricApertureArea", comment: "") }
+    public static var actionHideDetails: String { NSLocalizedString("actionHideDetails", comment: "") }
+    public static var actionShowDetails: String { NSLocalizedString("actionShowDetails", comment: "") }
+    public static var errorActivityNotFound: String { NSLocalizedString("errorActivityNotFound", comment: "") }
+    public static var titleShareImage: String { NSLocalizedString("titleShareImage", comment: "") }
+
+    /* New Keys */
+    public static var errorNameRequired: String { NSLocalizedString("errorNameRequired", comment: "") }
+    public static var errorMegapixelsInvalid: String { NSLocalizedString("errorMegapixelsInvalid", comment: "") }
+    public static var errorPixelSizeInvalid: String { NSLocalizedString("errorPixelSizeInvalid", comment: "") }
+    public static var actionShareAreaChart: String { NSLocalizedString("actionShareAreaChart", comment: "") }
+    public static var actionShareLightIntakeChart: String { NSLocalizedString("actionShareLightIntakeChart", comment: "") }
+    public static var labelLensCountCompact: String { NSLocalizedString("labelLensCountCompact", comment: "") }
+    public static var dialogRenamePresetTitle: String { NSLocalizedString("dialogRenamePresetTitle", comment: "") }
+    public static var labelLanguage: String { NSLocalizedString("labelLanguage", comment: "") }
+    public static var labelLanguageAuto: String { NSLocalizedString("labelLanguageAuto", comment: "") }
 }

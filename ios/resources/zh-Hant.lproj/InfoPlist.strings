@@ -1,0 +1,2 @@
+CFBundleDisplayName = "手機感應器對比";
+NSPhotoLibraryAddUsageDescription = "用於將對比結果圖像保存到照片庫。";

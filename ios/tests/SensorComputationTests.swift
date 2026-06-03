@@ -46,6 +46,32 @@ final class SensorComputationTests: XCTestCase {
     private var lenses: [LensProcessed] {
         [wideLens, teleLens]
     }
+
+    private var xiaomi17UltraTeleLens: LensProcessed {
+        LensProcessed(
+            nativeFocalLength35mm: 75.0,
+            fNumber: 2.39,
+            actualFocalLengthMm: 20.0,
+            sensorMetrics: wideSensorMetrics,
+            opticalEndFocalLength35mm: 100.0,
+            endFNumber: 2.96
+        )
+    }
+
+    private var xiaomi17UltraTeleLenses: [LensProcessed] {
+        [xiaomi17UltraTeleLens]
+    }
+
+    private var variableWideLens: LensProcessed {
+        LensProcessed(
+            nativeFocalLength35mm: wideLens.nativeFocalLength35mm,
+            fNumber: wideLens.fNumber,
+            actualFocalLengthMm: wideLens.actualFocalLengthMm,
+            sensorMetrics: wideLens.sensorMetrics,
+            opticalEndFocalLength35mm: 70.0,
+            endFNumber: 2.8
+        )
+    }
     
     func testCalculateEffectiveMetrics_returnsUnityZoomAtNativeFocal() {
         let metrics = calculateEffectiveMetrics(focalLength35mm: 24.0, lenses: lenses)
@@ -87,7 +113,11 @@ final class SensorComputationTests: XCTestCase {
             source: .DATABASE
         )
         let rawLenses = [
-            (24.0, (2.0, invalidMetrics))
+            LensProcessingInput(
+                nativeFocalLength35mm: 24.0,
+                fNumber: 2.0,
+                sensorMetrics: invalidMetrics
+            )
         ]
         
         let processed = computeProcessedDevice(
@@ -102,8 +132,16 @@ final class SensorComputationTests: XCTestCase {
     
     func testComputeProcessedDevice_generatesMetricsForReachableFocals() {
         let rawLenses = [
-            (24.0, (2.0, wideSensorMetrics)),
-            (70.0, (2.8, teleSensorMetrics))
+            LensProcessingInput(
+                nativeFocalLength35mm: 24.0,
+                fNumber: 2.0,
+                sensorMetrics: wideSensorMetrics
+            ),
+            LensProcessingInput(
+                nativeFocalLength35mm: 70.0,
+                fNumber: 2.8,
+                sensorMetrics: teleSensorMetrics
+            )
         ]
         
         let processed = computeProcessedDevice(
@@ -118,5 +156,55 @@ final class SensorComputationTests: XCTestCase {
             processed?.metricsByFocalLength.map { $0.focalLength35mm },
             [24.0, 35.0, 70.0]
         )
+    }
+
+    func testXiaomi17UltraTelephoto_keepsFullAreaWithin75To100mm() {
+        let metrics75 = calculateEffectiveMetrics(focalLength35mm: 75.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics90 = calculateEffectiveMetrics(focalLength35mm: 90.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics100 = calculateEffectiveMetrics(focalLength35mm: 100.0, lenses: xiaomi17UltraTeleLenses)!
+
+        XCTAssertEqual(metrics75.effectiveAreaSqMm, metrics90.effectiveAreaSqMm, accuracy: 0.0001)
+        XCTAssertEqual(metrics75.effectiveAreaSqMm, metrics100.effectiveAreaSqMm, accuracy: 0.0001)
+        XCTAssertEqual(metrics90.digitalCropRatio, 1.0, accuracy: 0.0001)
+        XCTAssertEqual(metrics90.opticalFocalLength35mm, 90.0, accuracy: 0.0001)
+    }
+
+    func testXiaomi17UltraTelephoto_cropsAfter100mm() {
+        let metrics100 = calculateEffectiveMetrics(focalLength35mm: 100.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics200 = calculateEffectiveMetrics(focalLength35mm: 200.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics400 = calculateEffectiveMetrics(focalLength35mm: 400.0, lenses: xiaomi17UltraTeleLenses)!
+
+        XCTAssertEqual(metrics200.effectiveAreaSqMm, metrics100.effectiveAreaSqMm / 4.0, accuracy: 0.0001)
+        XCTAssertEqual(metrics400.effectiveAreaSqMm, metrics100.effectiveAreaSqMm / 16.0, accuracy: 0.0001)
+        XCTAssertEqual(metrics200.digitalCropRatio, 2.0, accuracy: 0.0001)
+        XCTAssertEqual(metrics400.digitalCropRatio, 4.0, accuracy: 0.0001)
+        XCTAssertEqual(metrics200.opticalFocalLength35mm, 100.0, accuracy: 0.0001)
+    }
+
+    func testXiaomi17UltraTelephoto_interpolatesFNumberWithinRange() {
+        let metrics75 = calculateEffectiveMetrics(focalLength35mm: 75.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics100 = calculateEffectiveMetrics(focalLength35mm: 100.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics90 = calculateEffectiveMetrics(focalLength35mm: 90.0, lenses: xiaomi17UltraTeleLenses)!
+        let expected90 = 2.39 + (2.96 - 2.39) * ((90.0 - 75.0) / (100.0 - 75.0))
+
+        XCTAssertEqual(metrics75.effectiveFNumber, 2.39, accuracy: 0.0001)
+        XCTAssertEqual(metrics100.effectiveFNumber, 2.96, accuracy: 0.0001)
+        XCTAssertEqual(metrics90.effectiveFNumber, expected90, accuracy: 0.0001)
+    }
+
+    func testXiaomi17UltraTelephoto_actualFocalChangesWithinOpticalRange() {
+        let metrics75 = calculateEffectiveMetrics(focalLength35mm: 75.0, lenses: xiaomi17UltraTeleLenses)!
+        let metrics100 = calculateEffectiveMetrics(focalLength35mm: 100.0, lenses: xiaomi17UltraTeleLenses)!
+
+        XCTAssertGreaterThan(metrics100.opticalActualFocalLengthMm, metrics75.opticalActualFocalLengthMm)
+    }
+
+    func testCalculateEffectiveMetrics_prefersNativeLensAtOpticalRangeBoundary() {
+        let metrics = calculateEffectiveMetrics(
+            focalLength35mm: 70.0,
+            lenses: [variableWideLens, teleLens]
+        )
+
+        XCTAssertEqual(metrics?.baseLens.nativeFocalLength35mm, 70.0, accuracy: 0.0001)
     }
 }
