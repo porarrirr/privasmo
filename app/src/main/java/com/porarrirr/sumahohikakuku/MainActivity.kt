@@ -1,5 +1,6 @@
 package com.porarrirr.sumahohikakuku
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,10 +13,24 @@ import com.porarrirr.sumahohikakuku.ui.SensorComparisonScreen
 import com.porarrirr.sumahohikakuku.ui.theme.SumahohikakukuTheme
 
 class MainActivity : ComponentActivity() {
+    private var appliedLanguageTag: String = ""
+
+    override fun attachBaseContext(newBase: Context) {
+        appliedLanguageTag = AppLanguageController.getLanguageTag(newBase)
+        super.attachBaseContext(AppLanguageController.wrap(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SumahohikakukuApp()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppLanguageController.getLanguageTag(this) != appliedLanguageTag) {
+            recreate()
         }
     }
 }

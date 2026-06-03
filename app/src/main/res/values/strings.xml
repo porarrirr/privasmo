@@ -192,4 +192,9 @@
     <string name="action_show_details">詳細を表示 ▼</string>
     <string name="error_activity_not_found">Activity が見つかりません</string>
     <string name="title_share_image">共有</string>
+    <string name="action_share_area_chart">面積グラフ共有</string>
+    <string name="action_share_light_intake_chart">集光力グラフ共有</string>
+    <string name="label_lens_count_compact">%1$d レンズ</string>
+    <string name="label_language">言語 / Language</string>
+    <string name="label_language_auto">システム設定 (Auto)</string>
 </resources>

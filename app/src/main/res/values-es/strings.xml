@@ -186,4 +186,9 @@
     <string name="action_show_details">Mostrar detalles ▼</string>
     <string name="error_activity_not_found">No se encontro la Activity</string>
     <string name="title_share_image">Compartir</string>
+    <string name="action_share_area_chart">Compartir grafico de area</string>
+    <string name="action_share_light_intake_chart">Compartir grafico de luz</string>
+    <string name="label_lens_count_compact">%1$d lentes</string>
+    <string name="label_language">Idioma / Language</string>
+    <string name="label_language_auto">Configuracion del sistema (Auto)</string>
 </resources>

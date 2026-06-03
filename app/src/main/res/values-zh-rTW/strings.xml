@@ -186,4 +186,9 @@
     <string name="action_show_details">顯示詳情 ▼</string>
     <string name="error_activity_not_found">找不到 Activity</string>
     <string name="title_share_image">分享</string>
+    <string name="action_share_area_chart">分享面積圖表</string>
+    <string name="action_share_light_intake_chart">分享進光量圖表</string>
+    <string name="label_lens_count_compact">%1$d 個鏡頭</string>
+    <string name="label_language">語言 / Language</string>
+    <string name="label_language_auto">系統設定 (Auto)</string>
 </resources>

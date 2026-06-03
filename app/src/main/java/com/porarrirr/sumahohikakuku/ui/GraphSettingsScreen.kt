@@ -4,15 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -36,9 +35,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -48,13 +46,16 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.porarrirr.sumahohikakuku.AppLanguageController
 import com.porarrirr.sumahohikakuku.R
 import com.porarrirr.sumahohikakuku.data.CustomSensorRepository
 import com.porarrirr.sumahohikakuku.data.CustomSensorRepositoryError
@@ -103,13 +104,15 @@ fun GraphSettingsScreen(
 
     var builtInSensors by remember { mutableStateOf<List<SensorSpec>>(emptyList()) }
     LaunchedEffect(Unit) {
-        builtInSensors = withContext(Dispatchers.IO) {
-            runCatching {
+        try {
+            builtInSensors = withContext(Dispatchers.IO) {
                 val raw = context.resources.openRawResource(R.raw.sensor_database)
                     .bufferedReader()
                     .use { it.readText() }
                 parseSensorCsv(raw)
-            }.getOrElse { emptyList() }
+            }
+        } catch (error: Throwable) {
+            snackbarHostState.showSnackbar(context.getString(R.string.error_failed_to_load_sensor_database))
         }
     }
 
@@ -137,38 +140,11 @@ fun GraphSettingsScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.10f),
-                        MaterialTheme.colorScheme.background,
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
-                    )
-                )
-            )
-    ) {
-        Scaffold(
+    Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            containerColor = Color.Transparent,
+            containerColor = MaterialTheme.colorScheme.background,
             topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.settings_title)) },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
-                        titleContentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.action_back)
-                            )
-                        }
-                    }
-                )
+                SettingsToolbar(onBack = onBack)
             }
         ) { innerPadding ->
             Column(
@@ -178,6 +154,15 @@ fun GraphSettingsScreen(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                LanguageSettingsSection(
+                    selectedLanguageTag = AppLanguageController.getLanguageTag(context),
+                    onSelectLanguage = { languageTag ->
+                        val activity = context.findComponentActivity()
+                            ?: throw IllegalStateException(context.getString(R.string.error_activity_not_found))
+                        AppLanguageController.setLanguageTag(activity, languageTag)
+                    }
+                )
+
                 Card {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -413,7 +398,6 @@ fun GraphSettingsScreen(
             }
         }
     }
-    }
 
     if (isEditorOpen) {
         CustomSensorEditorDialog(
@@ -463,8 +447,111 @@ fun GraphSettingsScreen(
     }
 }
 
+@Composable
+private fun SettingsToolbar(
+    onBack: () -> Unit
+) {
+    Surface(color = MaterialTheme.colorScheme.surface) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(horizontal = 12.dp)
+            ) {
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .size(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.action_back),
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.settings_title),
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
 private fun sanitizeIntegerInput(value: String): String {
     return value.filter { it.isDigit() }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LanguageSettingsSection(
+    selectedLanguageTag: String,
+    onSelectLanguage: (String) -> Unit
+) {
+    val options = listOf(
+        "" to stringResource(R.string.label_language_auto),
+        "ja" to "日本語",
+        "en" to "English",
+        "zh-Hans" to "简体中文",
+        "zh-Hant" to "繁體中文"
+    )
+    var isLanguageMenuExpanded by remember { mutableStateOf(false) }
+    val selectedLabel = options.firstOrNull { it.first == selectedLanguageTag }?.second
+        ?: selectedLanguageTag
+
+    Card {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(text = stringResource(R.string.label_language), fontWeight = FontWeight.SemiBold)
+            ExposedDropdownMenuBox(
+                expanded = isLanguageMenuExpanded,
+                onExpandedChange = { isLanguageMenuExpanded = it },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = selectedLabel,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.label_language)) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isLanguageMenuExpanded)
+                    },
+                    singleLine = true
+                )
+                DropdownMenu(
+                    expanded = isLanguageMenuExpanded,
+                    onDismissRequest = { isLanguageMenuExpanded = false }
+                ) {
+                    options.forEach { (tag, label) ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            onClick = {
+                                isLanguageMenuExpanded = false
+                                onSelectLanguage(tag)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -478,16 +565,16 @@ private fun CustomSensorEditorDialog(
     var name by remember(initial) { mutableStateOf(initial?.name.orEmpty()) }
     var megapixelsInput by remember(initial) {
         mutableStateOf(
-            initial?.megapixels?.let { String.format(Locale.US, "%.2f", it) }.orEmpty()
+            initial?.megapixels?.let { String.format(Locale.US, "%g", it) } ?: "50"
         )
     }
     var pixelSizeInput by remember(initial) {
         mutableStateOf(
-            initial?.pixelSizeUm?.let { String.format(Locale.US, "%.2f", it) }.orEmpty()
+            initial?.pixelSizeUm?.let { String.format(Locale.US, "%g", it) } ?: "1.0"
         )
     }
     val normalizedInitialBinning = remember(initial) {
-        normalizeBinning(initial?.binningType.orEmpty()).ifBlank { "Unknown" }
+        normalizeBinning(initial?.binningType.orEmpty()).ifBlank { "None" }
     }
     val binningOptions = remember(normalizedInitialBinning) {
         val known = listOf(
