@@ -2,7 +2,7 @@
 
 スマホのカメラセンサー（センサーサイズ・F値・焦点距離など）を並べて比較する Android アプリです。総受光量の関係をグラフで確認できます。
 
-公開ページ: https://porarrirr.github.io/privasmo/
+公開ページ: https://porarrirr.github.io/sumaho-hikaku/
 
 ## 機能
 
