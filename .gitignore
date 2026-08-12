@@ -1,8 +1,11 @@
 *.iml
 /.gradle/
+/.kotlin/
 /local.properties
 /.idea/
+.vscode/
 .DS_Store
+._*
 /build
 **/build/
 /captures
@@ -12,6 +15,15 @@ local.properties
 keystore.properties
 *.keystore
 *.jks
+*.p12
+*.mobileprovision
+
+# Local environment and service configuration
+.env
+.env.*
+!.env.example
+google-services.json
+GoogleService-Info.plist
 
 # Logs and local run output
 *.log
@@ -25,12 +37,33 @@ DerivedData/
 *.xcarchive
 *.ipa
 *.dSYM/
+*.dSYM.zip
+*.xcresult
 *.app/
 *.xctest/
 *.xcuserstate
 xcuserdata/
+.build/
+.swiftpm/
 
 # CMake generated files
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
+compile_commands.json
+
+# Android package artifacts
+*.apk
+*.aab
+*.apks
+*.idsig
+
+# Temporary files
+.tmp/
+tmp/
+*.tmp
+*.bak
+*.orig
+*.rej
+*.swp
+*~
