@@ -34,4 +34,4 @@ Sensor data is stored in [`app/src/main/res/raw/sensor_database.csv`](app/src/ma
 
 ## License
 
-No license is currently granted for this repository's original code.
+The original code is proprietary and all rights are reserved. See [LICENSE](LICENSE). Third-party components remain subject to their own licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
