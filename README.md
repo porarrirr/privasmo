@@ -1,53 +1,30 @@
-# スマートフォンセンサー比較ツール
+# Smartphone Sensor Comparison
 
-スマホのカメラセンサー、F値、35mm判換算焦点距離を並べ、同じ画角で使われる有効センサー面積と理論上の相対受光量を比較するAndroidアプリです。
+English | [日本語](README.ja.md)
 
-公開ページ: https://porarrirr.github.io/sumaho-hikaku/
+An Android app for comparing smartphone camera sensors, apertures, and 35 mm-equivalent focal lengths. It estimates the effective sensor area used at a given field of view and a theoretical relative-light index, making camera specifications easier to compare side by side.
 
-## 機能
+Public page: https://porarrirr.github.io/sumaho-hikaku/
 
-- センサーサイズ / 焦点距離 / F値から相対受光量を比較
-- 最大5台 × 4レンズの同時比較
-- 光学ズーム区間とデジタルクロップ区間を分けて計算
-- プリセットの保存・呼び出し
-- 分数表記（例: `1/1.28`）のカスタムセンサー
-- 結果の数値サマリーとエクスポート
+## Highlights
 
-## 計算方法と前提
+- Compare up to five phones with four lenses each
+- Separate optical-zoom ranges from digital-crop ranges
+- Enter custom sensors using familiar fractions such as `1/1.28`
+- Save and restore comparison presets
+- Review a numeric summary and export results
 
-このアプリの「総光量」は測光器で測ったルーメンや実写の明るさではなく、センサー面積とF値から求める**無次元の相対指標**です。
+## Understanding the result
 
-データベース収録センサーは、画素数を $P$、画素ピッチを $p$ µmとし、4:3センサーを仮定して幅・高さを復元します。
+The app's total-light value is a dimensionless comparison index, not a measured lumen value or a guarantee of real-world image quality. It is based on effective sensor area and f-number:
 
-$$
-H_{px}=\sqrt{P\times\frac{3}{4}},\qquad W_{px}=\frac{4}{3}H_{px}
-$$
+$$L_{relative}=\frac{A_{effective}}{N^2}$$
 
-$$
-W_{mm}=\frac{W_{px}p}{1000},\qquad H_{mm}=\frac{H_{px}p}{1000},\qquad A=W_{mm}H_{mm}
-$$
+The estimate does not model lens transmission, quantum efficiency, color filters, read noise, HDR processing, exposure time, stabilization, vignetting, or manufacturer image processing. Use it to compare geometry and aperture under shared assumptions, then confirm important decisions with sample images and primary specifications.
 
-手動の型表記は、名目上の1インチを対角16mmとする光学フォーマット近似を使い、4:3として面積を求めます。35mm判換算焦点距離 $f_{35}$ とセンサー対角 $d$ からクロップ係数 $c=43.2666/d$、実焦点距離 $f=f_{35}/c$ を求めます。
+Sensor data is stored in [`app/src/main/res/raw/sensor_database.csv`](app/src/main/res/raw/sensor_database.csv). Because the dataset does not currently retain a primary-source URL for every row, verify values against manufacturer documentation or other primary sources before citing them.
 
-デジタルクロップ倍率を $z$ とすると、有効面積は $A_{eff}=A/z^2$。F値を $N$ とした相対受光量は次の値です。
-
-$$
-L_{relative}=\frac{A_{eff}}{N^2}
-$$
-
-絞り径と絞り面積も表示します。
-
-$$
-D=\frac{f}{N},\qquad A_{aperture}=\frac{\pi D^2}{4}
-$$
-
-この計算は、透過率（T値）、量子効率、マイクロレンズ、カラーフィルター、読み出しノイズ、HDR合成、露光時間、ISO、手ぶれ補正、レンズ周辺減光、メーカーの画像処理を考慮しません。したがって、実写画質や低照度性能を直接保証する値ではありません。
-
-## センサーデータ
-
-収録値は [`app/src/main/res/raw/sensor_database.csv`](app/src/main/res/raw/sensor_database.csv) で管理しています。列はセンサー名、画素数（CSV内ではMPの100倍）、画素ピッチ（µm）、ビニング種別です。現時点では行ごとの一次資料URLを保持していないため、公開仕様、メーカー資料、分解調査などと照合が必要です。値を引用・判断に使う場合は、必ず元資料で再確認してください。
-
-## ビルドとテスト
+## Build
 
 ```bash
 ./gradlew assembleDebug
@@ -55,8 +32,6 @@ $$
 ./gradlew lint
 ```
 
-`ios/` には関連するiOS向け作業用ディレクトリがあります。GitHub ActionsはAndroidのデバッグビルドと単体テストを実行します。
+## License
 
-## ライセンス
-
-このリポジトリには現在、再利用を許諾するライセンスを設定していません。
+No license is currently granted for this repository's original code.
